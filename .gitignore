@@ -1,0 +1,31 @@
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Word and Office lock and backup files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+*.tmp
+
+# Node, used only for the Mermaid diagram renderer
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Python, for the document build and check scripts
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Build scratch
+scratch/
+*.log
