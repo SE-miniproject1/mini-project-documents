@@ -1,0 +1,62 @@
+%% Blood Bank Management System - System Architecture
+%% SRS Section 2.1, Product Perspective
+flowchart TB
+    subgraph CLIENT["Presentation Tier — Browser"]
+        direction LR
+        C1["Donor Portal"]
+        C2["Staff Console"]
+        C3["Hospital Portal"]
+        C4["Admin Console"]
+    end
+
+    LB["Nginx Reverse Proxy<br/>TLS 1.2+ termination, HSTS"]
+
+    subgraph APP["Application Tier — Django 5.x on Gunicorn"]
+        direction TB
+        SEC["Authentication and RBAC<br/>session, CSRF, permissions"]
+        subgraph DOMAIN["Domain Services"]
+            direction LR
+            M1["Donor<br/>Management"]
+            M2["Collection and<br/>Screening"]
+            M3["Inventory<br/>Management"]
+            M4["Request and<br/>Issue"]
+            M5["Camp<br/>Management"]
+            M6["Search and<br/>Reporting"]
+        end
+        NOTIF["Notification Dispatcher<br/>async, retry, email fallback"]
+        JOBS["Scheduled Jobs<br/>expiry, reminders, shortage appeal"]
+        AUD["Audit Writer<br/>append-only"]
+    end
+
+    subgraph DATA["Data Tier"]
+        direction LR
+        DB[("PostgreSQL 15<br/>donors, units, requests,<br/>camps, users, audit")]
+        FILES[("Report Artefacts<br/>PDF and CSV")]
+    end
+
+    subgraph EXT["External Gateways"]
+        direction LR
+        SMSG["SMS Gateway<br/>HTTPS REST"]
+        SMTP["SMTP Relay<br/>STARTTLS :587"]
+    end
+
+    SCAN["Barcode Scanner<br/>keyboard-wedge"]
+
+    C1 -->|HTTPS| LB
+    C2 -->|HTTPS| LB
+    C3 -->|HTTPS| LB
+    C4 -->|HTTPS| LB
+    SCAN -.->|unit ID keystrokes| C2
+
+    LB --> SEC
+    SEC --> DOMAIN
+    DOMAIN --> AUD
+    DOMAIN --> NOTIF
+    JOBS --> DOMAIN
+
+    DOMAIN -->|Django ORM| DB
+    AUD -->|append only| DB
+    M6 --> FILES
+
+    NOTIF --> SMSG
+    NOTIF --> SMTP
