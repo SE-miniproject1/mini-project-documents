@@ -300,7 +300,37 @@ This feature allows a registered hospital to raise a request for blood, allows s
 
 ### 5.5 Donation Camp and Drive Management
 
-*Content pending.*
+#### 5.5.1 Description and Priority
+
+This feature schedules and manages blood donation camps held away from the blood bank premises, handles donor enrolment for those camps, and reconciles the units collected at a camp into central inventory. Camps are the principal source of supply for most blood banks, so the feature carries real operational benefit, though the system remains usable without it.
+
+**Priority: Medium.** Benefit 7, Penalty 5, Cost 5, Risk 3.
+
+#### 5.5.2 Stimulus/Response Sequences
+
+**Sequence 1, schedule a camp.** Staff create a camp specifying name, venue, date, start and end times, organiser and target unit count. The system validates that the date is in the future and creates the camp in Scheduled status.
+
+**Sequence 2, donor enrols.** A donor browses upcoming camps and enrols in one. The system verifies that the donor will be eligible on the camp date, records the enrolment and sends a confirmation.
+
+**Sequence 3, ineligible enrolment.** A donor whose next eligible date falls after the camp date attempts to enrol. The system refuses the enrolment and displays the date on which the donor becomes eligible.
+
+**Sequence 4, camp day collection.** Staff record collections against the camp. Each unit created carries the camp as its collection site.
+
+**Sequence 5, close a camp.** Staff close the camp. The system moves it to Completed, computes actual units collected against the target, and prevents further collections being recorded against it.
+
+#### 5.5.3 Functional Requirements
+
+**REQ-32:** The system shall permit staff and administrators to create a donation camp capturing camp name, venue address, camp date, start and end time, organiser name and contact, and target number of units.
+
+**REQ-33:** The system shall reject the creation of a camp whose date is earlier than the current date, and shall reject an end time that is not later than the start time.
+
+**REQ-34:** The system shall publish all camps in Scheduled status to the donor camp listing, ordered by camp date ascending, and shall permit a donor to enrol in a listed camp.
+
+**REQ-35:** The system shall refuse a camp enrolment where the donor's next eligible donation date falls after the camp date, and shall display the donor's next eligible date in the refusal message.
+
+**REQ-36:** The system shall record the camp identifier as the collection site on every unit collected at that camp, so that units remain traceable to the camp at which they were collected.
+
+**REQ-37:** The system shall permit staff to close a camp, shall move it to Completed status, shall report actual units collected against the target, and shall reject any collection recorded against a Completed camp.
 
 ### 5.6 Search, Notification and Reporting
 
