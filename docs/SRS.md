@@ -378,13 +378,64 @@ This feature provides availability search across the inventory, dispatches notif
 
 ## 6. Other Nonfunctional Requirements
 
-*Content pending — to be drafted by Niveditha.*
+### 6.1 Performance Requirements
 
----
+**NFR-P1:** Any screen that does not generate a report shall render completely within 3 seconds at the 95th percentile, measured at the server under a load of 50 concurrent users. This bound exists because blood bank staff perform high-volume repetitive entry, and a slower response measurably reduces throughput during peak collection hours.
 
-## 7. Other Requirements
+**NFR-P2:** The availability search specified in REQ-38 shall return within 2 seconds at the 95th percentile for an inventory of up to 50,000 unit records. Emergency requests depend on this search, so it is bounded more tightly than general screens.
 
-*Content pending — to be drafted by Niveditha.*
+**NFR-P3:** The system shall support at least 50 concurrent authenticated users and at least 200 registered hospital accounts without breaching NFR-P1.
+
+**NFR-P4:** A report covering a 12-month range shall be generated and made available for download within 30 seconds. Reporting is a background activity and is permitted a looser bound than interactive screens.
+
+**NFR-P5:** An inventory change committed by one user shall be visible to all other users within 5 seconds, satisfying REQ-17. This bound prevents two staff members allocating the same unit to different requests.
+
+**NFR-P6:** Notification dispatch shall be enqueued within 1 second of the triggering transaction committing. Actual delivery time is governed by the external gateway and is outside the system's control.
+
+**NFR-P7:** The database shall sustain the stated response times with up to 200,000 donor records, 500,000 unit records and 100,000 request records.
+
+### 6.2 Safety Requirements
+
+**NFR-S1:** The system shall make it impossible, through any application function, to issue a blood unit that has not completed the mandatory screening panel with all results Non-Reactive. This is the single most safety-critical constraint in the system, because an infected unit reaching a patient could cause death.
+
+**NFR-S2:** The system shall make it impossible to issue a unit whose expiry date has passed.
+
+**NFR-S3:** The system shall prevent the allocation of a unit whose blood group does not match the blood group on the request. Group mismatch in transfusion can cause a fatal haemolytic reaction.
+
+**NFR-S4:** The system shall prevent the same unit being allocated to more than one request concurrently, by reserving the unit atomically at the point of allocation.
+
+**NFR-S5:** The system shall enforce the donor deferral rules in REQ-6 and REQ-7 so that a donor cannot be bled more frequently than the configured interval, protecting the donor from iron depletion.
+
+**NFR-S6:** Every unit shall remain traceable in both directions, from donor to recipient hospital and from recipient hospital back to donor, for the retention period stated in CON-6, so that a transfusion-transmitted infection can be investigated.
+
+**NFR-S7:** Where the system cannot determine that an operation is safe, it shall refuse the operation rather than permit it. Ambiguity resolves to refusal.
+
+### 6.3 Security Requirements
+
+**NFR-SEC1:** The system shall authenticate every user by username and password before granting access to any function other than public camp listings and the registration and login screens.
+
+**NFR-SEC2:** Passwords shall be stored only as salted hashes produced by a deliberately slow key derivation function. Plain text and reversibly encrypted passwords are prohibited.
+
+**NFR-SEC3:** The system shall enforce a password policy of at least 10 characters including at least one letter, one digit and one special character, and shall reject passwords appearing in a known-compromised password list.
+
+**NFR-SEC4:** The system shall lock an account for 15 minutes after 5 consecutive failed authentication attempts, and shall notify the account holder by email.
+
+**NFR-SEC5:** The system shall enforce role-based access control so that every function and every data record is accessible only to the roles authorised for it. Authorisation shall be checked on the server for every request, and shall never rely on the client hiding a control.
+
+**NFR-SEC6:** A hospital user shall be able to access only records belonging to their own hospital. A donor shall be able to access only their own records.
+
+**NFR-SEC7:** Donor identity shall never be disclosed to any hospital user, in any screen, report, export or notification, in accordance with CON-5.
+
+**NFR-SEC8:** All data in transit shall be protected by TLS 1.2 or higher, as stated in CI-1.
+
+**NFR-SEC9:** The system shall be free of the OWASP Top Ten vulnerability classes. In particular, all database access shall use parameter binding, all user-supplied content shall be contextually escaped on output, and all state-changing requests shall carry a CSRF token.
+
+**NFR-SEC10:** The system shall write an audit record for every authentication event, every authorisation failure, every unit status transition and every configuration change, carrying the acting user, the timestamp and the source address.
+
+**NFR-SEC11:** Sessions shall expire after 30 minutes of inactivity and shall be invalidated on logout and on password change.
+
+
+
 
 ---
 
