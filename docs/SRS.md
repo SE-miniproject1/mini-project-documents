@@ -240,8 +240,79 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 
 ## 3. External Interface Requirements
 
-*Content pending — to be drafted by Niveditha.*
+### 3.1 User Interfaces
 
+The system presents four role-scoped web interfaces. All are served as responsive HTML rendered by the server, progressively enhanced with client-side scripting.
+
+**UI-1 General characteristics.** All screens share a common layout comprising a header carrying the system name and the signed-in user's name and role, a left navigation panel scoped to the user's role, a main content region, and a footer. On viewports narrower than 768 pixels the navigation panel collapses into a menu control.
+
+**UI-2 Standard controls.** Every screen shall carry a Help control in the header opening context-sensitive guidance. Every data entry form shall carry Save and Cancel controls, with Cancel returning to the previous screen without persisting changes. Every list screen shall support column sorting and pagination at 25 rows per page.
+
+**UI-3 Keyboard shortcuts.** For the staff console, the following shortcuts shall be provided, because staff perform high-volume repetitive entry: Alt+N new record, Alt+S save, Alt+F focus search, Escape cancel current dialog.
+
+**UI-4 Error message standard.** Errors shall be displayed adjacent to the field in error, in red, prefixed with the field label, and shall state the corrective action. A summary banner shall appear at the top of the form listing all errors. Error text shall never expose stack traces, SQL, or internal identifiers.
+
+**UI-5 Confirmation standard.** Any irreversible operation, including issuing a unit, discarding a unit and deactivating a user, shall require an explicit confirmation dialog naming the specific record affected.
+
+**UI-6 Screen inventory.** The following screens shall be provided.
+
+| Screen | User Class | Purpose |
+|---|---|---|
+| Login and Password Reset | All | Authentication |
+| Donor Registration | UC-1 | Self-registration |
+| Donor Dashboard | UC-1 | Eligibility status, next eligible date, history |
+| Camp Listing and Enrolment | UC-1 | Browse and enrol in camps |
+| Donor Search and Screening | UC-2 | Locate donor, record screening |
+| Collection Entry | UC-2 | Record a donation, generate unit |
+| Test Result Entry | UC-2 | Record screening test outcomes |
+| Inventory Console | UC-2, UC-4 | Stock by group, component, status, expiry |
+| Request Queue | UC-2 | Review and act on hospital requests |
+| Issue and Cross-match | UC-2 | Allocate specific units to a request |
+| Hospital Request Form | UC-3 | Raise a request |
+| Hospital Request Tracker | UC-3 | Status and issue history |
+| Camp Management | UC-2, UC-4 | Create and manage camps |
+| User and Role Administration | UC-4 | Accounts, roles, hospital registration |
+| Configuration | UC-4 | Eligibility and expiry parameters |
+| Reports | UC-2, UC-3, UC-4 | Generate and export reports |
+
+**UI-7 Accessibility.** Screens shall meet WCAG 2.1 Level AA for colour contrast, keyboard operability and form labelling.
+
+Detailed visual design is documented separately in the user interface specification and is not part of this SRS.
+### 3.2 Software Interfaces
+
+**SI-1 Database interface.** The application shall use PostgreSQL 15 or later as its production relational database. All persistent access shall be through the Django ORM. SQLite 3 may be used for local development and automated tests.
+
+**SI-2 Email interface.** The system shall connect to an SMTP relay for outbound email notifications and password-reset messages. SMTP host, port, authentication credentials and sender address shall be configurable without a code change.
+
+**SI-3 SMS interface.** The system shall connect to a third-party SMS gateway through its HTTPS API. The gateway endpoint and credentials shall be configurable. The application shall treat the gateway as an external dependency and shall not store SMS provider credentials in source code.
+
+**SI-4 Report interface.** The reporting subsystem shall produce PDF and CSV files from the same report dataset displayed on screen. Export shall preserve the selected date range and the identity of the generating user.
+
+**SI-5 Browser interface.** The application shall be accessed through standards-compliant web browsers. No browser plug-in or client-side installation shall be required.
+
+### 3.3 Communications Interfaces
+
+**CI-1 Transport security.** All browser-to-server communication shall use HTTPS with TLS 1.2 or later. HTTP requests shall be redirected to HTTPS.
+
+**CI-2 Email communication.** Outbound email shall use authenticated SMTP over TLS. Password-reset messages shall contain a time-limited reset link and shall not contain the user's password.
+
+**CI-3 SMS communication.** Outbound SMS shall use the configured provider's HTTPS API. Requests and responses shall use the provider's documented JSON or form-encoded protocol.
+
+**CI-4 Session communication.** Authenticated browser sessions shall use secure, HTTP-only session cookies. Session cookies shall have the Secure and SameSite attributes enabled.
+
+**CI-5 Failure handling.** Failure of an external notification gateway shall not roll back the transaction that triggered the notification. The failure shall be recorded and handled according to REQ-39.
+
+### 3.4 Hardware Interfaces
+
+**HI-1 Server hardware.** The application shall execute on standard 64-bit server hardware capable of running the specified Linux, Python, Django and PostgreSQL environment. No specialised hardware shall be required.
+
+**HI-2 Client hardware.** Users shall access the system from standard desktop, laptop, tablet or mobile hardware with a supported web browser.
+
+**HI-3 Printer interface.** The system shall not require a dedicated printer interface. Reports shall be exported as PDF so that they can be printed using the operating system's standard print facilities.
+
+**HI-4 Laboratory hardware.** Release 1.0 shall have no direct hardware interface to laboratory analysers or blood-testing instruments. Test results are entered manually by authorised staff, consistent with ASM-2.
+
+**HI-5 Barcode hardware.** Release 1.0 shall not require a dedicated barcode scanner. Unit identifiers may be entered using the standard keyboard input available on the client device.
 ---
 
 ## 4. Analysis Models
