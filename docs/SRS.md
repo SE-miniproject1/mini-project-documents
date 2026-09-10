@@ -246,7 +246,47 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 
 ## 4. Analysis Models
 
-*Content pending — to be drafted by Dhanya K M.*
+The following field layouts define the minimum fields used by the requirements. Lengths are maximum storage/display lengths unless a format is stated. Fields marked Y are mandatory at the point described.
+
+| Entity / form | Field | Data type / format | Mandatory | Description |
+|---|---|---|:---:|---|
+| Donor registration | Donor ID | Alphanumeric | Y (generated) | Immutable identifier assigned by REQ-2 |
+| Donor registration | Full name | Text, 120 | Y | Donor's legal name |
+| Donor registration | Date of birth | Date, YYYY-MM-DD | Y | Used for age eligibility |
+| Donor registration | Sex | Enumerated | Y | Recorded demographic value |
+| Donor registration | Blood group | ABO/Rh enum | N | May be unknown at registration and confirmed later |
+| Donor registration | Weight | Decimal kg | Y | Used for minimum-weight check |
+| Donor registration | Haemoglobin | Decimal g/dL | Y at screening | Used for minimum-haemoglobin check |
+| Donor registration | Medical declaration | Text / structured flags | Y | Self-reported health and risk declarations |
+| Donor registration | Address | Text, 255 | Y | Contact address |
+| Donor registration | Telephone | E.164 text, 16 | Y | Duplicate detection and notifications |
+| Donor registration | Email | Email, 254 | Y | Duplicate detection and notifications |
+| Donor registration | Consent | Boolean + timestamp | Y | Consent to processing |
+| Eligibility assessment | Assessment status | Eligible / Ineligible | Y (generated) | Current decision |
+| Eligibility assessment | Failed rules | Structured list | N | Reasons shown for an ineligible donor |
+| Eligibility assessment | Next eligible date | Date | N | Required for cooldown decisions |
+| Eligibility assessment | Rule version | Alphanumeric | Y | Configuration version used |
+| Blood unit | Unit ID | Alphanumeric | Y (generated) | Unique traceability identifier |
+| Blood unit | Donation event ID | Alphanumeric | Y | Link to one collection event |
+| Blood unit | Blood group | ABO/Rh enum | Y | Group for inventory and allocation |
+| Blood unit | Component type | Enum | Y | Whole blood, packed red cells, plasma or platelets |
+| Blood unit | Storage location | Alphanumeric, 64 | Y | Refrigerator/freezer/rack location |
+| Blood unit | Status | Enum | Y | Screening Pending, Available, Near Expiry, Reserved, Issued, Quarantined, Expired or Disposed |
+| Blood unit | Collection date | Date/time | Y | Donation timestamp |
+| Blood unit | Expiry date | Date/time | Y | Calculated from component shelf life |
+| Screening result | Test name | Text, 64 | Y | Screening panel test |
+| Screening result | Outcome | Pass / Reactive / Invalid | Y | Manually entered under ASM-2 |
+| Screening result | Technician | User ID | Y | Staff member entering result |
+| Screening result | Result timestamp | Date/time | Y | Time result was recorded |
+| Stock configuration | Blood group | ABO/Rh enum | Y | Group to which threshold applies |
+| Stock configuration | Minimum Available units | Integer | Y | Threshold used by REQ-22 and REQ-23 |
+| Stock configuration | Near-expiry window | Integer days | Y | Window used by REQ-19 |
+| Report fields | Report name | Text | Y | Name of generated report |
+| Report fields | Date range | Start/end dates | Y | User-selected reporting window |
+| Report fields | Generating user | User ID | Y | User responsible for generation |
+| Report fields | Generation timestamp | Date/time | Y | Audit value in PDF and CSV exports |
+
+The principal reports contain the following fields: Donor Registration Report (donor ID, registration date, demographic summary, blood group, contact status and eligibility status); Blood Collection Report (donation event ID, donor ID for authorised staff, date, site, unit ID, component and screening status); Inventory Status Report (unit ID, group, component, location, status, collection date and expiry date); Near-Expiry and Expiry Report (unit ID, group, component, location, status, expiry date and days remaining); Hospital Request and Issue Report (request ID, hospital, group, component, requested quantity, issued quantity, status and timestamps); and Camp Performance Report (camp ID, date, target units, collected units, rejected units and completion status).
 
 ---
 
@@ -256,7 +296,126 @@ The functional requirements are organised by system feature, which are the major
 
 Priority is stated as High, Medium or Low, supported by component ratings for benefit, penalty, cost and risk, each on a scale of 1 to 9.
 
-*Content pending — SF-1 to SF-3 to be drafted by Balaraj R.*
+### 5.1 Donor Registration and Eligibility Screening
+
+#### 5.1.1 Description and Priority
+
+This feature registers donors, captures the demographic, medical and contact information needed for safe donation, evaluates eligibility against the configured donor-safety rules, and preserves the donor's donation history. It is the entry point for the supply side of the system: an incorrect eligibility decision can harm a donor and can place an unsafe unit into circulation.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 5, Risk 7.
+
+#### 5.1.2 Stimulus/Response Sequences
+
+**Sequence 1, donor registers.** A donor submits the registration form with the required identity, demographic, medical declaration and contact details. The system validates the fields, creates a donor record with a unique donor identifier, and displays the donor's current eligibility status.
+
+**Sequence 2, donor is eligible.** A donor submits values within the configured age, weight and haemoglobin limits and has no donation in the restricted interval. The system marks the donor Eligible, records the assessed values and date, and permits the collection workflow to be started.
+
+**Sequence 3, donor fails an eligibility check.** A donor is outside one or more configured limits, or has donated too recently. The system marks the donor Ineligible, names every failed rule, displays the next eligible date when a cooldown applies, and prevents a donation event from being recorded.
+
+**Sequence 4, donor re-registers after cooldown.** A previously ineligible donor returns on or after the stored next eligible date and submits an updated screening declaration. The system re-evaluates the current values, retains the previous assessment and donation history, and marks the donor Eligible if all rules now pass.
+
+**Sequence 5, duplicate donor detected.** A registration contains an identifier, verified contact value or other matching data already associated with a donor. The system does not create a second donor record; it alerts authorised staff to the possible duplicate and offers the existing record for review.
+
+**Sequence 6, incomplete or invalid registration.** A required field is missing or a value is malformed, such as an invalid phone number, future date of birth or non-numeric weight. The system identifies the field error, retains no partial donor record, and asks the user to correct the input.
+
+**Sequence 7, history review.** An authorised staff member opens a donor record. The system shows the donor's eligibility assessments, accepted and rejected donation events, reasons for rejection, and next eligible date without permitting historical events to be silently overwritten.
+
+#### 5.1.3 Functional Requirements
+
+**REQ-1:** The system shall permit a donor or authorised staff member to register a donor by capturing full name, date of birth, sex, blood group when known, weight, haemoglobin reading, medical-history declaration, address, telephone number, email address and consent to data processing.
+
+**REQ-2:** The system shall validate mandatory fields, field formats and value ranges before saving a registration, shall assign a unique immutable donor identifier on successful registration, and shall return field-specific validation messages for invalid input.
+
+**REQ-3:** The system shall evaluate donor eligibility using the configured age bounds, minimum weight, minimum haemoglobin and minimum donation interval. The default values are age 18 through 65 years inclusive, weight at least 45 kg, haemoglobin at least 12.5 g/dL, and 90 calendar days since the donor's last accepted whole-blood donation.
+
+**REQ-4:** The system shall calculate and store the donor's next eligible donation date as the later of the date on which all current screening rules pass and the last accepted donation date plus the configured minimum donation interval.
+
+**REQ-5:** The system shall reject an attempted donation by an ineligible donor, display each failed eligibility rule in the response, and display the next eligible date when the failure is caused by the donation interval.
+
+**REQ-6:** The system shall detect a probable duplicate registration using an existing government/identity reference where supplied, a verified telephone number or email address, and a matching combination of name and date of birth; it shall not create a second active donor record without an authorised staff resolution.
+
+**REQ-7:** The system shall maintain a chronological donation history linked to the donor, including donation date, collection site, eligibility decision, rejection reason where applicable, and linked blood unit identifiers, and shall retain history when contact or demographic details are updated.
+
+**REQ-8:** The system shall record each eligibility assessment with the assessment timestamp, assessor, input values and rule configuration version used, and shall restrict changes to eligibility decisions and donor medical declarations to authorised staff with an audit entry.
+
+### 5.2 Blood Donation and Collection Management
+
+#### 5.2.1 Description and Priority
+
+This feature records a donation from an eligible donor, creates the traceable blood unit record, captures screening results entered manually by a technician, and converts an accepted whole-blood donation into the components managed by inventory. It is a safety-critical supply workflow because every later inventory and issue decision depends on the identity and screening status created here.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 6, Risk 8.
+
+#### 5.2.2 Stimulus/Response Sequences
+
+**Sequence 1, normal collection.** Staff select a registered donor whose eligibility status is current, record the donation event and collection details, and submit it. The system creates a unique blood unit identifier, links it to the donor and event, and places the unit in Screening Pending status.
+
+**Sequence 2, manual screening entry.** A technician opens the pending unit and enters the screening panel results manually, as required by ASM-2. The system validates that every required result is present, records the technician and timestamp, and makes the unit eligible for acceptance or quarantine according to the results.
+
+**Sequence 3, whole-blood separation.** Staff record separation of an accepted whole-blood donation. The system creates traceable component records, calculates their expiry dates from the configured shelf lives, and links each component back to the source unit and donor without duplicating the donation event.
+
+**Sequence 4, ineligible donor at collection.** Staff attempt to record a collection for a donor whose eligibility has expired or who is still within the cooldown interval. The system rejects the event, shows the eligibility reason and next eligible date, and creates no blood unit.
+
+**Sequence 5, failed screening.** One or more required screening results are reactive or otherwise fail the configured acceptance rule. The system marks the unit Quarantined, prevents it from becoming Available, records the failed test and reason, and raises the required staff alert.
+
+**Sequence 6, incomplete screening.** A technician tries to submit a panel with a missing result or invalid value. The system identifies the missing or invalid test, keeps the unit in Screening Pending status, and does not allow separation or issue.
+
+#### 5.2.3 Functional Requirements
+
+**REQ-9:** The system shall permit authorised staff to record a donation event only against a registered donor whose eligibility assessment is current and Eligible, capturing donation date and time, collection site or camp, staff member, donation type and collected volume.
+
+**REQ-10:** The system shall generate a unique, immutable blood unit identifier for every accepted collection, shall prevent reuse of an identifier, and shall link the unit to exactly one donation event and donor for traceability.
+
+**REQ-11:** The system shall place a newly recorded unit in Screening Pending status and shall prevent it from being counted as Available until the required screening and acceptance workflow is complete.
+
+**REQ-12:** The system shall permit an authorised technician to enter the required screening test results manually, including the test name, result value or outcome, technician, date and time, and shall validate that all mandatory tests have a recorded outcome.
+
+**REQ-13:** The system shall apply the configured screening acceptance rules to the manually entered results, shall accept a unit only when every mandatory test passes, and shall retain the individual results and acceptance decision for audit.
+
+**REQ-14:** The system shall permit staff to record separation of an accepted whole-blood unit into configured components, shall create a traceable component record for each produced component, and shall retain the source unit relationship.
+
+**REQ-15:** The system shall assign each component its component type, blood group, storage requirements, storage location, initial status and expiry date calculated from the component shelf life configured under REQ-46.
+
+**REQ-16:** The system shall quarantine any unit or component that fails screening, shall exclude quarantined records from Available stock and allocation searches, shall record the failed test and quarantine reason, and shall require authorised staff action before final disposal or release.
+
+### 5.3 Blood Inventory and Stock Management
+
+#### 5.3.1 Description and Priority
+
+This feature provides a real-time, traceable stock ledger for every blood unit and component, including its group, location, status and expiry. It makes near-expiry stock visible, removes expired stock from availability, and evaluates minimum stock thresholds so that the shortage-appeal workflow in REQ-41 has a defined and reliable trigger.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 6, Risk 7.
+
+#### 5.3.2 Stimulus/Response Sequences
+
+**Sequence 1, normal inventory update.** An accepted component is stored or its status changes. The system updates the unit ledger with blood group, component, location, status and expiry, recalculates Available counts, and records the staff member and timestamp.
+
+**Sequence 2, near expiry.** A unit's expiry date falls within the configurable near-expiry window in REQ-46. The system flags the unit, includes it in near-expiry views and reports, and leaves it Available only while it remains unexpired and otherwise usable.
+
+**Sequence 3, expiry reached.** A scheduled check or inventory access finds that a unit's expiry date has passed. The system moves it out of Available stock to Expired, excludes it from allocation, and records the transition.
+
+**Sequence 4, failed or quarantined unit.** A collection or screening workflow marks a unit Quarantined. The inventory ledger shows the unit for traceability but excludes it from Available counts, search results for fulfilment and minimum-stock calculations.
+
+**Sequence 5, stock falls below threshold.** A status change reduces Available stock for a blood group below its configured minimum stock threshold. The system records the threshold breach and exposes the event for REQ-41's donor appeal without exposing donor personal data.
+
+**Sequence 6, threshold restored.** An accepted unit increases Available stock to or above the configured threshold. The system clears the active shortage condition for that blood group and does not create a new shortage appeal for the same recovery event.
+
+#### 5.3.3 Functional Requirements
+
+**REQ-17:** The system shall maintain a record for every blood unit and component containing a unique identifier, donor and donation-event link, blood group, component type, storage location, status, collection date, expiry date and audit timestamps.
+
+**REQ-18:** The system shall support authorised inventory searches and filters by blood group, component type, storage location, status, collection date and expiry date, and shall return counts and traceable unit details only to roles authorised to view them.
+
+**REQ-19:** The system shall flag a unit as Near Expiry when its expiry date is within the configurable near-expiry window defined by REQ-46 and shall include the unit in the near-expiry view and report while it remains unexpired.
+
+**REQ-20:** The system shall move a unit whose expiry date has passed from Available to Expired, shall exclude it from Available stock counts and allocation, and shall record the expiry transition with timestamp and system actor.
+
+**REQ-21:** The system shall permit authorised staff to record a valid storage-location or inventory-status movement, shall validate permitted status transitions, and shall retain an immutable movement history containing previous value, new value, actor and timestamp.
+
+**REQ-22:** The system shall maintain a configurable minimum Available-stock threshold for each blood group, defaulting to 5 units unless an administrator changes it through REQ-46, and shall expose the current threshold and Available count to authorised shortage-monitoring processes.
+
+**REQ-23:** After every transaction that changes Available stock, the system shall atomically recalculate the affected blood-group count, determine whether it is below the configured threshold, and record a shortage-state change that can trigger REQ-41 without double-counting a unit.
+
 
 ### 5.4 Hospital Blood Request and Issue
 
@@ -380,6 +539,26 @@ This feature provides availability search across the inventory, dispatches notif
 
 *Content pending — to be drafted by Niveditha.*
 
+### 6.5 Business Rules and Domain Requirements
+
+The following defaults are used by the functional requirements and remain administrator-configurable through REQ-46. A configuration change applies to new eligibility assessments, collections and inventory calculations; previously recorded decisions retain the configuration version used at the time.
+
+| Rule | Default value | Use in the system |
+|---|---:|---|
+| Minimum donor age | 18 years | Inclusive lower bound for eligibility |
+| Maximum donor age | 65 years | Inclusive upper bound for eligibility |
+| Minimum donor weight | 45 kg | Minimum weight for the standard whole-blood collection volume |
+| Minimum haemoglobin | 12.5 g/dL | Inclusive lower bound for eligibility |
+| Minimum donation interval | 90 calendar days | Time between accepted whole-blood donations by the same donor |
+| Whole blood shelf life | 35 days | Expiry calculation when whole blood is stored as a unit |
+| Packed red-cell shelf life | 35 days | Expiry calculation for packed red-cell components |
+| Fresh-frozen plasma shelf life | 365 days | Expiry calculation for frozen plasma components |
+| Platelet shelf life | 5 days | Expiry calculation for platelet components |
+| Near-expiry window | 7 days | Window used by REQ-19 and REQ-46 |
+| Minimum Available stock per blood group | 5 units | Threshold evaluated by REQ-22 and REQ-23 and consumed by REQ-41 |
+
+The stored blood group must be one of the supported ABO/Rh groups (A+, A-, B+, B-, AB+, AB-, O+ or O-). A unit marked Quarantined, Expired, Disposed, Reserved or Issued is not Available. A blood unit may be issued only after screening acceptance and while it is unexpired.
+
 ---
 
 ## 7. Other Requirements
@@ -402,7 +581,56 @@ This feature provides availability search across the inventory, dispatches notif
 
 ## Appendix C: Requirement Traceability Matrix
 
-*Content pending — to be drafted by Balaraj R.*
+The test-plan identifiers below are assigned to the companion test plan. Each requirement has three unit tests, three integration tests and two system tests; Actual Result and Test Result remain blank until manual execution.
+
+| Requirement ID | Short description | Source system feature | Priority | Test Case ID |
+|---|---|---|---|---|
+| REQ-1 | Capture donor demographic, medical and contact details | SF-1 | High | UT-001, UT-002, UT-003, IT-001, IT-002, IT-003, ST-001, ST-002 |
+| REQ-2 | Validate registration and assign unique donor ID | SF-1 | High | UT-004, UT-005, UT-006, IT-004, IT-005, IT-006, ST-003, ST-004 |
+| REQ-3 | Evaluate age, weight, haemoglobin and interval rules | SF-1 | High | UT-007, UT-008, UT-009, IT-007, IT-008, IT-009, ST-005, ST-006 |
+| REQ-4 | Calculate and store next eligible date | SF-1 | High | UT-010, UT-011, UT-012, IT-010, IT-011, IT-012, ST-007, ST-008 |
+| REQ-5 | Reject ineligible donor with reasons | SF-1 | High | UT-013, UT-014, UT-015, IT-013, IT-014, IT-015, ST-009, ST-010 |
+| REQ-6 | Detect duplicate donor registration | SF-1 | High | UT-016, UT-017, UT-018, IT-016, IT-017, IT-018, ST-011, ST-012 |
+| REQ-7 | Maintain chronological donation history | SF-1 | High | UT-019, UT-020, UT-021, IT-019, IT-020, IT-021, ST-013, ST-014 |
+| REQ-8 | Audit eligibility assessments and rule versions | SF-1 | High | UT-022, UT-023, UT-024, IT-022, IT-023, IT-024, ST-015, ST-016 |
+| REQ-9 | Record collection for current eligible donor | SF-2 | High | UT-025, UT-026, UT-027, IT-025, IT-026, IT-027, ST-017, ST-018 |
+| REQ-10 | Generate unique blood unit ID | SF-2 | High | UT-028, UT-029, UT-030, IT-028, IT-029, IT-030, ST-019, ST-020 |
+| REQ-11 | Hold new unit in Screening Pending | SF-2 | High | UT-031, UT-032, UT-033, IT-031, IT-032, IT-033, ST-021, ST-022 |
+| REQ-12 | Enter and validate manual screening results | SF-2 | High | UT-034, UT-035, UT-036, IT-034, IT-035, IT-036, ST-023, ST-024 |
+| REQ-13 | Apply screening acceptance rules | SF-2 | High | UT-037, UT-038, UT-039, IT-037, IT-038, IT-039, ST-025, ST-026 |
+| REQ-14 | Separate accepted donation into components | SF-2 | High | UT-040, UT-041, UT-042, IT-040, IT-041, IT-042, ST-027, ST-028 |
+| REQ-15 | Assign component attributes and expiry | SF-2 | High | UT-043, UT-044, UT-045, IT-043, IT-044, IT-045, ST-029, ST-030 |
+| REQ-16 | Quarantine failed units and exclude them | SF-2 | High | UT-046, UT-047, UT-048, IT-046, IT-047, IT-048, ST-031, ST-032 |
+| REQ-17 | Maintain complete unit/component ledger | SF-3 | High | UT-049, UT-050, UT-051, IT-049, IT-050, IT-051, ST-033, ST-034 |
+| REQ-18 | Search and filter inventory securely | SF-3 | High | UT-052, UT-053, UT-054, IT-052, IT-053, IT-054, ST-035, ST-036 |
+| REQ-19 | Flag units within near-expiry window | SF-3 | High | UT-055, UT-056, UT-057, IT-055, IT-056, IT-057, ST-037, ST-038 |
+| REQ-20 | Move expired units out of Available stock | SF-3 | High | UT-058, UT-059, UT-060, IT-058, IT-059, IT-060, ST-039, ST-040 |
+| REQ-21 | Validate and audit inventory movements | SF-3 | High | UT-061, UT-062, UT-063, IT-061, IT-062, IT-063, ST-041, ST-042 |
+| REQ-22 | Define configurable minimum stock threshold | SF-3 | High | UT-064, UT-065, UT-066, IT-064, IT-065, IT-066, ST-043, ST-044 |
+| REQ-23 | Atomically recalculate shortage state | SF-3 | High | UT-067, UT-068, UT-069, IT-067, IT-068, IT-069, ST-045, ST-046 |
+| REQ-24 | Create a hospital blood request | SF-4 | High | UT-070, UT-071, UT-072, IT-070, IT-071, IT-072, ST-047, ST-048 |
+| REQ-25 | Reject invalid quantity and past deadline | SF-4 | High | UT-073, UT-074, UT-075, IT-073, IT-074, IT-075, ST-049, ST-050 |
+| REQ-26 | Order queue by urgency and deadline | SF-4 | High | UT-076, UT-077, UT-078, IT-076, IT-077, IT-078, ST-051, ST-052 |
+| REQ-27 | Approve, reject or partially fulfil request | SF-4 | High | UT-079, UT-080, UT-081, IT-079, IT-080, IT-081, ST-053, ST-054 |
+| REQ-28 | Allocate only matching available units | SF-4 | High | UT-082, UT-083, UT-084, IT-082, IT-083, IT-084, ST-055, ST-056 |
+| REQ-29 | Move allocated unit and record issue | SF-4 | High | UT-085, UT-086, UT-087, IT-085, IT-086, IT-087, ST-057, ST-058 |
+| REQ-30 | Set fulfilled/partial status and shortfall | SF-4 | High | UT-088, UT-089, UT-090, IT-088, IT-089, IT-090, ST-059, ST-060 |
+| REQ-31 | Cancel request and release reservations | SF-4 | High | UT-091, UT-092, UT-093, IT-091, IT-092, IT-093, ST-061, ST-062 |
+| REQ-32 | Create donation camp | SF-5 | Medium | UT-094, UT-095, UT-096, IT-094, IT-095, IT-096, ST-063, ST-064 |
+| REQ-33 | Validate camp date and time | SF-5 | Medium | UT-097, UT-098, UT-099, IT-097, IT-098, IT-099, ST-065, ST-066 |
+| REQ-34 | Publish camps and enrol donor | SF-5 | Medium | UT-100, UT-101, UT-102, IT-100, IT-101, IT-102, ST-067, ST-068 |
+| REQ-35 | Refuse ineligible camp enrolment | SF-5 | Medium | UT-103, UT-104, UT-105, IT-103, IT-104, IT-105, ST-069, ST-070 |
+| REQ-36 | Trace camp collection site on units | SF-5 | Medium | UT-106, UT-107, UT-108, IT-106, IT-107, IT-108, ST-071, ST-072 |
+| REQ-37 | Close camp and prevent later collection | SF-5 | Medium | UT-109, UT-110, UT-111, IT-109, IT-110, IT-111, ST-073, ST-074 |
+| REQ-38 | Search available counts without private data | SF-6 | Medium | UT-112, UT-113, UT-114, IT-112, IT-113, IT-114, ST-075, ST-076 |
+| REQ-39 | Dispatch, retry and fall back notifications | SF-6 | Medium | UT-115, UT-116, UT-117, IT-115, IT-116, IT-117, ST-077, ST-078 |
+| REQ-40 | Notify donor and camp enrollee | SF-6 | Medium | UT-118, UT-119, UT-120, IT-118, IT-119, IT-120, ST-079, ST-080 |
+| REQ-41 | Appeal when group stock is below threshold | SF-6 | High | UT-121, UT-122, UT-123, IT-121, IT-122, IT-123, ST-081, ST-082 |
+| REQ-42 | Generate required operational reports | SF-6 | Medium | UT-124, UT-125, UT-126, IT-124, IT-125, IT-126, ST-083, ST-084 |
+| REQ-43 | Export reports with audit metadata | SF-6 | Medium | UT-127, UT-128, UT-129, IT-127, IT-128, IT-129, ST-085, ST-086 |
+| REQ-44 | Enforce role-based report/search scope | SF-6 | High | UT-130, UT-131, UT-132, IT-130, IT-131, IT-132, ST-087, ST-088 |
+| REQ-45 | Administer users, roles and hospitals | SF-6 | High | UT-133, UT-134, UT-135, IT-133, IT-134, IT-135, ST-089, ST-090 |
+| REQ-46 | Configure eligibility, shelf life and thresholds | SF-6 | Medium | UT-136, UT-137, UT-138, IT-136, IT-137, IT-138, ST-091, ST-092 |
 
 ---
 
