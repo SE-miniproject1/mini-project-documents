@@ -246,47 +246,7 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 
 ## 4. Analysis Models
 
-The following field layouts define the minimum fields used by the requirements. Lengths are maximum storage/display lengths unless a format is stated. Fields marked Y are mandatory at the point described.
-
-| Entity / form | Field | Data type / format | Mandatory | Description |
-|---|---|---|:---:|---|
-| Donor registration | Donor ID | Alphanumeric | Y (generated) | Immutable identifier assigned by REQ-2 |
-| Donor registration | Full name | Text, 120 | Y | Donor's legal name |
-| Donor registration | Date of birth | Date, YYYY-MM-DD | Y | Used for age eligibility |
-| Donor registration | Sex | Enumerated | Y | Recorded demographic value |
-| Donor registration | Blood group | ABO/Rh enum | N | May be unknown at registration and confirmed later |
-| Donor registration | Weight | Decimal kg | Y | Used for minimum-weight check |
-| Donor registration | Haemoglobin | Decimal g/dL | Y at screening | Used for minimum-haemoglobin check |
-| Donor registration | Medical declaration | Text / structured flags | Y | Self-reported health and risk declarations |
-| Donor registration | Address | Text, 255 | Y | Contact address |
-| Donor registration | Telephone | E.164 text, 16 | Y | Duplicate detection and notifications |
-| Donor registration | Email | Email, 254 | Y | Duplicate detection and notifications |
-| Donor registration | Consent | Boolean + timestamp | Y | Consent to processing |
-| Eligibility assessment | Assessment status | Eligible / Ineligible | Y (generated) | Current decision |
-| Eligibility assessment | Failed rules | Structured list | N | Reasons shown for an ineligible donor |
-| Eligibility assessment | Next eligible date | Date | N | Required for cooldown decisions |
-| Eligibility assessment | Rule version | Alphanumeric | Y | Configuration version used |
-| Blood unit | Unit ID | Alphanumeric | Y (generated) | Unique traceability identifier |
-| Blood unit | Donation event ID | Alphanumeric | Y | Link to one collection event |
-| Blood unit | Blood group | ABO/Rh enum | Y | Group for inventory and allocation |
-| Blood unit | Component type | Enum | Y | Whole blood, packed red cells, plasma or platelets |
-| Blood unit | Storage location | Alphanumeric, 64 | Y | Refrigerator/freezer/rack location |
-| Blood unit | Status | Enum | Y | Screening Pending, Available, Near Expiry, Reserved, Issued, Quarantined, Expired or Disposed |
-| Blood unit | Collection date | Date/time | Y | Donation timestamp |
-| Blood unit | Expiry date | Date/time | Y | Calculated from component shelf life |
-| Screening result | Test name | Text, 64 | Y | Screening panel test |
-| Screening result | Outcome | Pass / Reactive / Invalid | Y | Manually entered under ASM-2 |
-| Screening result | Technician | User ID | Y | Staff member entering result |
-| Screening result | Result timestamp | Date/time | Y | Time result was recorded |
-| Stock configuration | Blood group | ABO/Rh enum | Y | Group to which threshold applies |
-| Stock configuration | Minimum Available units | Integer | Y | Threshold used by REQ-22 and REQ-23 |
-| Stock configuration | Near-expiry window | Integer days | Y | Window used by REQ-19 |
-| Report fields | Report name | Text | Y | Name of generated report |
-| Report fields | Date range | Start/end dates | Y | User-selected reporting window |
-| Report fields | Generating user | User ID | Y | User responsible for generation |
-| Report fields | Generation timestamp | Date/time | Y | Audit value in PDF and CSV exports |
-
-The principal reports contain the following fields: Donor Registration Report (donor ID, registration date, demographic summary, blood group, contact status and eligibility status); Blood Collection Report (donation event ID, donor ID for authorised staff, date, site, unit ID, component and screening status); Inventory Status Report (unit ID, group, component, location, status, collection date and expiry date); Near-Expiry and Expiry Report (unit ID, group, component, location, status, expiry date and days remaining); Hospital Request and Issue Report (request ID, hospital, group, component, requested quantity, issued quantity, status and timestamps); and Camp Performance Report (camp ID, date, target units, collected units, rejected units and completion status).
+*Content pending — to be drafted by Dhanya K M.*
 
 ---
 
@@ -538,26 +498,6 @@ This feature provides availability search across the inventory, dispatches notif
 ## 6. Other Nonfunctional Requirements
 
 *Content pending — to be drafted by Niveditha.*
-
-### 6.5 Business Rules and Domain Requirements
-
-The following defaults are used by the functional requirements and remain administrator-configurable through REQ-46. A configuration change applies to new eligibility assessments, collections and inventory calculations; previously recorded decisions retain the configuration version used at the time.
-
-| Rule | Default value | Use in the system |
-|---|---:|---|
-| Minimum donor age | 18 years | Inclusive lower bound for eligibility |
-| Maximum donor age | 65 years | Inclusive upper bound for eligibility |
-| Minimum donor weight | 45 kg | Minimum weight for the standard whole-blood collection volume |
-| Minimum haemoglobin | 12.5 g/dL | Inclusive lower bound for eligibility |
-| Minimum donation interval | 90 calendar days | Time between accepted whole-blood donations by the same donor |
-| Whole blood shelf life | 35 days | Expiry calculation when whole blood is stored as a unit |
-| Packed red-cell shelf life | 35 days | Expiry calculation for packed red-cell components |
-| Fresh-frozen plasma shelf life | 365 days | Expiry calculation for frozen plasma components |
-| Platelet shelf life | 5 days | Expiry calculation for platelet components |
-| Near-expiry window | 7 days | Window used by REQ-19 and REQ-46 |
-| Minimum Available stock per blood group | 5 units | Threshold evaluated by REQ-22 and REQ-23 and consumed by REQ-41 |
-
-The stored blood group must be one of the supported ABO/Rh groups (A+, A-, B+, B-, AB+, AB-, O+ or O-). A unit marked Quarantined, Expired, Disposed, Reserved or Issued is not Available. A blood unit may be issued only after screening acceptance and while it is unexpired.
 
 ---
 
