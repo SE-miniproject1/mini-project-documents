@@ -375,9 +375,6 @@ This feature provides availability search across the inventory, dispatches notif
 **REQ-46:** The system shall permit an administrator to configure the minimum donation interval, the donor age bounds, the minimum weight, the minimum haemoglobin, the component shelf lives, the near-expiry window and the per-group minimum stock thresholds, without requiring a code change or a restart.
 
 ---
-
-## 6. Other Nonfunctional Requirements
-
 ### 6.1 Performance Requirements
 
 **NFR-P1:** Any screen that does not generate a report shall render completely within 3 seconds at the 95th percentile, measured at the server under a load of 50 concurrent users. This bound exists because blood bank staff perform high-volume repetitive entry, and a slower response measurably reduces throughput during peak collection hours.
@@ -393,7 +390,6 @@ This feature provides availability search across the inventory, dispatches notif
 **NFR-P6:** Notification dispatch shall be enqueued within 1 second of the triggering transaction committing. Actual delivery time is governed by the external gateway and is outside the system's control.
 
 **NFR-P7:** The database shall sustain the stated response times with up to 200,000 donor records, 500,000 unit records and 100,000 request records.
-
 ### 6.2 Safety Requirements
 
 **NFR-S1:** The system shall make it impossible, through any application function, to issue a blood unit that has not completed the mandatory screening panel with all results Non-Reactive. This is the single most safety-critical constraint in the system, because an infected unit reaching a patient could cause death.
@@ -409,7 +405,6 @@ This feature provides availability search across the inventory, dispatches notif
 **NFR-S6:** Every unit shall remain traceable in both directions, from donor to recipient hospital and from recipient hospital back to donor, for the retention period stated in CON-6, so that a transfusion-transmitted infection can be investigated.
 
 **NFR-S7:** Where the system cannot determine that an operation is safe, it shall refuse the operation rather than permit it. Ambiguity resolves to refusal.
-
 ### 6.3 Security Requirements
 
 **NFR-SEC1:** The system shall authenticate every user by username and password before granting access to any function other than public camp listings and the registration and login screens.
@@ -434,72 +429,6 @@ This feature provides availability search across the inventory, dispatches notif
 
 **NFR-SEC11:** Sessions shall expire after 30 minutes of inactivity and shall be invalidated on logout and on password change.
 
-### 6.4 Software Quality Attributes
-
-**NFR-Q1 Usability.** A blood bank staff member shall be able to complete a routine collection entry in no more than 8 interactions after the donor is located. A donor with no training shall be able to complete registration without assistance. Where ease of use and ease of learning conflict for the staff console, **ease of use is preferred**, because staff are trained once and then use the system continuously. For the donor portal the preference is reversed and **ease of learning is preferred**, because donors use the system rarely.
-
-**NFR-Q2 Availability.** The system shall be available at least 99 percent of the time during the blood bank's operating hours, excluding scheduled maintenance announced at least 48 hours in advance.
-
-**NFR-Q3 Reliability.** The mean time between failures shall exceed 720 hours of operation. No failure shall leave a unit in an inconsistent status, because every status transition is performed within a database transaction.
-
-**NFR-Q4 Correctness.** All eligibility, expiry and allocation calculations shall be exact. There is no tolerance for approximation in any safety-related computation.
-
-**NFR-Q5 Maintainability.** Automated unit test line coverage shall be at least 70 percent. Every module shall carry a docstring stating its responsibility. Cyclomatic complexity of any single function shall not exceed 10.
-
-**NFR-Q6 Testability.** Every functional requirement in Section 5 shall be verifiable by at least one test case, and this shall be demonstrated in Appendix C. The system shall support seeding of a deterministic test data set.
-
-**NFR-Q7 Portability.** The application shall run on any Linux distribution providing the platform versions in Section 2.4 and shall not depend on any operating system feature outside the Python standard library and declared dependencies.
-
-**NFR-Q8 Interoperability.** All report exports shall be produced in PDF and in RFC 4180 conformant CSV, so that they can be consumed by standard office software.
-
-**NFR-Q9 Robustness.** The system shall validate every input on the server irrespective of client-side validation, and shall respond to invalid input with a corrective message rather than an unhandled error.
-
-**NFR-Q10 Flexibility.** The parameters listed in REQ-46 shall be changeable through configuration without code modification, so that a change in regulation is absorbed operationally.
-
-### 6.5 Business Rules and Domain Requirements
-
-**BR-1** Only a donor whose current eligibility status is Eligible may donate. Staff cannot override this rule.
-
-**BR-2** The minimum interval between two whole blood donations by the same donor is 90 days. This value is configurable per REQ-46 but shall not be configurable below 90 days.
-
-**BR-3** A donor must be at least 18 and at most 65 years of age, weigh at least 50 kilograms and have a haemoglobin level of at least 12.5 grams per decilitre.
-
-**BR-4** Component shelf lives, measured from the collection date, are as follows. These are domain requirements derived from transfusion medicine practice.
-
-| Component | Shelf Life | Storage Temperature |
-|---|---|---|
-| Whole Blood | 35 days | 2 to 6 degrees Celsius |
-| Packed Red Blood Cells | 42 days | 2 to 6 degrees Celsius |
-| Fresh Frozen Plasma | 365 days | minus 30 degrees Celsius or below |
-| Platelet Concentrate | 5 days | 20 to 24 degrees Celsius with agitation |
-| Cryoprecipitate | 365 days | minus 30 degrees Celsius or below |
-
-**BR-5** Every unit must complete the mandatory screening panel of HIV, Hepatitis B, Hepatitis C, Syphilis and Malaria. A unit reactive to any of these is discarded and can never be issued.
-
-**BR-6** Only blood bank staff may record a collection or issue a unit. Only an administrator may alter configuration, register a hospital or change a user's role.
-
-**BR-7** Only a hospital user linked to a registered, active hospital may raise a blood request.
-
-**BR-8** Blood group compatibility for issue in Release 1.0 is exact match only. Compatible-group substitution, such as issuing O negative to any recipient, is a manual clinical decision and is not automated by the system.
-
-**BR-9** Donor identity is confidential. It is visible to blood bank staff and administrators only, never to hospital users.
-**BR-10** No donor record, unit record, request record or audit record may be permanently deleted. Records are deactivated or superseded, never removed.
-## 7. Other Requirements
-
-**OR-1 Database requirements.** The schema shall be normalised to at least third normal form. Every table shall carry a surrogate primary key, a creation timestamp and a last-modified timestamp. Foreign key constraints shall be enforced at the database level and shall not rely solely on application logic. All schema changes shall be applied through versioned migration files held in source control.
-
-**OR-2 Backup and recovery.** The database shall be backed up daily with a retention of 30 days. The recovery point objective is 24 hours and the recovery time objective is 4 hours. A restore shall be tested at least once before release.
-
-**OR-3 Internationalisation.** All user-facing text shall be held in externalised message files rather than embedded in code, so that a future release can add a second language. Release 1.0 ships English only. All timestamps shall be stored in UTC and displayed in the Asia/Kolkata timezone. Dates shall be displayed as DD-MM-YYYY.
-
-**OR-4 Legal and regulatory.** Donor personal data and medical data shall be processed only for the purposes stated in this SRS. The registration screen shall obtain the donor's explicit consent to the storage and processing of their data, and that consent shall be recorded with a timestamp.
-
-**OR-5 Reuse objectives.** The authentication, role-based access control and notification dispatch modules shall be written without dependency on blood-bank-specific domain logic, so that they can be reused in future projects.
-
-**OR-6 Documentation.** The delivered system shall be accompanied by a user manual per user class, an installation and deployment guide, and API documentation generated from source docstrings.
-
-**OR-7 Logging.** The application shall write structured logs at INFO level for business events and at ERROR level for failures. Logs shall never contain passwords, session tokens or full donor medical histories.
-**OR-8 Environment separation.** Development, test and production environments shall be separate. Production data shall never be copied to a development environment without anonymisation of donor personal data.
 
 ---
 
