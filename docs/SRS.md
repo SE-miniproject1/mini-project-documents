@@ -429,8 +429,57 @@ This feature provides availability search across the inventory, dispatches notif
 
 **NFR-SEC11:** Sessions shall expire after 30 minutes of inactivity and shall be invalidated on logout and on password change.
 
+### 6.4 Software Quality Attributes
 
+**NFR-Q1 Usability.** A blood bank staff member shall be able to complete a routine collection entry in no more than 8 interactions after the donor is located. A donor with no training shall be able to complete registration without assistance. Where ease of use and ease of learning conflict for the staff console, **ease of use is preferred**, because staff are trained once and then use the system continuously. For the donor portal the preference is reversed and **ease of learning is preferred**, because donors use the system rarely.
+
+**NFR-Q2 Availability.** The system shall be available at least 99 percent of the time during the blood bank's operating hours, excluding scheduled maintenance announced at least 48 hours in advance.
+
+**NFR-Q3 Reliability.** The mean time between failures shall exceed 720 hours of operation. No failure shall leave a unit in an inconsistent status, because every status transition is performed within a database transaction.
+
+**NFR-Q4 Correctness.** All eligibility, expiry and allocation calculations shall be exact. There is no tolerance for approximation in any safety-related computation.
+
+**NFR-Q5 Maintainability.** Automated unit test line coverage shall be at least 70 percent. Every module shall carry a docstring stating its responsibility. Cyclomatic complexity of any single function shall not exceed 10.
+
+**NFR-Q6 Testability.** Every functional requirement in Section 5 shall be verifiable by at least one test case, and this shall be demonstrated in Appendix C. The system shall support seeding of a deterministic test data set.
+
+**NFR-Q7 Portability.** The application shall run on any Linux distribution providing the platform versions in Section 2.4 and shall not depend on any operating system feature outside the Python standard library and declared dependencies.
+
+**NFR-Q8 Interoperability.** All report exports shall be produced in PDF and in RFC 4180 conformant CSV, so that they can be consumed by standard office software.
+
+**NFR-Q9 Robustness.** The system shall validate every input on the server irrespective of client-side validation, and shall respond to invalid input with a corrective message rather than an unhandled error.
+
+**NFR-Q10 Flexibility.** The parameters listed in REQ-46 shall be changeable through configuration without code modification, so that a change in regulation is absorbed operationally.
 ---
+### 6.5 Business Rules and Domain Requirements
+
+**BR-1** Only a donor whose current eligibility status is Eligible may donate. Staff cannot override this rule.
+
+**BR-2** The minimum interval between two whole blood donations by the same donor is 90 days. This value is configurable per REQ-46 but shall not be configurable below 90 days.
+
+**BR-3** A donor must be at least 18 and at most 65 years of age, weigh at least 50 kilograms and have a haemoglobin level of at least 12.5 grams per decilitre.
+
+**BR-4** Component shelf lives, measured from the collection date, are as follows. These are domain requirements derived from transfusion medicine practice.
+
+| Component | Shelf Life | Storage Temperature |
+|---|---|---|
+| Whole Blood | 35 days | 2 to 6 degrees Celsius |
+| Packed Red Blood Cells | 42 days | 2 to 6 degrees Celsius |
+| Fresh Frozen Plasma | 365 days | minus 30 degrees Celsius or below |
+| Platelet Concentrate | 5 days | 20 to 24 degrees Celsius with agitation |
+| Cryoprecipitate | 365 days | minus 30 degrees Celsius or below |
+
+**BR-5** Every unit must complete the mandatory screening panel of HIV, Hepatitis B, Hepatitis C, Syphilis and Malaria. A unit reactive to any of these is discarded and can never be issued.
+
+**BR-6** Only blood bank staff may record a collection or issue a unit. Only an administrator may alter configuration, register a hospital or change a user's role.
+
+**BR-7** Only a hospital user linked to a registered, active hospital may raise a blood request.
+
+**BR-8** Blood group compatibility for issue in Release 1.0 is exact match only. Compatible-group substitution, such as issuing O negative to any recipient, is a manual clinical decision and is not automated by the system.
+
+**BR-9** Donor identity is confidential. It is visible to blood bank staff and administrators only, never to hospital users.
+
+**BR-10** No donor record, unit record, request record or audit record may be permanently deleted. Records are deactivated or superseded, never removed.
 
 ## Appendix A: Glossary
 
