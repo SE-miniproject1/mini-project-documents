@@ -252,7 +252,127 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 
 ## 5. System Features
 
-*Content pending — to be drafted by Balaraj R and G A Aadish.*
+The functional requirements are organised by system feature, which are the major services the product provides. Six features are specified. Each requirement carries a unique tag of the form `REQ-n` and is traced in Appendix C.
+
+Priority is stated as High, Medium or Low, supported by component ratings for benefit, penalty, cost and risk, each on a scale of 1 to 9.
+
+*Content pending — SF-1 to SF-3 to be drafted by Balaraj R.*
+
+### 5.4 Hospital Blood Request and Issue
+
+#### 5.4.1 Description and Priority
+
+This feature allows a registered hospital to raise a request for blood, allows staff to review and act on that request, and records the issue of specific units against it. It is the demand side of the system and the feature that most directly affects patient outcomes in an emergency.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 6, Risk 6.
+
+#### 5.4.2 Stimulus/Response Sequences
+
+**Sequence 1, raise a request.** A hospital user submits a request specifying blood group, component, quantity, urgency and required-by date and time, together with a patient reference that is not a patient name. The system validates the input, creates the request in Pending status, assigns a request identifier, and notifies blood bank staff. Emergency requests are placed at the head of the queue.
+
+**Sequence 2, insufficient stock.** The hospital requests a quantity exceeding available stock of that group and component. The system accepts the request but displays the currently available quantity, and staff may later fulfil it partially.
+
+**Sequence 3, approve and issue.** Staff open a Pending request, review it, and approve it. The system moves the request to Approved. Staff then allocate specific units. The system reserves each allocated unit, and on confirmation of issue moves each unit to Issued, moves the request to Fulfilled, and notifies the hospital.
+
+**Sequence 4, partial fulfilment.** Staff allocate fewer units than requested. The system moves the request to Partially Fulfilled, records the shortfall, and keeps the request open for further allocation.
+
+**Sequence 5, rejection.** Staff reject a request with a stated reason. The system moves the request to Rejected, releases any reservation, and notifies the hospital with the reason.
+
+**Sequence 6, cancellation.** A hospital user cancels a request that has not yet been issued. The system releases any reserved units back to Available and moves the request to Cancelled.
+
+#### 5.4.3 Functional Requirements
+
+**REQ-24:** The system shall permit an authenticated hospital user to raise a blood request capturing blood group, component type, quantity of units, urgency drawn from Routine, Urgent and Emergency, required-by date and time, and a patient reference code. The system shall assign a unique, immutable request identifier of the form `REQ` followed by eight digits.
+
+**REQ-25:** The system shall reject a request for a quantity that is not a positive integer, and shall reject a required-by date and time that lies in the past, with a message naming the field in error.
+
+**REQ-26:** The system shall order the staff request queue by urgency, with Emergency first, then by required-by date and time ascending, and shall visually distinguish Emergency requests.
+
+**REQ-27:** The system shall permit staff to approve, reject or partially fulfil a Pending request. A rejection shall require a reason drawn from a configured list, and that reason shall be communicated to the requesting hospital.
+
+**REQ-28:** The system shall permit staff to allocate specific Available units of the requested blood group and component to an approved request. The system shall reject any attempt to allocate a unit that is not Available, whose blood group does not match the request, or which has expired.
+
+**REQ-29:** The system shall move an allocated unit to Reserved on allocation and to Issued on confirmation of issue, and shall record against each issue the request identifier, unit identifier, issuing staff member, receiving hospital and timestamp.
+
+**REQ-30:** The system shall set a request to Fulfilled when the issued quantity equals the requested quantity, to Partially Fulfilled when it is greater than zero but less than the requested quantity, and shall record the outstanding shortfall in the latter case.
+
+**REQ-31:** The system shall permit a hospital user to cancel their own request while it is in Pending or Approved status, shall release any Reserved units back to Available, and shall prohibit cancellation once any unit has been Issued against the request.
+
+### 5.5 Donation Camp and Drive Management
+
+#### 5.5.1 Description and Priority
+
+This feature schedules and manages blood donation camps held away from the blood bank premises, handles donor enrolment for those camps, and reconciles the units collected at a camp into central inventory. Camps are the principal source of supply for most blood banks, so the feature carries real operational benefit, though the system remains usable without it.
+
+**Priority: Medium.** Benefit 7, Penalty 5, Cost 5, Risk 3.
+
+#### 5.5.2 Stimulus/Response Sequences
+
+**Sequence 1, schedule a camp.** Staff create a camp specifying name, venue, date, start and end times, organiser and target unit count. The system validates that the date is in the future and creates the camp in Scheduled status.
+
+**Sequence 2, donor enrols.** A donor browses upcoming camps and enrols in one. The system verifies that the donor will be eligible on the camp date, records the enrolment and sends a confirmation.
+
+**Sequence 3, ineligible enrolment.** A donor whose next eligible date falls after the camp date attempts to enrol. The system refuses the enrolment and displays the date on which the donor becomes eligible.
+
+**Sequence 4, camp day collection.** Staff record collections against the camp. Each unit created carries the camp as its collection site.
+
+**Sequence 5, close a camp.** Staff close the camp. The system moves it to Completed, computes actual units collected against the target, and prevents further collections being recorded against it.
+
+#### 5.5.3 Functional Requirements
+
+**REQ-32:** The system shall permit staff and administrators to create a donation camp capturing camp name, venue address, camp date, start and end time, organiser name and contact, and target number of units.
+
+**REQ-33:** The system shall reject the creation of a camp whose date is earlier than the current date, and shall reject an end time that is not later than the start time.
+
+**REQ-34:** The system shall publish all camps in Scheduled status to the donor camp listing, ordered by camp date ascending, and shall permit a donor to enrol in a listed camp.
+
+**REQ-35:** The system shall refuse a camp enrolment where the donor's next eligible donation date falls after the camp date, and shall display the donor's next eligible date in the refusal message.
+
+**REQ-36:** The system shall record the camp identifier as the collection site on every unit collected at that camp, so that units remain traceable to the camp at which they were collected.
+
+**REQ-37:** The system shall permit staff to close a camp, shall move it to Completed status, shall report actual units collected against the target, and shall reject any collection recorded against a Completed camp.
+
+### 5.6 Search, Notification and Reporting
+
+#### 5.6.1 Description and Priority
+
+This feature provides availability search across the inventory, dispatches notifications to donors, hospitals and staff, and generates the operational and statutory reports the blood bank must produce. It also carries the administrative functions for users, roles and system configuration.
+
+**Priority: Medium to High.** Benefit 8, Penalty 6, Cost 5, Risk 3.
+
+#### 5.6.2 Stimulus/Response Sequences
+
+**Sequence 1, availability search.** A hospital user searches for a blood group and component. The system returns the available quantity without revealing individual unit identifiers or donor identities.
+
+**Sequence 2, eligibility notification.** A donor reaches their next eligible date. The system sends a notification inviting them to donate.
+
+**Sequence 3, shortage appeal.** Stock of a blood group falls below its configured minimum threshold. The system notifies eligible donors of that group.
+
+**Sequence 4, generate a report.** A user selects a report and a date range. The system generates it, displays it on screen, and offers PDF and CSV export.
+
+**Sequence 5, gateway failure.** The SMS gateway is unreachable. The system records the failure, retries per the configured policy, and falls back to email.
+
+**Sequence 6, user administration.** An administrator creates a user account, assigns a role and, for a hospital user, links the account to a registered hospital.
+
+#### 5.6.3 Functional Requirements
+
+**REQ-38:** The system shall provide an availability search returning the count of Available units by blood group and component type. When invoked by a hospital user the response shall carry counts only, and shall not disclose unit identifiers, donor identifiers or any donor personal data.
+
+**REQ-39:** The system shall dispatch notifications by SMS and email. Dispatch shall be asynchronous and shall not block or roll back the originating transaction. A failed SMS dispatch shall be retried up to three times at increasing intervals, and on final failure the system shall fall back to email and record the failure against the notification record.
+
+**REQ-40:** The system shall notify a donor when their next eligible donation date is reached, and shall notify enrolled donors 24 hours before a camp in which they are enrolled.
+
+**REQ-41:** The system shall notify eligible donors of a given blood group when Available stock of that group falls below its configured minimum threshold, and shall not send more than one such appeal to the same donor within any 30-day period.
+
+**REQ-42:** The system shall generate the following reports over a user-selected date range: Donor Registration Report, Blood Collection Report, Inventory Status Report, Near-Expiry and Expiry Report, Hospital Request and Issue Report, and Camp Performance Report. The field composition of each is specified in Appendix B.
+
+**REQ-43:** The system shall permit every generated report to be exported as PDF and as CSV, and shall include in the exported artefact the report name, the selected date range, the generating user and the generation timestamp.
+
+**REQ-44:** The system shall restrict every report and search result to the data the requesting user is authorised to see. A hospital user shall see only requests and issues belonging to their own hospital.
+
+**REQ-45:** The system shall permit an administrator to create, modify and deactivate user accounts, to assign exactly one role from Donor, Staff, Hospital User and Administrator to each account, and to register hospitals with name, address, licence number and contact details. Accounts shall be deactivated rather than deleted, in accordance with CON-6.
+
+**REQ-46:** The system shall permit an administrator to configure the minimum donation interval, the donor age bounds, the minimum weight, the minimum haemoglobin, the component shelf lives, the near-expiry window and the per-group minimum stock thresholds, without requiring a code change or a restart.
 
 ---
 
