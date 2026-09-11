@@ -1,0 +1,160 @@
+%% Blood Bank Management System - Entity Relationship Diagram
+%% SRS Section 4, attributes per Appendix B
+erDiagram
+    DONOR ||--o{ DONATION : "makes"
+    DONOR ||--o{ CAMP_ENROLMENT : "enrols via"
+    DONATION ||--|| BLOOD_UNIT : "produces"
+    BLOOD_UNIT ||--o{ BLOOD_UNIT : "separates into"
+    BLOOD_UNIT ||--o{ SCREENING_TEST : "is screened by"
+    BLOOD_UNIT ||--o| ISSUE : "is issued as"
+    HOSPITAL ||--o{ BLOOD_REQUEST : "raises"
+    BLOOD_REQUEST ||--o{ ISSUE : "fulfilled by"
+    CAMP ||--o{ CAMP_ENROLMENT : "has"
+    CAMP ||--o{ DONATION : "hosts"
+    USER_ACCOUNT ||--|| ROLE : "holds"
+    USER_ACCOUNT ||--o{ AUDIT_LOG : "generates"
+    HOSPITAL ||--o{ USER_ACCOUNT : "employs"
+    DONOR ||--o| USER_ACCOUNT : "signs in as"
+    NOTIFICATION }o--|| DONOR : "sent to"
+
+    DONOR {
+        string donor_id PK "DNR + 8 digits"
+        string full_name
+        date   date_of_birth
+        string gender
+        string blood_group
+        string mobile_number UK
+        string email UK
+        string city
+        string pin_code
+        decimal weight_kg
+        decimal haemoglobin
+        date   last_donation_date
+        date   next_eligible_date
+        string eligibility_status
+        string deferral_reason
+        datetime consent_timestamp
+    }
+
+    DONATION {
+        string donation_id PK
+        string donor_id FK
+        datetime collected_at
+        int    volume_ml
+        string bag_lot_number
+        string collection_site
+        string recorded_by
+    }
+
+    BLOOD_UNIT {
+        string unit_id PK "BU + 10 digits"
+        string donor_id FK
+        string parent_unit_id FK
+        string blood_group
+        string component_type
+        int    volume_ml
+        date   collection_date
+        date   expiry_date
+        string storage_location
+        string status
+        string discard_reason
+    }
+
+    SCREENING_TEST {
+        string test_id PK
+        string unit_id FK
+        string test_name
+        string result "Reactive / Non-Reactive"
+        date   tested_on
+        string tested_by
+    }
+
+    HOSPITAL {
+        string hospital_id PK
+        string hospital_name
+        string licence_number UK
+        string city
+        string contact_person
+        string contact_number
+        bool   is_active
+    }
+
+    BLOOD_REQUEST {
+        string request_id PK "REQ + 8 digits"
+        string hospital_id FK
+        string blood_group
+        string component_type
+        int    quantity_requested
+        int    quantity_issued
+        string urgency
+        datetime required_by
+        string patient_reference
+        string status
+        string rejection_reason
+        datetime raised_on
+    }
+
+    ISSUE {
+        string issue_id PK
+        string request_id FK
+        string unit_id FK
+        string issued_by
+        datetime issued_at
+    }
+
+    CAMP {
+        string camp_id PK
+        string camp_name
+        string venue_address
+        date   camp_date
+        time   start_time
+        time   end_time
+        string organiser_name
+        int    target_units
+        int    units_collected
+        string status
+    }
+
+    CAMP_ENROLMENT {
+        string enrolment_id PK
+        string camp_id FK
+        string donor_id FK
+        datetime enrolled_at
+        bool   attended
+    }
+
+    USER_ACCOUNT {
+        string user_id PK
+        string username UK
+        string password_hash
+        string role_id FK
+        string hospital_id FK
+        bool   is_active
+        datetime last_login
+    }
+
+    ROLE {
+        string role_id PK
+        string role_name "Donor / Staff / Hospital / Admin"
+    }
+
+    NOTIFICATION {
+        string notification_id PK
+        string recipient_id
+        string channel "SMS / Email"
+        string message_body
+        string dispatch_status
+        int    retry_count
+        datetime dispatched_at
+    }
+
+    AUDIT_LOG {
+        string audit_id PK
+        string entity_type
+        string entity_id
+        string previous_status
+        string new_status
+        string acting_user FK
+        string reason
+        datetime occurred_at
+    }
