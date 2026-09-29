@@ -239,8 +239,69 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 ---
 
 ## 3. External Interface Requirements
+### 3.1 User Interfaces
 
-*Content pending — to be drafted by Niveditha.*
+The Blood Bank Management System shall provide browser-based user interfaces for four user classes: Donors, Blood Bank Staff, Hospital Users and Administrators. The interfaces shall use a consistent layout with a header, navigation area, main content area, action controls and notification/error area.
+
+#### 3.1.1 Donor Portal
+
+The Donor Portal shall allow donors to:
+- Register and maintain their profile and contact information.
+- View their eligibility status and next eligible donation date.
+- View their donation history.
+- Browse upcoming donation camps and enrol in eligible camps.
+- Receive confirmation and notification messages.
+
+The interface shall be usable on mobile browsers because donors may access the system from mobile devices. The interface shall display clear validation messages when entered information is invalid or when a donor is not eligible for an action.
+
+#### 3.1.2 Blood Bank Staff Console
+
+The Staff Console shall provide screens for:
+- Donor registration and eligibility screening.
+- Recording blood donation and collection details.
+- Recording screening results and component separation.
+- Managing blood inventory and expiry information.
+- Processing hospital blood requests.
+- Managing donation camps.
+- Searching inventory and generating operational reports.
+
+The Staff Console shall use dense, keyboard-efficient screens suitable for continuous use during working hours. Tables, filters, search controls and status indicators shall be used where appropriate.
+
+#### 3.1.3 Hospital Portal
+
+The Hospital Portal shall allow authorised hospital users to:
+- Raise blood requests.
+- Specify blood group, component, quantity, urgency and required-by date and time.
+- View the status of their requests.
+- View issue history for their own hospital.
+- Cancel eligible requests.
+
+The interface shall clearly distinguish request states such as Pending, Approved, Partially Fulfilled, Fulfilled, Rejected and Cancelled. Donor identities shall not be displayed to hospital users.
+
+#### 3.1.4 Administrator Console
+
+The Administrator Console shall provide screens for:
+- Managing user accounts and roles.
+- Registering and managing hospitals.
+- Configuring eligibility and expiry parameters.
+- Viewing reports.
+- Viewing audit logs.
+
+Administrative functions shall only be accessible to authenticated users with administrator privileges.
+
+#### 3.1.5 Common Interface Requirements
+
+All user interfaces shall:
+- Use consistent navigation, labels, buttons and form layouts.
+- Display required fields clearly.
+- Validate user input before submission.
+- Display clear error messages identifying the field or action that caused the error.
+- Provide confirmation messages after successful operations.
+- Clearly display important statuses such as eligibility, inventory status and request status.
+- Prevent users from accessing functions for which they do not have permission.
+- Support the browser environments specified in Section 2.4.
+- Remain usable from a 360-pixel-wide mobile viewport up to a 1920-pixel-wide desktop viewport.
+
 
 ---
 
