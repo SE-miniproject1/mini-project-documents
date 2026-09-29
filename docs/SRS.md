@@ -302,7 +302,37 @@ All user interfaces shall:
 - Support the browser environments specified in Section 2.4.
 - Remain usable from a 360-pixel-wide mobile viewport up to a 1920-pixel-wide desktop viewport.
 
+### 3.2 Hardware Interfaces
 
+The Blood Bank Management System shall operate on standard computing devices used by donors, blood bank staff, hospital users and administrators.
+
+- Client devices shall include desktop computers, laptops, tablets and mobile devices with a supported web browser.
+- The system shall use standard keyboard, mouse and touch-screen input devices supported by the client device.
+- Blood bank staff may use barcode or scanning devices where available for identifying blood units and donor records.
+- The system shall interface with display devices through the user's web browser.
+- No specialised hardware shall be mandatory for normal system operation.
+
+### 3.3 Software Interfaces
+
+The Blood Bank Management System shall provide software interfaces with the following components:
+
+- **Web Browser:** Users shall access the system through supported web browsers.
+- **Database Management System:** The application shall communicate with the database for storing and retrieving user, donor, hospital, blood inventory, donation, request and transaction information.
+- **Authentication and Authorization:** The system shall use authenticated user accounts and role-based access control to restrict access to authorised functions.
+- **Notification Services:** The system may interface with notification services for sending confirmations, reminders and important status notifications.
+- **Reporting Services:** The system shall provide software interfaces for generating operational and administrative reports.
+- **Audit Logging:** Security-sensitive and important user actions shall be recorded through the system's audit logging mechanism.
+
+### 3.4 Communication Interfaces
+
+The Blood Bank Management System shall use standard web-based communication mechanisms.
+
+- Communication between client browsers and the application server shall use HTTP/HTTPS.
+- HTTPS shall be used for authenticated and sensitive communication.
+- The system shall use standard request-response communication between the client and server.
+- Data exchanged between the client and server shall use structured formats supported by the application.
+- Communication errors or unavailable services shall be reported to the user using clear error messages.
+- The system shall maintain secure communication when transmitting sensitive user, donor, hospital and blood inventory information.
 ---
 
 ## 4. Analysis Models
