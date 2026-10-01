@@ -1,0 +1,89 @@
+%% Blood Bank Management System - Use Case Diagram
+%% SRS Section 4, Analysis Models
+%% Use cases are grouped by the system feature (SF) that contains them.
+flowchart TB
+    DONOR([Donor])
+    STAFF([Blood Bank Staff])
+    HOSP([Hospital User])
+    ADMIN([Administrator])
+    SMS([SMS Gateway])
+    MAIL([Email Gateway])
+
+    subgraph SF1["SF-1 Donor and Eligibility"]
+        direction LR
+        UC1((Register<br/>as Donor))
+        UC2((View Eligibility<br/>Status))
+        UC4((Screen<br/>Donor))
+    end
+
+    subgraph SF2["SF-2 Collection and Screening"]
+        direction LR
+        UC5((Record<br/>Collection))
+        UC6((Enter Test<br/>Results))
+        UC7((Separate<br/>Components))
+    end
+
+    subgraph SF3["SF-3 Inventory"]
+        direction LR
+        UC8((Manage<br/>Inventory))
+        UC9((Discard<br/>Unit))
+    end
+
+    subgraph SF4["SF-4 Request and Issue"]
+        direction LR
+        UC10((Raise Blood<br/>Request))
+        UC11((Track<br/>Request))
+        UC13((Approve or<br/>Reject Request))
+        UC14((Allocate and<br/>Issue Units))
+    end
+
+    subgraph SF5["SF-5 Camps"]
+        direction LR
+        UC3((Enrol<br/>in Camp))
+        UC15((Manage<br/>Camp))
+    end
+
+    subgraph SF6["SF-6 Search, Reporting and Admin"]
+        direction LR
+        UC12((Check<br/>Availability))
+        UC16((Generate<br/>Reports))
+        UC17((Manage Users<br/>and Roles))
+        UC18((Configure<br/>Parameters))
+        UC19((Send<br/>Notification))
+    end
+
+    DONOR --> UC1
+    DONOR --> UC2
+    DONOR --> UC3
+
+    STAFF --> UC4
+    STAFF --> UC5
+    STAFF --> UC6
+    STAFF --> UC7
+    STAFF --> UC8
+    STAFF --> UC9
+    STAFF --> UC13
+    STAFF --> UC14
+    STAFF --> UC15
+    STAFF --> UC16
+
+    HOSP --> UC10
+    HOSP --> UC11
+    HOSP --> UC12
+    HOSP --> UC16
+
+    ADMIN --> UC8
+    ADMIN --> UC15
+    ADMIN --> UC16
+    ADMIN --> UC17
+    ADMIN --> UC18
+
+    UC5 -.->|include| UC4
+    UC14 -.->|include| UC8
+    UC6 -.->|extend| UC9
+    UC1 -.->|include| UC19
+    UC3 -.->|include| UC19
+    UC13 -.->|include| UC19
+
+    UC19 --> SMS
+    UC19 --> MAIL
