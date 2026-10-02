@@ -1,0 +1,47 @@
+%% Blood Bank Management System - Data Flow Diagram, Level 1 (Sheet A: Supply Side)
+%% SRS Section 4. Processes 1.0 to 4.0, the path by which blood enters the system.
+%% Sheet B covers processes 5.0 to 9.0.
+flowchart TB
+    DONOR([Donor])
+    STAFF([Blood Bank Staff])
+    ADMINA([Administrator])
+
+    P1["1.0<br/>Register and<br/>Screen Donor"]
+    P2["2.0<br/>Record<br/>Collection"]
+    P3["3.0<br/>Test and<br/>Quarantine Unit"]
+    P4["4.0<br/>Maintain<br/>Inventory"]
+
+    D1[("D1  Donor Store")]
+    D2[("D2  Unit Store")]
+    D5[("D5  Audit Store")]
+
+    TO_B(["To Sheet B<br/>6.0 Allocate and Issue"])
+    TO_N(["To Sheet B<br/>9.0 Dispatch Notification"])
+    FROM_C(["From Sheet B<br/>7.0 Manage Camp"])
+
+    DONOR -->|"registration details"| P1
+    P1 -->|"donor ID, eligibility status"| DONOR
+    STAFF -->|"screening values"| P1
+    P1 -->|"donor record"| D1
+    D1 -->|"eligibility status"| P1
+
+    D1 -->|"eligible donor"| P2
+    STAFF -->|"collection data"| P2
+    FROM_C -->|"camp as collection site"| P2
+    P2 -->|"last donation date"| D1
+    P2 -->|"new quarantined unit"| D2
+    P2 -->|"unit ID and label"| STAFF
+
+    STAFF -->|"test results"| P3
+    D2 -->|"quarantined unit"| P3
+    P3 -->|"released or discarded unit"| D2
+    P3 -->|"reactive alert"| TO_N
+    P3 -->|"status transition"| D5
+
+    D2 -->|"unit records"| P4
+    P4 -->|"expiry and transfer updates"| D2
+    P4 -->|"stock levels"| STAFF
+    P4 -->|"stock levels"| ADMINA
+    P4 -->|"available units"| TO_B
+    P4 -->|"near-expiry digest"| TO_N
+    P4 -->|"status transition"| D5

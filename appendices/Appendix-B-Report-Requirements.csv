@@ -1,0 +1,24 @@
+Registration Report,Collection Report,Inventory Status Report
+Donor ID,Unit ID,Blood Group
+Full Name,Donor ID,Component Type
+Blood Group,Blood Group,Available Count
+Mobile Number,Component Type,Reserved Count
+City,Volume,Quarantined Count
+Registration Date,Collection Date,Near-Expiry Count
+Eligibility Status,Collection Site,Expired Count
+Last Donation Date,Bag Lot Number,Storage Location
+Next Eligible Date,Screening Outcome,Oldest Expiry Date
+Total Donations,Current Status,Total Volume
+
+Expiry Report,Request and Issue Report,Camp Performance Report
+Unit ID,Request ID,Camp ID
+Blood Group,Hospital Name,Camp Name
+Component Type,Blood Group,Camp Date
+Collection Date,Component Type,Venue
+Expiry Date,Quantity Requested,Organiser Name
+Days To Expiry,Quantity Issued,Donors Enrolled
+Storage Location,Urgency,Donors Attended
+Status,Raised On,Target Units
+Discard Reason,Fulfilled On,Units Collected
+Recorded By,Status,Achievement Percentage
+
