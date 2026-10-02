@@ -22,8 +22,8 @@
 | Version | Date | Author | Change Summary |
 |---|---|---|---|
 | 0.1 | 01 Oct 2026 | G A Aadish | Document skeleton, Section 1 Introduction, Section 2 Overview, Section 3 Architecture. |
-| 0.2 | — | Dhanya K M | Section 4.2 UML Sequence Diagrams, Section 4.3 API Design. |
-| 0.3 | — | Niveditha | Section 4.4 Error Handling, Section 4.5 UX Design, Section 4.6 Open Issues, Section 5 Appendices. |
+| 0.2 | 02 Oct 2026 | G A Aadish | Section 4.1 Design Overview, 4.2 UML Sequence Diagrams, 4.3 API Design. |
+| 0.3 | 02 Oct 2026 | G A Aadish | Section 4.4 Error Handling, 4.5 UX Design, 4.6 Open Issues, Section 5 Appendices. |
 | 1.0 | — | All Members | Consistency pass, approved for submission. |
 
 ## Approvals
@@ -259,13 +259,125 @@ This table maps each architectural component to the SRS functional requirements 
 
 ## 4. Design
 
-*Content pending — to be drafted by Dhanya K M (4.1 Design Overview, 4.2 UML Sequence Diagrams, 4.3 API Design) and Niveditha (4.4 Error Handling/Logging/Monitoring, 4.5 UX Design, 4.6 Open Issues).*
+### 4.1 Design Overview
+
+The design follows directly from the layered architecture in Section 3. Each domain service exposes its behaviour through a small set of service-layer functions (not through the ORM models directly), so that the view layer, the scheduled jobs, and the future API consumers all go through the same validated entry point. Section 4.2 traces two representative flows through these service boundaries; Section 4.3 specifies the API contract for the two most externally-facing components, Request and Issue and Search; Section 4.4 specifies how failures are surfaced and observed; Section 4.5 states the UX principles that apply across all four consoles; Section 4.6 lists what is deliberately deferred.
+
+### 4.2 UML Sequence Diagrams
+
+Two flows are modelled: the supply-side flow from collection to available inventory, and the demand-side flow from a hospital request to an issued unit. Together they exercise every tier in the architecture diagram and both external gateways. Sources are `diagrams/sequence-collection-release.mmd` and `diagrams/sequence-request-issue.mmd`, with PNG exports alongside for the Word submission.
+
+#### 4.2.1 Sequence: Record Collection, Screen, and Release to Inventory
+
+Covers REQ-9 through REQ-14 (SRS Section 5.2) and the Quarantine → Available transition rule (NFR-S1).
+
+```mermaid
+sequenceDiagram
+    actor Staff
+    participant Console as Staff Console
+    participant Collection as Collection and Screening
+    participant Inventory as Inventory Management
+    participant Audit as Audit Writer
+    participant DB as PostgreSQL
+
+    Staff->>Console: Select eligible donor, start collection
+    Console->>Collection: record_collection(donor_id, volume, site)
+    Collection->>DB: verify donor.eligibility_status == Eligible
+    DB-->>Collection: Eligible
+    Collection->>DB: INSERT BloodUnit (status=Quarantined)
+    Collection->>Audit: log(unit created, Quarantined)
+    Collection-->>Console: unit_id, status=Quarantined
+    Console-->>Staff: Unit BU1000000123 created, Quarantined
+
+    Staff->>Console: Enter mandatory screening panel results
+    Console->>Collection: record_test_results(unit_id, results[])
+
+    alt all five tests Non-Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Available
+        Collection->>Audit: log(Quarantined -> Available)
+        Collection->>Inventory: notify_available(unit_id)
+        Collection-->>Console: status=Available
+        Console-->>Staff: Unit released to inventory
+    else any test Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Discarded, reason="Reactive Screening"
+        Collection->>Audit: log(Quarantined -> Discarded)
+        Collection->>Collection: queue admin alert (REQ-14)
+        Collection-->>Console: status=Discarded
+        Console-->>Staff: Unit discarded, reason shown
+    end
+```
+
+#### 4.2.2 Sequence: Hospital Raises an Emergency Request and Receives Issued Units
+
+Covers REQ-24 through REQ-29 (SRS Section 5.4) and the asynchronous notification guarantee (CI-6, REQ-39).
+
+```mermaid
+sequenceDiagram
+    actor Hospital as Hospital User
+    participant Portal as Hospital Portal
+    participant ReqSvc as Request and Issue
+    participant Notif as Notification Dispatcher
+    actor Staff
+    participant Console as Staff Console
+    participant Inv as Inventory Management
+    participant DB as PostgreSQL
+
+    Hospital->>Portal: Raise request (group O-, qty 2, Emergency)
+    Portal->>ReqSvc: create_request(hospital_id, group, qty, urgency)
+    ReqSvc->>DB: INSERT BloodRequest (status=Pending)
+    ReqSvc->>Notif: enqueue(staff, "new emergency request")
+    Notif-->>ReqSvc: enqueued (non-blocking)
+    ReqSvc-->>Portal: request_id=REQ10000042, status=Pending
+    Portal-->>Hospital: Confirmation shown
+
+    Staff->>Console: Open request queue (Emergency first)
+    Console->>ReqSvc: approve_request(request_id)
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Approved
+    Staff->>Console: Allocate matching units
+    Console->>ReqSvc: allocate_units(request_id, unit_ids[])
+    ReqSvc->>Inv: reserve(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Reserved (row-locked)
+    Inv-->>ReqSvc: reserved
+    Staff->>Console: Confirm issue
+    Console->>ReqSvc: confirm_issue(request_id)
+    ReqSvc->>Inv: issue(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Issued
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Fulfilled
+    ReqSvc->>Notif: enqueue(hospital, "request fulfilled")
+    Notif-->>Hospital: SMS/email: units issued
+    ReqSvc-->>Console: status=Fulfilled
+```
+
+### 4.3 API Design
+
+Interface definitions for the two most externally-facing components: Request and Issue, and Search. These are the internal service APIs the view layer and, in a future release, an external API client would call; they are not yet exposed as a public API in Release 1.0.
+
+**Component: Request and Issue**
+
+| Endpoint | Method | Request | Response | Errors |
+|---|---|---|---|---|
+| `/api/requests` | POST | `{hospital_id, blood_group, component_type, quantity, urgency, required_by, patient_reference}` | `201 {request_id, status: "Pending"}` | `400` invalid quantity or past required-by date (REQ-25) |
+| `/api/requests/{id}/approve` | POST | `{}` | `200 {status: "Approved"}` | `403` not staff role; `409` request not Pending |
+| `/api/requests/{id}/reject` | POST | `{reason}` | `200 {status: "Rejected", reason}` | `400` missing reason |
+| `/api/requests/{id}/allocate` | POST | `{unit_ids: []}` | `200 {status: "Reserved", unit_ids}` | `409` unit not Available, group mismatch, or expired (NFR-S2, NFR-S3) |
+| `/api/requests/{id}/issue` | POST | `{}` | `200 {status: "Fulfilled" \| "Partially Fulfilled", issued_qty, shortfall}` | `409` no units reserved |
+| `/api/requests/{id}` | GET | — | `200 {request_id, status, blood_group, quantity, issued_qty, ...}` | `403` hospital user requesting another hospital's record (NFR-SEC6) |
+
+**Component: Search**
+
+| Endpoint | Method | Request | Response | Errors |
+|---|---|---|---|---|
+| `/api/availability` | GET | `?blood_group=O-&component=PRBC` | `200 {blood_group, component, available_count}` | `400` invalid group/component value |
+
+The availability response for a caller in the Hospital User role never includes a `unit_id` or any donor field, by construction of the query the endpoint runs (Section 3.9); the same endpoint called by Staff may additionally return unit-level detail, gated by role inside the same handler rather than by a separate endpoint, which keeps the "never leaks to hospital" guarantee in one place.
+
+*Content pending — 4.4 Error Handling/Logging/Monitoring, 4.5 UX Design, 4.6 Open Issues.*
 
 ---
 
 ## 5. Appendices
 
-*Content pending — to be drafted by Niveditha.*
+*Content pending.*
 
 ---
 

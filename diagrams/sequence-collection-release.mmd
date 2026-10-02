@@ -1,0 +1,35 @@
+%% BBMS - Sequence: record collection, screen, and release to inventory
+%% SAD Section 4.2.1; covers REQ-9 to REQ-14
+sequenceDiagram
+    actor Staff
+    participant Console as Staff Console
+    participant Collection as Collection and Screening
+    participant Inventory as Inventory Management
+    participant Audit as Audit Writer
+    participant DB as PostgreSQL
+
+    Staff->>Console: Select eligible donor, start collection
+    Console->>Collection: record_collection(donor_id, volume, site)
+    Collection->>DB: verify donor.eligibility_status == Eligible
+    DB-->>Collection: Eligible
+    Collection->>DB: INSERT BloodUnit (status=Quarantined)
+    Collection->>Audit: log(unit created, Quarantined)
+    Collection-->>Console: unit_id, status=Quarantined
+    Console-->>Staff: Unit BU1000000123 created, Quarantined
+
+    Staff->>Console: Enter mandatory screening panel results
+    Console->>Collection: record_test_results(unit_id, results[])
+
+    alt all five tests Non-Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Available
+        Collection->>Audit: log(Quarantined -> Available)
+        Collection->>Inventory: notify_available(unit_id)
+        Collection-->>Console: status=Available
+        Console-->>Staff: Unit released to inventory
+    else any test Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Discarded, reason="Reactive Screening"
+        Collection->>Audit: log(Quarantined -> Discarded)
+        Collection->>Collection: queue admin alert (REQ-14)
+        Collection-->>Console: status=Discarded
+        Console-->>Staff: Unit discarded, reason shown
+    end
