@@ -397,7 +397,25 @@ The four consoles follow one shared layout (SRS UI-1) but are tuned to how each 
 
 ## 5. Appendices
 
-*Content pending.*
+### 5.1 Glossary
+
+See `docs/SRS.md`, Appendix A, for the full project glossary. Terms specific to this document are defined in Section 1.4.
+
+### 5.2 References
+
+1. IEEE Std 1016-2009, *IEEE Standard for Information Technology — Systems Design — Software Design Descriptions*.
+2. IEEE Std 42010:2011, *Systems and software engineering — Architecture description*.
+3. OWASP Foundation, *OWASP Application Security Verification Standard, Version 4.0* (as cited in SRS Section 1.4, reference 6).
+4. `docs/SRS.md`, Version 1.0 — the companion Software Requirements Specification.
+5. `docs/Test-Plan.md`, Version 1.0 — the companion Test Plan.
+
+### 5.3 Tools
+
+| Tool | Purpose |
+|---|---|
+| Mermaid (rendered natively by GitHub) | All diagrams in this document and in `diagrams/` — component, sequence, use case, ER and data flow. |
+| mermaid-cli (`@mermaid-js/mermaid-cli`) | Exporting diagram sources to PNG for the Word submission; see `README.md`. |
+| python-docx | Generating the `.docx` submission copies from the Markdown masters (`tools/build_docx.py`). |
 
 ---
 
