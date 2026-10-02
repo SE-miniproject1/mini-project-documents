@@ -371,7 +371,27 @@ Interface definitions for the two most externally-facing components: Request and
 
 The availability response for a caller in the Hospital User role never includes a `unit_id` or any donor field, by construction of the query the endpoint runs (Section 3.9); the same endpoint called by Staff may additionally return unit-level detail, gated by role inside the same handler rather than by a separate endpoint, which keeps the "never leaks to hospital" guarantee in one place.
 
-*Content pending — 4.4 Error Handling/Logging/Monitoring, 4.5 UX Design, 4.6 Open Issues.*
+### 4.4 Error Handling, Logging and Monitoring
+
+**Error handling.** Every service-layer function validates its inputs regardless of client-side validation (NFR-Q9) and raises a typed exception (`ValidationError`, `StateConflictError`, `AuthorizationError`) rather than returning an ambiguous status code; the view layer maps each exception type to the HTTP status and user-facing message shown in Section 4.3. Error messages never expose a stack trace, SQL, or an internal identifier (SRS UI-4); they name the field in error and the corrective action.
+
+**Logging.** Structured logs at INFO level for business events (collection recorded, request approved, unit issued) and ERROR level for failures (OR-7). Logs never contain passwords, session tokens, or a donor's full medical history, even at DEBUG level.
+
+**Monitoring.** Three categories of signal are tracked: (1) safety signals — any attempt to issue a Quarantined, Expired, or group-mismatched unit, which should be zero in production and alerts immediately if it is not; (2) performance signals — the 95th-percentile response time for screen renders and the availability search, against the NFR-P1/NFR-P2 bounds; (3) operational signals — SMS/email dispatch failure rate, near-expiry unit count, and the daily backup success/failure (OR-2).
+
+### 4.5 UX Design
+
+The four consoles follow one shared layout (SRS UI-1) but are tuned to how each role actually works. The Staff Console favours density and keyboard shortcuts (SRS UI-3) because staff perform high-volume repetitive entry all day; the Donor Portal favours simplicity and mobile-first layout because a donor uses it a handful of times a year with no training. Every irreversible action — discarding a unit, issuing units, deactivating a user — requires an explicit confirmation dialog that names the specific record affected (SRS UI-5), which is a deliberate design response to the cost of an accidental click in a safety-critical system. Accessibility follows WCAG 2.1 Level AA (SRS UI-7): colour is never the only signal (the near-expiry flag in Section 3.4's Inventory Management, for example, pairs colour with an explicit label), and every form control is keyboard-reachable.
+
+### 4.6 Open Issues and Next Steps
+
+| Issue | Status |
+|---|---|
+| Laboratory instrument integration for screening results (ASM-2 in the SRS) | Deferred. Release 1.0 assumes manual entry; REQ-12/REQ-13 would need revision if automated instrument feeds are added. |
+| A public, versioned external API (beyond the internal service API in Section 4.3) | Deferred to a later release; no external consumer is in scope for Release 1.0. |
+| Compatible-group substitution for issue (e.g. O- to any recipient) | Explicitly out of scope per BR-8; remains a manual clinical decision, not automated. |
+| Mobile native app for donors | Out of scope per SRS Section 1.3; the Donor Portal is a responsive web app instead. |
+| Multi-language support | Infrastructure for it exists (OR-3, externalised message files) but no second language is translated for Release 1.0. |
 
 ---
 
