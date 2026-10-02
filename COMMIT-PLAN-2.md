@@ -2,84 +2,73 @@
 
 Blood Bank Management System · Organisation [SE-miniproject1](https://github.com/SE-miniproject1)
 
-The source PDF, `Deliverable-2/SE_Mini_Project_Delivereables_Part-1.pdf`, is dated **28 September 2026**. Today is already past that. This plan covers what is left, split for **today and tomorrow**, on the assumption that getting it submitted now matters more than hitting the original date.
-
-This plan assumes Deliverable 1's `main` branch has already been brought up to date using the four `gh pr merge` commands given at the end of that deliverable's work (PRs for Balaraj's SF-1 to SF-3, Dhanya's use case/ER diagrams, Niveditha's section 3, and Niveditha's full Test Plan). Deliverable 2's traceability sections cite requirement IDs REQ-1 through REQ-46, which only fully exist once that merge has happened.
+The source PDF, `SE_Mini_Project_Delivereables_Part-1.pdf`, is dated **28 September 2026**. That date has passed, so this plan fits everything that remains into **one working day, Friday 02 October 2026**.
 
 ---
 
-## 1. What Deliverable 2 actually requires
+## 1. What Deliverable 2 requires, and where it stands
 
-Read from `Deliverable-2/SE_Mini_Project_Delivereables_Part-1.pdf`, cross-checked against `SAD_Template.docx` and `Test_Plan_Template for SE.docx`.
-
-| # | Requirement | Status |
-|---|---|---|
-| 1a | SRS in IEEE format, intro + descriptive sections | Already satisfied by `docs/SRS.md` |
-| 1b | FRs and NFRs specified clearly, unambiguously, measurably | Already satisfied, 46 REQ + NFR series |
-| 1c | UML use case diagram, at least 1 | Already drafted (`diagrams/use-case.mmd`), pending merge via PR #11 |
-| 1d | Security section with Objectives and Requirements, at least 2 each | **Done this session.** PR #12, 2 objectives + 11 existing requirements |
-| 2a | Test Plan in IEEE STP format | **New document structure needed.** `docs/Test-Plan.md` must be rebuilt in the 15-section STP format from `Test_Plan_Template for SE.docx`, not the simpler course template Deliverable 1 used |
-| 2b | STP Sections 3, 4, 5 filled (Features to be/not to be Tested, Test Approach) | Not started |
-| 2c | STP Section 5.1, Security Validation | Not started |
-| 2d | Traceability to SRS | Partially exists in SRS Appendix C; needs an STP-side section 13 too |
-| 3 | Software Architecture & Design Specification | **New document, started this session.** PR #13 has the skeleton and full Architecture section (3.1–3.9). Design section (4) and Appendices (5) remain |
-| 4a | At least 7–10 test cases, FR + NFR | Comfortably exceeded already — Deliverable 1 has 104 cases to draw from, once ported into the new STP structure |
-
-## 2. What is already done
-
-| PR | Branch | Content | Status |
+| # | Requirement from the PDF | Where it lives | Status |
 |---|---|---|---|
-| #12 | `docs/srs-security-objectives` | SRS Security Objectives (2) above the 11 existing NFR-SEC requirements | Open, awaiting Balaraj's review |
-| #13 | `docs/sad-architecture` | SAD skeleton, Section 1, Section 2, full Section 3 Architecture (component diagram, descriptions, pattern, tech stack, risks, traceability, STRIDE security architecture) | Open, awaiting Dhanya's review |
+| 1a | SRS in IEEE format, intro and descriptive sections | `docs/SRS.md` | Done. Complete on PR #6 |
+| 1b | FRs and NFRs, clear and measurable | `docs/SRS.md` sections 5 and 6 | Done. 46 REQ plus the NFR series |
+| 1c | UML use case diagram, at least 1 | `diagrams/use-case.mmd` | Diagram merged. Embedding it in SRS section 4 is **task D2** below |
+| 1d | Security objectives and requirements, at least 2 each | `docs/SRS.md` section 6.3 | Done. PR #12, 2 objectives and 11 requirements |
+| 2a | Test Plan in IEEE STP format | `docs/Test-Plan.md` | Draft ready. Commit is **task D1** below |
+| 2b | STP sections 3, 4 and 5 | Test Plan sections 3 to 5 | In the draft |
+| 2c | STP section 5.1, security validation | Test Plan section 5.1 | In the draft, with 8 new cases SV-01 to SV-08 |
+| 2d | Traceability with the SRS | Test Plan section 13, generated from SRS Appendix C | In the draft |
+| 3 | Software Architecture and Design Specification | `docs/SAD.md` | **Done.** PR #13, sections 1 to 5 complete |
+| 4 | At least 7 to 10 test cases, FR and NFR | Test Plan Appendix A and section 5.1 | 112 cases in the draft, far above the minimum |
 
-A full draft of SAD Section 4 (Design) and Section 5 (Appendices) has already been written and is ready to hand to Dhanya and Niveditha directly rather than written from scratch — see Section 5 of this plan.
+## 2. What has been done
 
-## 3. What is left, and who owns it
+| PR | Branch | Content | State |
+|---|---|---|---|
+| #12 | `docs/srs-security-objectives` | Security objectives in SRS 6.3 | Open, needs a review |
+| #13 | `docs/sad-architecture` | Complete SAD: architecture, two sequence diagrams, API design, error handling, UX, appendices | Open, approved by Dhanya for the architecture section |
+| #14 | `docs/d2-commit-plan` | This plan | Open, needs a review |
+| #15 | `docs/readme-d2-pointer` | README pointer to the new documents | Open, needs a review |
+| #6 | `docs/balaraj-srs-testplan` | Balaraj's Deliverable 1 package: SF-1 to SF-3, Appendix C, tools, Test Plan, appendices | Open, mergeable, **must merge first** |
 
-| Owner | Deliverable 2 task | Depends on |
-|---|---|---|
-| Dhanya K M | SAD Section 4.1–4.3: Design Overview, the two UML sequence diagrams (collection/screening flow and hospital request/issue flow — both already drafted and verified, ready to use), API design for the Request/Issue and Search components | PR #13 merged |
-| Niveditha | SAD Section 4.4–4.6 (error handling, UX design, open issues) and Section 5 (glossary/references/tools) | PR #13 merged, Dhanya's 4.1–4.3 merged |
-| Balaraj | Rebuild `docs/Test-Plan.md` into the IEEE STP format: sections 1–2 (intro, test items), 3–4 (features to test / not to test, mapped to REQ IDs), 5 (approach/strategy) and 5.1 (security validation), 6–12 (environment, schedule, deliverables, roles, risks, assumptions, suspension criteria) | Deliverable 1's `main` consolidation (needs the full REQ-1 to REQ-46 set) |
-| Dhanya or Balaraj | Port a representative set of existing test cases (comfortably more than the 7–10 minimum, Deliverable 1 already has 104) into STP Section 14, and write STP Section 13 traceability | Balaraj's STP structure above |
-| Niveditha | Final consistency pass across SRS, SAD and the new Test Plan; Word exports for all three documents (extend `tools/build_docx.py`) | Everything else merged |
+The SAD was written in full by Aadish, including the Design and Appendix sections originally planned for Dhanya and Niveditha, because the SAD is the architect's document and nothing else depended on those sections being split.
 
-## 4. Commit sequence — today and tomorrow
+## 3. Merge order
 
-### Today, 01 October
+Everything merges cleanly together. The order matters only because PR #6 carries most of Deliverable 1.
 
-| # | Author | Branch | Commit | Status |
+1. **#6** Balaraj's Deliverable 1 package
+2. **#13** SAD
+3. **#12** security objectives
+4. **#14** this plan
+5. **#15** README pointer, after #6
+6. Close **#7** and **#10**. Their content is superseded by #6 and by direct commits already on `main`
+
+## 4. Remaining work, one day
+
+Each person commits only under their own name. The prepared drafts are in `Deliverable-2/handoff/<name>/` and should be read and adjusted, not pasted unread.
+
+| Time | Owner | Task | Branch | Commit message |
 |---|---|---|---|---|
-| 1 | Aadish | `docs/srs-security-objectives` | `docs(srs): add security objectives to section 6.3` | **Done, PR #12 open** |
-| 2 | Aadish | `docs/sad-architecture` | `docs(sad): add SAD skeleton, intro, overview and architecture` | **Done, PR #13 open** |
-| 3 | Dhanya | `docs/sad-design` | `docs(sad): add design overview and sequence diagrams` | Pending |
-| 4 | Dhanya | `docs/sad-design` | `docs(sad): add API design for Request/Issue and Search` | Pending |
-| 5 | Balaraj | `docs/test-plan-stp` | `docs(test-plan): rebuild as IEEE STP, sections 1-5` | Pending |
-| 6 | Balaraj | `docs/test-plan-stp` | `docs(test-plan): add section 5.1 security validation` | Pending |
+| 09:30 | All | Review the open PRs. Balaraj reviews #12 and #14, Niveditha reviews #15 | | |
+| 10:00 | Aadish | Merge in the order above | | |
+| 10:30 | Balaraj | **D1.** Replace `docs/Test-Plan.md` with the IEEE STP layout from `handoff/balaraj/Test-Plan.md`. Run `python3 tools/check_traceability.py` and confirm it passes | `docs/test-plan-stp` | `docs(test-plan): restructure to IEEE STP layout with generated traceability` |
+| 12:00 | Balaraj | Second commit for the security validation cases SV-01 to SV-08 and section 5.1 if split from the first | `docs/test-plan-stp` | `docs(test-plan): add security validation section and SV cases` |
+| 10:30 | Dhanya | **D2.** Replace SRS section 4 with `handoff/dhanya/SRS-section4.md` so the use case diagram and use case summary appear in the SRS itself | `docs/srs-use-case-section` | `docs(srs): embed use case diagram and use case summary in section 4` |
+| 12:00 | Dhanya | **D3.** Rewrite `CONTRIBUTIONS.md` from `git shortlog` and the real PR reviews. The version in PR #6 describes a planned history, not the actual one | `docs/contributions-actual` | `docs: record actual per-member contributions` |
+| 11:00 | Niveditha | **D4.** Close #7 and #10 with a comment pointing at #6. Fix the SRS revision history dates to match when work really happened | `docs/revision-history-dates` | `docs(srs): correct revision history dates` |
+| 14:00 | Niveditha | **D5.** After every content branch above has merged, replace `tools/build_docx.py` with `handoff/niveditha/build_docx.py`, run it, and commit the three regenerated `.docx` files | `build/submission-d2` | `build: generate Word versions of SRS, SAD and Test Plan` |
+| 15:30 | Niveditha | Proofread the three documents against the PDF checklist in section 1 | | |
+| 16:00 | Aadish | Final check. Run the traceability script, open each diagram on GitHub, confirm the `.docx` files match the Markdown, then submit | | |
 
-### Tomorrow, 02 October
+Task D5 has to come last because it reads the Markdown masters. If anything merges after it, rerun the build.
 
-| # | Author | Branch | Commit | Status |
-|---|---|---|---|---|
-| 7 | Niveditha | `docs/sad-design` | `docs(sad): add error handling, UX design and open issues` | Pending |
-| 8 | Niveditha | `docs/sad-appendices` | `docs(sad): add glossary, references and tools appendices` | Pending |
-| 9 | Balaraj | `docs/test-plan-stp` | `docs(test-plan): add sections 6-12, environment through assumptions` | Pending |
-| 10 | Dhanya | `docs/test-plan-cases` | `docs(test-plan): port test cases and add section 13 traceability` | Pending |
-| 11 | Niveditha | `docs/d2-consistency` | `docs: consistency pass across SRS, SAD and Test Plan` | Pending |
-| 12 | Niveditha | `build/submission-d2` | `build: generate Word versions of SAD and the rebuilt Test Plan` | Pending |
+## 5. Known issues to fix before submitting
 
-Commit 10 depends on commit 5/6/9 (the STP structure needs to exist before test cases are ported into it). Commits 3–4 and 5–6 are independent of each other and can run in parallel today.
-
-## 5. Handoff package for Dhanya and Niveditha
-
-The complete SAD draft, all five sections, was written in one pass for consistency and is available for whoever picks up Section 4 and 5 to use directly rather than starting cold. It is saved at `Deliverable-2/SAD-full-draft-handoff.md` (next to this repo, not committed), the same quality bar as the committed Section 3, covering:
-
-- **4.1–4.3 (Dhanya's):** Design overview, two sequence diagrams already written in Mermaid and verified to render (collection-and-screening flow, hospital-request-and-issue flow), and the API design table for the Request/Issue and Search components.
-- **4.4–4.6 (Niveditha's):** Error handling/logging/monitoring approach, UX design principles, and the open issues table.
-- **Section 5 (Niveditha's):** Glossary pointer, references, and tooling list.
-
-Each person should still read and adjust it to their own voice rather than commit it verbatim, the same way Balaraj rewrote his own SF-1 to SF-3 content in Deliverable 1 rather than using a prepared draft unchanged.
+- **CONTRIBUTIONS.md and the SRS revision history in PR #6 describe the original three-day plan.** Dates and commit counts there do not match what happened. D3 and D4 correct this.
+- **Two Copilot comments on PR #6** (about REQ-4 and REQ-6) refer to an earlier revision and no longer match the text. Balaraj should confirm they no longer apply and resolve them.
+- **No test has been executed.** Every Actual Result and Test Result stays `Not executed` and `Pending` until the system is built.
 
 ## 6. Working agreement
 
-Same as Deliverable 1: every PR needs one approving review from someone other than its author before merge, no squash merges, and nobody commits under another member's name. See `COMMIT-PLAN.md` Section 0 and Section 1 for the git identity setup, which stays the same for this deliverable since it's the same repository.
+Same as Deliverable 1. One approving review from someone other than the author before merge, no squash merges, and nobody commits under another member's name.
