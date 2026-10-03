@@ -1,0 +1,36 @@
+%% BBMS - Sequence: hospital emergency request through to issued units
+%% SAD Section 4.2.2; covers REQ-24 to REQ-29
+sequenceDiagram
+    actor Hospital as Hospital User
+    participant Portal as Hospital Portal
+    participant ReqSvc as Request and Issue
+    participant Notif as Notification Dispatcher
+    actor Staff
+    participant Console as Staff Console
+    participant Inv as Inventory Management
+    participant DB as PostgreSQL
+
+    Hospital->>Portal: Raise request (group O-, qty 2, Emergency)
+    Portal->>ReqSvc: create_request(hospital_id, group, qty, urgency)
+    ReqSvc->>DB: INSERT BloodRequest (status=Pending)
+    ReqSvc->>Notif: enqueue(staff, "new emergency request")
+    Notif-->>ReqSvc: enqueued (non-blocking)
+    ReqSvc-->>Portal: request_id=REQ10000042, status=Pending
+    Portal-->>Hospital: Confirmation shown
+
+    Staff->>Console: Open request queue (Emergency first)
+    Console->>ReqSvc: approve_request(request_id)
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Approved
+    Staff->>Console: Allocate matching units
+    Console->>ReqSvc: allocate_units(request_id, unit_ids[])
+    ReqSvc->>Inv: reserve(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Reserved (row-locked)
+    Inv-->>ReqSvc: reserved
+    Staff->>Console: Confirm issue
+    Console->>ReqSvc: confirm_issue(request_id)
+    ReqSvc->>Inv: issue(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Issued
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Fulfilled
+    ReqSvc->>Notif: enqueue(hospital, "request fulfilled")
+    Notif-->>Hospital: SMS/email: units issued
+    ReqSvc-->>Console: status=Fulfilled
