@@ -189,7 +189,8 @@ def insert_figures(document, usable_width):
         document.add_paragraph()
 
 
-def convert(source, target, title, subtitle, landscape, table_font, with_figures):
+def convert(source, target, title, subtitle, landscape, table_font, with_figures, mermaid_images=None):
+    mermaid_images = list(mermaid_images) if mermaid_images else None
     document = Document()
     configure(document, landscape, title, subtitle)
     section = document.sections[0]
@@ -220,16 +221,27 @@ def convert(source, target, title, subtitle, landscape, table_font, with_figures
         flush_table()
 
         if stripped.startswith("```"):
+            fence_lang = stripped[3:].strip()
             block = []
             index += 1
             while index < len(lines) and not lines[index].strip().startswith("```"):
                 block.append(lines[index])
                 index += 1
-            add_code_block(document, block)
+            if fence_lang == "mermaid" and mermaid_images:
+                image = DIAGRAMS / mermaid_images.pop(0)
+                picture_paragraph = document.add_paragraph()
+                picture_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                picture_paragraph.add_run().add_picture(str(image), width=usable_width)
+            else:
+                add_code_block(document, block)
             index += 1
             continue
 
         if not stripped:
+            index += 1
+            continue
+
+        if stripped.startswith("!["):
             index += 1
             continue
 
@@ -290,11 +302,21 @@ def main():
          "Test Plan", "Blood Bank Management System, Version 1.0",
          True, 7.5, False),
     ]
-    for source, target, title, subtitle, landscape, table_font, figures in jobs:
+    sad = DOCS / "SAD.md"
+    if sad.exists():
+        jobs.append((sad, OUT / "SAD-Blood-Bank-Management-System.docx",
+                     "Software Architecture and Design Specification",
+                     "Blood Bank Management System, Version 1.0",
+                     False, 9, False,
+                     ["architecture.png", "sequence-collection-release.png",
+                      "sequence-request-issue.png"]))
+    for job in jobs:
+        source, target, title, subtitle, landscape, table_font, figures = job[:7]
+        mermaid_images = job[7] if len(job) > 7 else None
         if not source.exists():
             print(f"missing source: {source}")
             return 1
-        convert(source, target, title, subtitle, landscape, table_font, figures)
+        convert(source, target, title, subtitle, landscape, table_font, figures, mermaid_images)
         print(f"built {target.relative_to(ROOT)}  ({target.stat().st_size // 1024} KB)")
     return 0
 
