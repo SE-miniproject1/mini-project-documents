@@ -615,6 +615,12 @@ This feature provides availability search across the inventory, dispatches notif
 
 ### 6.3 Security Requirements
 
+**Security Objectives.** The eleven requirements below exist to satisfy two higher-level objectives, stated here so that a future requirement can be checked against intent rather than only against the existing list.
+
+**SEC-OBJ-1, Confidentiality of donor and patient data.** No party outside the blood bank's own staff and administrators shall be able to view a donor's identity or medical history, and no party outside a hospital's own authorised users shall be able to view another hospital's request or patient-reference data. This objective is what NFR-SEC6, NFR-SEC7 and BR-9 exist to enforce, and it is addressed architecturally, not only procedurally, in `docs/SAD.md` Section 3.9.
+
+**SEC-OBJ-2, Integrity and non-repudiation of safety-critical transactions.** Every transition of a blood unit's status, and every approval, allocation or issue against a hospital request, shall be attributable to a specific authenticated user and shall be impossible to alter or delete after the fact. This objective is what NFR-SEC10 (audit logging) and the state-machine constraints in NFR-S1 through NFR-S4 exist to enforce.
+
 **NFR-SEC1:** The system shall authenticate every user by username and password before granting access to any function other than public camp listings and the registration and login screens.
 
 **NFR-SEC2:** Passwords shall be stored only as salted hashes produced by a deliberately slow key derivation function. Plain text and reversibly encrypted passwords are prohibited.
