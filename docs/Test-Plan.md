@@ -1,83 +1,325 @@
-# Test Plan
+# Software Test Plan (STP)
 
 ## Blood Bank Management System
 
-**Version 1.0**
+**Project:** Blood Bank Management System (BBMS)
+**Version:** 1.0
+**Authors:**
 
 | SRN | Name | GitHub Handle | Testing Responsibility |
 |---|---|---|---|
-| PES1UG24CS560 | Balaraj R | balaraj74 | Test Lead. Unit tests SF-1, SF-2. Integration tests. |
-| PES1UG24CS567 | Dhanya K M | Dhanya-KM | Unit tests SF-3, SF-4. Data and inventory scenarios. |
-| PES1UG24CS569 | G A Aadish | Sonuaadi0706 | System tests. Security and safety negative tests. |
-| PES1UG24CS585 | Niveditha | nnivedithaparmesh-cpu | Unit tests SF-5, SF-6. Reporting and notification tests. |
+| PES1UG24CS560 | Balaraj R | balaraj74 | QA Lead. Plan, SF-1 and SF-2 test cases, integration tests. |
+| PES1UG24CS567 | Dhanya K M | Dhanya-KM | Test Engineer. SF-3 and SF-4 test cases, data and inventory scenarios. |
+| PES1UG24CS569 | G A Aadish | Sonuaadi0706 | Security validation and safety negative tests, system tests. |
+| PES1UG24CS585 | Niveditha | nnivedithaparmesh-cpu | Test Engineer. SF-5 and SF-6 test cases, reporting and notification tests. |
 
 **Organization:** SE-miniproject1
-**Companion document:** `docs/SRS.md`, Version 1.0
-**Date:** 10 September 2026
+**Date:** 02 October 2026
+**Status:** Draft. Restructured to the IEEE-style STP layout required for Deliverable 2. The detailed test cases from Deliverable 1 are retained unchanged in Appendix A.
 
 ---
 
-## 1. Purpose and Scope
+## 1. Introduction
 
-This Test Plan defines the test cases that verify the Blood Bank Management System against the functional requirements REQ-1 to REQ-46 and the nonfunctional requirements stated in the SRS. Every functional requirement is covered by at least one test case, satisfying NFR-Q6, and the coverage is demonstrated in Appendix C of the SRS.
+**Purpose.** This document defines the test plan for the Blood Bank Management System (BBMS) Release 1.0. It states the objectives, scope, strategy, environment, schedule, responsibilities and traceability for testing, so that every requirement in the SRS is verifiably covered.
 
-## 2. Test Levels
+**Scope.** Testing covers all six system features in the SRS (donor registration and eligibility, collection and screening, inventory, hospital request and issue, camps, and search, notification and reporting) together with the performance, safety, security and quality requirements in SRS Section 6. Third-party gateways and framework internals are excluded, as listed in Section 4.
 
-| Level | Prefix | Definition | Count |
+**References.**
+
+- `docs/SRS.md`, Software Requirements Specification, Version 1.0
+- `docs/SAD.md`, Software Architecture and Design Specification, Version 1.0
+- IEEE Std 829-2008, *Standard for Software and System Test Documentation*
+- OWASP Application Security Verification Standard, Version 4.0
+
+**Definitions.** BBMS (Blood Bank Management System), SRS (Software Requirements Specification), SAD (Software Architecture and Design Specification), RTM (Requirement Traceability Matrix), RBAC (Role-Based Access Control), TLS (Transport Layer Security), UT, IT, ST and SV (unit, integration, system and security-validation test case prefixes).
+
+---
+
+## 2. Test Items
+
+- Donor registration and eligibility module (SF-1)
+- Collection, screening and component separation module (SF-2)
+- Inventory and stock module (SF-3)
+- Hospital request and issue module (SF-4)
+- Donation camp module (SF-5)
+- Search, notification, reporting and administration module (SF-6)
+- Authentication, RBAC and audit components shared by all modules
+- Notification dispatcher and scheduled jobs
+
+---
+
+## 3. Features to be Tested
+
+Features are mapped to SRS requirement identifiers.
+
+| Feature | SRS Requirements | Priority |
+|---|---|---|
+| SF-1 Donor registration and eligibility screening | REQ-1 to REQ-8 | High |
+| SF-2 Blood donation and collection management | REQ-9 to REQ-15 | High |
+| SF-3 Blood inventory and stock management | REQ-16 to REQ-23 | High |
+| SF-4 Hospital blood request and issue | REQ-24 to REQ-31 | High |
+| SF-5 Donation camp and drive management | REQ-32 to REQ-37 | Medium |
+| SF-6 Search, notification and reporting | REQ-38 to REQ-46 | Medium to High |
+
+Nonfunctional requirements under test:
+
+| Group | Requirements | Measure |
+|---|---|---|
+| Performance | NFR-P1, NFR-P2 | Screen render at most 3 seconds and availability search at most 2 seconds, 95th percentile |
+| Safety | NFR-S1 to NFR-S4 | Untested, expired or wrong-group unit can never be issued. No double allocation |
+| Security | NFR-SEC1 to NFR-SEC11 | See Section 5.1 |
+| Quality | NFR-Q5, NFR-Q6, NFR-Q9 | At least 70 percent coverage, every requirement has a test, server-side validation |
+
+---
+
+## 4. Features Not to be Tested
+
+- Laboratory instrument integration. Release 1.0 enters screening results manually (SRS ASM-2).
+- Compatible-group substitution for issue. This stays a manual clinical decision (SRS BR-8).
+- Internals of the third-party SMS gateway and SMTP relay. Only the BBMS side of the interface is tested, using stubs.
+- Django, Gunicorn, Nginx and PostgreSQL internals, which are assumed tested by their maintainers.
+- Barcode scanner device firmware. The scanner is treated as a keyboard.
+- Billing, national registry integration and a native mobile application, all out of scope in SRS Section 1.3.
+
+---
+
+## 5. Test Approach / Strategy
+
+**Levels.**
+
+| Level | Prefix | Definition | Cases |
 |---|---|---|---|
-| Unit Testing | `UT` | A single function, validator or service method exercised in isolation with its collaborators stubbed. | 48 |
-| Integration Testing | `IT` | Two or more components exercised together, including database and external gateway interaction. | 26 |
-| System Testing | `ST` | An end-to-end scenario exercised through the user interface as a real user, including negative, security and performance scenarios. | 30 |
-| **Total** | | | **104** |
+| Unit | UT | One function, validator or service method in isolation, collaborators stubbed | 48 |
+| Integration | IT | Two or more components together, including the database and gateway stubs | 26 |
+| System | ST | End-to-end scenarios through the user interface, including negative, security, concurrency and performance | 30 |
+| Security validation | SV | Authentication, session, transport, storage, logging and fuzz checks (Section 5.1) | 8 |
+| Acceptance | none | Faculty demonstration of the system tests against the SRS | by demonstration |
 
-Test case identifiers follow the convention `UT_01` style stated in the course template, rendered here as `UT-01` for consistency with the SRS traceability matrix.
+**Types.** Functional testing of every requirement, regression testing after each merged change, performance testing of the two bounded operations, safety negative testing (attempting every forbidden transition), usability testing of the staff and donor consoles, and security testing (Section 5.1).
 
-## 3. Test Environment
+**Entry criteria.** A stable build is deployed to the test environment, the deterministic seed data is loaded, test accounts exist for each role, and no blocker defect from the previous cycle remains open.
 
-| Item | Value |
-|---|---|
-| Browser | Google Chrome, current stable version |
-| Application URL | http://localhost:8000 for local runs, https://bbms-test.local for the shared test environment |
-| Server | Python 3.11, Django 5.x, Gunicorn |
-| Database | PostgreSQL 15 for integration and system tests, SQLite 3 for unit tests |
-| Test data | Deterministic seed fixture loaded per NFR-Q6 |
-| Test framework | Django test runner with pytest, coverage measured by coverage.py |
+**Exit criteria.** All planned cases executed, no Critical or High defect open, at least 95 percent of cases passed, and unit test line coverage at least 70 percent (SRS NFR-Q5).
 
-## 4. Standing Pre-conditions
+### 5.1 Security Validation
 
-Unless a test case states otherwise, the following hold for every test.
+Security objectives in SRS Section 6.3 are SEC-OBJ-1 (confidentiality of donor and patient data) and SEC-OBJ-2 (integrity and non-repudiation of safety-critical transactions). Validation is organised around them.
 
-- The application is deployed and reachable at the test URL.
-- The deterministic seed fixture has been loaded.
-- The tester has access to Google Chrome.
-- Accounts exist for each role: `staff01` for blood bank staff, `hosp01` for a hospital user of Apollo Hospital, `admin01` for an administrator, and donor account `DNR10000001`.
+- **Authentication.** Password policy, lockout and session handling are exercised directly (SV-01, SV-02, SV-03).
+- **Authorisation and isolation.** Vertical privilege (a donor reaching staff or admin URLs) and horizontal privilege (one hospital reading another hospital's records) are covered by the existing ST-28, IT-25 and IT-21.
+- **Confidentiality.** Donor identity must never reach a hospital user in any screen, export or notification (ST-29, IT-08, IT-21).
+- **Transport and storage.** TLS 1.2+ verification and credential storage are checked in SV-04 and SV-05.
+- **Input handling.** Fuzzing of every free-text and numeric field with SQL, script and oversized payloads (SV-07, ST-29).
+- **Non-repudiation.** Failed logins, authorisation failures and status transitions must appear in the audit log (SV-08, UT-24, IT-13).
+- **Tooling.** An automated scanner is run against the test environment for the OWASP Top Ten classes (ST-29). Penetration testing of the authentication flow is limited to the cases above.
 
-## 5. Entry and Exit Criteria
+New security validation cases:
 
-**Entry.** The build is deployed, the seed data is loaded, and no blocker defect from the previous cycle remains open.
-
-**Exit.** All test cases have been executed. All High severity defects are closed. At least 95 percent of test cases pass. Unit test line coverage is at least 70 percent per NFR-Q5.
-
-## 6. Defect Severity
-
-| Severity | Definition |
-|---|---|
-| Critical | A safety requirement in Section 6.2 of the SRS is violated. Release is blocked. |
-| High | A functional requirement fails with no workaround. |
-| Medium | A functional requirement fails but a workaround exists. |
-| Low | Cosmetic or wording defect. |
-
-## 7. Note on Actual Result and Test Result Columns
-
-Per instruction 2 of the course template, the **Actual Result** and **Test Result** columns are populated at a later stage, when manual testing is carried out against the implemented system. Deliverable 1 contains no implementation, so every case in this document is recorded as `Not executed` and `Pending`.
-
-These two columns will be filled in during the execution cycle that follows implementation. Nothing in this document should be read as evidence that a test has been run.
+| Test Case ID | Name of Module | Test case description | Pre-conditions | Test Steps | Test data | Expected Results | Actual Result | Test Result |
+|---|---|---|---|---|---|---|---|---|
+| SV-01 | Authentication | Verify the password policy rejects weak and known-compromised passwords | Registration or password-change screen reachable | 1: Open the password change form<br>2: Submit each candidate password<br>3: Read the response | `short1!`, `longenoughbutnodigits!`, `Password123!` (on the compromised list), `Blood#Bank2026x` | The first three are rejected with a message naming the rule broken. The last is accepted | Not executed | Pending |
+| SV-02 | Authentication | Verify the account locks for 15 minutes after 5 consecutive failed logins and the holder is emailed | Test staff account exists with a reachable mailbox | 1: Submit a wrong password 5 times<br>2: Submit the correct password immediately<br>3: Check the mailbox<br>4: Retry after 15 minutes | Wrong password x5, then the correct one | The sixth attempt is refused even with the correct password, a lockout email arrives, and login succeeds after 15 minutes | Not executed | Pending |
+| SV-03 | Session management | Verify sessions expire after 30 minutes idle and are invalidated on logout and password change | Signed in as staff in two browsers | 1: Stay idle 31 minutes in browser A and reload<br>2: Log out in browser B and replay its old session cookie<br>3: Change password in A and reuse B's session | Captured session cookies | Idle session redirects to login. Replayed cookie after logout is refused. Other sessions end on password change | Not executed | Pending |
+| SV-04 | Transport security | Verify HTTP redirects to HTTPS, weak TLS versions are refused and HSTS is sent | Test environment deployed behind the reverse proxy | 1: Request the site over plain HTTP<br>2: Attempt a TLS 1.0 and TLS 1.1 handshake<br>3: Inspect response headers | `http://` URL, a TLS scanner | HTTP gets a permanent redirect to HTTPS, TLS below 1.2 handshakes fail, `Strict-Transport-Security` header is present | Not executed | Pending |
+| SV-05 | Credential storage | Verify only salted slow hashes are stored | Seeded database | 1: Query the user table's password column for 5 accounts<br>2: Compare two accounts given the same password | Two accounts with identical passwords | Values are salted hashes of a slow key derivation function, never plain text, and the two identical passwords produce different hashes | Not executed | Pending |
+| SV-06 | Logging | Verify logs never contain passwords, session tokens or full medical histories | Application run through login, registration and screening | 1: Perform those flows at DEBUG and INFO level<br>2: Search the log output for the test values | Known test password, session id and a declared condition | None of the secret values appear in any log line | Not executed | Pending |
+| SV-07 | Input handling | Verify fuzzed input never causes an unhandled error or data corruption | Staff console reachable | 1: Submit oversized, empty, unicode, negative, SQL and script payloads to every free-text and numeric field<br>2: Inspect responses and database | 10 000-character strings, `-1`, `' OR 1=1 --`, `<script>alert(1)</script>` | Every payload gets a field-level validation message or is stored as inert text. No stack trace, no 500, no script execution | Not executed | Pending |
+| SV-08 | Audit | Verify failed logins and authorisation failures are written to the audit log with user, time and source | Audit log viewable by the administrator | 1: Fail a login as staff<br>2: Request an admin-only URL as a donor<br>3: Open the audit log as admin | Failed credentials, forbidden URL | Both events appear with the acting user, timestamp and source address | Not executed | Pending |
 
 ---
 
-## 8. Test Cases
+## 6. Test Environment
 
-### 8.1 SF-1 Donor Registration and Eligibility Screening
+**Hardware.** Developer laptops and one test server with 4 virtual CPUs, 8 GB RAM and 100 GB storage. A USB or Bluetooth barcode scanner in keyboard mode for the collection screen.
+
+**Software.** Python 3.11, Django 5.x, Gunicorn behind Nginx with TLS, PostgreSQL 15 (SQLite 3 for unit tests only), Google Chrome as the reference browser.
+
+**Tools.** Django test runner with pytest and coverage.py (unit and integration), Selenium (UI automation), JMeter (load, NFR-P1 and NFR-P2), a TLS scanner and OWASP ZAP (security), Git and GitHub for defect tracking through issues.
+
+**Test data.** A deterministic seed fixture with accounts for each role (`staff01`, `hosp01`, `admin01`, donor `DNR10000001`) and 50 000 unit records for the performance case.
+
+---
+
+## 7. Test Schedule
+
+| Milestone | Date |
+|---|---|
+| Test case design (Deliverable 1) | Complete, 10 September 2026 |
+| Restructure to STP layout and security validation cases (Deliverable 2) | 02 October 2026 |
+| Environment setup | After the implementation milestone. Date to be confirmed by the team |
+| Test execution | After environment setup. Date to be confirmed by the team |
+| Acceptance demonstration | To be scheduled with the course faculty |
+
+No test has been executed. Actual Result and Test Result columns stay `Not executed` and `Pending` until the system exists.
+
+---
+
+## 8. Test Deliverables
+
+- Test Plan (this document)
+- Test cases, manual and automated (Appendix A and Section 5.1)
+- Test scripts and seed data
+- Test execution logs
+- Defect reports (GitHub issues)
+- Test Summary Report
+
+---
+
+## 9. Roles and Responsibilities
+
+| Role | Name | Responsibility |
+|---|---|---|
+| QA Lead | Balaraj R | Prepare the plan, coordinate execution, own the traceability matrix |
+| Test Engineer | Dhanya K M | Design and execute inventory and request cases, log defects |
+| Test Engineer | Niveditha | Design and execute camp, reporting and notification cases, log defects |
+| Security and System Test | G A Aadish | Security validation, safety negative tests, architecture questions |
+| Sign-off | Course faculty | Approve results and readiness |
+
+---
+
+## 10. Risks and Mitigation
+
+| Risk | Mitigation |
+|---|---|
+| Implementation is late, leaving little time to execute 112 cases | Prioritise safety (ST-26, ST-27) and security (Section 5.1) cases first, then High-priority features |
+| Concurrency case ST-27 is hard to reproduce reliably | Use a scripted two-session harness and repeat the case 50 times |
+| Gateway outage blocks notification tests | Use stubs for the SMS gateway and SMTP relay |
+| Performance results differ between laptops and the test server | Run NFR-P1 and NFR-P2 only on the test server |
+| Team members cannot all attend execution sessions | Cases are owned per feature so execution can proceed independently |
+
+---
+
+## 11. Assumptions and Dependencies
+
+- The system is implemented to the SRS and SAD before execution starts.
+- Test accounts and the seed fixture are available before execution.
+- SMS and email gateways are stubbed in the test environment.
+- The SRS and the traceability in Section 13 are kept in step. Any change to a requirement updates both.
+
+---
+
+## 12. Suspension and Resumption Criteria
+
+**Suspend testing if** the test environment is unavailable for more than 4 hours, the build is unstable enough to block more than 30 percent of planned cases, or a Critical safety defect is found (any path that issues an untested, expired or wrong-group unit).
+
+**Resume testing when** blocking defects are fixed and verified, the environment is stable, and for a safety defect a regression run of ST-26 and ST-27 passes.
+
+---
+
+## 13. Test Case Management and Traceability
+
+The RTM in SRS Appendix C maps each requirement to architecture, design and code references. The tables below are the test-side view of the same mapping. Detailed case descriptions are in Appendix A and Section 5.1.
+
+### 13.1 Functional requirements
+
+| Requirement | Summary | Unit / Integration Cases | System Cases |
+|---|---|---|---|
+| REQ-1 | Donor registration capturing personal, contact and medical details | UT-01, IT-01 | ST-01 |
+| REQ-2 | Unique immutable donor identifier DNR + 8 digits | UT-02 | ST-01 |
+| REQ-3 | Reject duplicate mobile number or email | UT-03, IT-01 | ST-02 |
+| REQ-4 | Age between 18 and 65 validated from date of birth | UT-04 | ST-02 |
+| REQ-5 | Record medical history and apply permanent deferral | UT-05, IT-02 | ST-03 |
+| REQ-6 | Evaluate all eligibility criteria and report every failure | UT-06, UT-07, IT-02 | ST-03 |
+| REQ-7 | Block collection against a non-eligible donor | UT-08, IT-03 | ST-04 |
+| REQ-8 | Compute next eligible date and auto-clear deferral | UT-09, IT-04 | ST-04 |
+| REQ-9 | Record donation event with site and staff | UT-10, IT-05 | ST-05 |
+| REQ-10 | Unique immutable unit identifier BU + 10 digits with barcode | UT-11 | ST-05 |
+| REQ-11 | New units created Quarantined and not issuable | UT-12, IT-06 | ST-06 |
+| REQ-12 | Mandatory screening panel complete before release | UT-13, IT-07 | ST-06 |
+| REQ-13 | Release to Available only when all results Non-Reactive | UT-14, IT-07 | ST-07 |
+| REQ-14 | Discard on reactive result and alert administrator | UT-15, IT-08 | ST-07 |
+| REQ-15 | Component separation with per-component expiry and linkage | UT-16, IT-09 | ST-08 |
+| REQ-16 | Maintain full unit attribute set and status | UT-17 | ST-09 |
+| REQ-17 | Stock counts by group and component refreshed within 5 seconds | UT-18, IT-10 | ST-09 |
+| REQ-18 | Filter and search inventory on combined criteria | UT-19, IT-10 | ST-10 |
+| REQ-19 | Auto-expire units and exclude from availability | UT-20, IT-11 | ST-10 |
+| REQ-20 | Flag near-expiry units and send daily digest | UT-21, IT-11 | ST-11 |
+| REQ-21 | Record inter-location transfer without status change | UT-22, IT-12 | ST-11 |
+| REQ-22 | Require reason and confirmation for manual discard | UT-23, IT-12 | ST-12 |
+| REQ-23 | Immutable audit record for every status transition | UT-24, IT-13 | ST-12 |
+| REQ-24 | Hospital raises request with unique identifier | UT-25, IT-14 | ST-13 |
+| REQ-25 | Reject non-positive quantity and past required-by date | UT-26 | ST-13 |
+| REQ-26 | Queue ordered by urgency then required-by | UT-27, IT-15 | ST-14 |
+| REQ-27 | Approve, reject or partially fulfil with reason | UT-28, IT-15 | ST-14 |
+| REQ-28 | Allocate only matching, Available, unexpired units | UT-29, UT-30, IT-16 | ST-15 |
+| REQ-29 | Reserve then issue, recording full issue detail | UT-31, IT-16 | ST-15 |
+| REQ-30 | Set Fulfilled or Partially Fulfilled and record shortfall | UT-32, IT-17 | ST-16 |
+| REQ-31 | Hospital cancels own request and reservations released | UT-33, IT-17 | ST-16 |
+| REQ-32 | Create camp with venue, schedule, organiser and target | UT-34, IT-18 | ST-17 |
+| REQ-33 | Reject past camp date and invalid time range | UT-35 | ST-17 |
+| REQ-34 | Publish scheduled camps and permit donor enrolment | UT-36, IT-19 | ST-18 |
+| REQ-35 | Refuse enrolment when donor not eligible on camp date | UT-37, IT-19 | ST-18 |
+| REQ-36 | Record camp as collection site on collected units | UT-38, IT-20 | ST-19 |
+| REQ-37 | Close camp, report actual against target, block further entry | UT-39, IT-20 | ST-19 |
+| REQ-38 | Availability search returning counts without donor data | UT-40, IT-21 | ST-20 |
+| REQ-39 | Asynchronous dispatch with retry and email fallback | UT-41, IT-22 | ST-21 |
+| REQ-40 | Eligibility and camp reminder notifications | UT-42, IT-22 | ST-21 |
+| REQ-41 | Shortage appeal with 30-day per-donor suppression | UT-43, IT-23 | ST-22 |
+| REQ-42 | Generate the six specified reports over a date range | UT-44, IT-24 | ST-22 |
+| REQ-43 | Export every report as PDF and CSV with provenance header | UT-45, IT-24 | ST-23 |
+| REQ-44 | Scope every report and search to the user's authorisation | UT-46, IT-25 | ST-23 |
+| REQ-45 | Administer users, roles and hospital registration | UT-47, IT-26 | ST-24 |
+| REQ-46 | Configure operational parameters without code change | UT-48, IT-26 | ST-24 |
+
+### 13.2 Nonfunctional requirements
+
+| Requirement | Description | Verification Method | Test Cases |
+|---|---|---|---|
+| NFR-P1 | Screen render within 3 seconds at 50 concurrent users | Load test | ST-25 |
+| NFR-P2 | Availability search within 2 seconds at 50,000 units | Load test | ST-25 |
+| NFR-S1 | Untested unit can never be issued | Negative test | ST-26 |
+| NFR-S2 | Expired unit can never be issued | Negative test | ST-26 |
+| NFR-S3 | Group mismatch allocation prevented | Negative test | ST-27 |
+| NFR-S4 | Concurrent double allocation prevented | Concurrency test | ST-27 |
+| NFR-SEC5 | Server-side role enforcement on every request | Security test | ST-28 |
+| NFR-SEC6 | Hospital and donor data isolation | Security test | ST-28 |
+| NFR-SEC7 | Donor identity never exposed to hospital users | Security test | ST-29 |
+| NFR-SEC9 | No OWASP Top Ten vulnerability classes present | Security scan and manual test | ST-29 |
+| NFR-Q5 | Unit test line coverage at least 70 percent | Coverage report | ST-30 |
+| NFR-Q6 | Every functional requirement covered by a test case | Traceability review | ST-30 |
+| NFR-SEC1 | Authentication required for every non-public function | Security test | ST-28, SV-08 |
+| NFR-SEC2 | Passwords stored only as salted slow hashes | Inspection test | SV-05 |
+| NFR-SEC3 | Password policy and compromised-password rejection | Security test | SV-01 |
+| NFR-SEC4 | Lockout after 5 failures for 15 minutes | Security test | SV-02 |
+| NFR-SEC8 | TLS 1.2+ for all data in transit | Configuration scan | SV-04 |
+| NFR-SEC10 | Audit record for auth events and config changes | Security test | SV-06, SV-08 |
+| NFR-SEC11 | Session expiry and invalidation | Security test | SV-03 |
+| NFR-Q9 | Server-side validation, no unhandled errors on bad input | Fuzz test | SV-07 |
+
+---
+
+## 14. Test Metrics and Reporting
+
+**Planned coverage.**
+
+| Level | Planned | Executed | Passed | Failed | Pending |
+|---|---|---|---|---|---|
+| Unit | 48 | 0 | 0 | 0 | 48 |
+| Integration | 26 | 0 | 0 | 0 | 26 |
+| System | 30 | 0 | 0 | 0 | 30 |
+| Security validation | 8 | 0 | 0 | 0 | 8 |
+| **Total** | **112** | **0** | **0** | **0** | **112** |
+
+**Metrics collected.** Percentage of cases executed, percentage passed and failed, defect density, defect ageing and requirement coverage (currently 46 of 46 functional requirements and 20 nonfunctional requirements have at least one case).
+
+**Reports.** Daily execution status during the execution window and a final Test Summary Report.
+
+---
+
+## 15. Approvals
+
+| Role | Name | Signature / Date |
+|---|---|---|
+| QA Lead | Balaraj R | |
+| Project Lead | G A Aadish | |
+| Course faculty | | |
+
+---
+
+## Appendix A: Detailed Test Cases
+
+### A.1 SF-1 Donor Registration and Eligibility Screening
 
 Covers REQ-1 to REQ-8.
 
@@ -101,7 +343,7 @@ Covers REQ-1 to REQ-8.
 | ST-03 | Staff Console | Verify screening a donor who fails multiple criteria shows every reason | Staff signed in as staff01 | 1: Search donor DNR10000003<br>2: Open Screening<br>3: Enter weight 46 and haemoglobin 10.5<br>4: Click Evaluate | Weight: 46 kg, Haemoglobin: 10.5 g/dL | The screen shows Temporarily Deferred and lists both the underweight and low haemoglobin reasons, with a review date | Not executed | Pending |
 | ST-04 | Donor Portal | Verify the donor dashboard shows the correct next eligible date after a donation | Donor DNR10000001 donated 10 days ago | 1: Sign in as the donor<br>2: Open the dashboard<br>3: Read the eligibility panel | Donor DNR10000001 | The dashboard shows Not Eligible, the next eligible date as the donation date plus 90 days, and the number of days remaining | Not executed | Pending |
 
-### 8.2 SF-2 Blood Donation and Collection Management
+### A.2 SF-2 Blood Donation and Collection Management
 
 Covers REQ-9 to REQ-15.
 
@@ -124,7 +366,7 @@ Covers REQ-9 to REQ-15.
 | ST-07 | Staff Console | Verify a reactive screening result removes the unit from circulation permanently | A Quarantined unit exists, staff signed in | 1: Record Hepatitis B as Reactive<br>2: Save<br>3: Attempt to allocate the unit to a request<br>4: Sign in as admin and check alerts | Hepatitis B: Reactive | The unit shows Discarded with reason Reactive Screening, allocation is impossible because the unit is not offered, and the administrator sees a confidential alert | Not executed | Pending |
 | ST-08 | Staff Console | Verify component separation through the interface produces three usable child units | An Available whole blood unit exists, staff signed in | 1: Open the unit<br>2: Click Separate Components<br>3: Select PRBC, FFP and Platelets<br>4: Confirm<br>5: Open the inventory console | Parent unit collected 01-09-2026 | Three child units appear as Available with distinct identifiers and distinct expiry dates, and the parent no longer appears in issuable stock | Not executed | Pending |
 
-### 8.3 SF-3 Blood Inventory and Stock Management
+### A.3 SF-3 Blood Inventory and Stock Management
 
 Covers REQ-16 to REQ-23.
 
@@ -147,7 +389,7 @@ Covers REQ-16 to REQ-23.
 | ST-11 | Inventory Console | Verify near-expiry flagging and location transfer through the interface | Staff signed in, a unit expiring in 4 days exists | 1: Open the console and locate the unit<br>2: Confirm it carries the near-expiry flag<br>3: Transfer it to FRIDGE-D1<br>4: Re-open the unit | Unit expiring in 4 days | The unit is visibly flagged as near expiry, the transfer succeeds, and after transfer the location is FRIDGE-D1 with the status and flag unchanged | Not executed | Pending |
 | ST-12 | Inventory Console | Verify the discard workflow enforces confirmation and audit | Staff signed in, an Available unit exists | 1: Click Discard on the unit<br>2: Attempt to confirm without selecting a reason<br>3: Select reason Breakage<br>4: Read the confirmation dialog text<br>5: Confirm<br>6: Open the audit log | Reason: Breakage | The confirmation is blocked until a reason is chosen. The dialog names the specific unit identifier. After confirmation the unit is Discarded and the audit log records the user, timestamp and reason | Not executed | Pending |
 
-### 8.4 SF-4 Hospital Blood Request and Issue
+### A.4 SF-4 Hospital Blood Request and Issue
 
 Covers REQ-24 to REQ-31.
 
@@ -171,7 +413,7 @@ Covers REQ-24 to REQ-31.
 | ST-15 | Staff Console | Verify units are issued only when group, status and expiry all match | An Approved A+ request exists with mixed candidate units | 1: Open the issue screen for the request<br>2: Inspect the offered unit list<br>3: Issue two offered units<br>4: Check inventory and the hospital tracker | A+ request, candidate units of A+, O+, expired A+ and Quarantined A+ | Only Available, unexpired A+ units are offered. The O+, expired and Quarantined units are not selectable. After issue the units show Issued and the hospital tracker updates | Not executed | Pending |
 | ST-16 | Hospital Portal | Verify partial fulfilment display and cancellation behaviour for a hospital user | A Partially Fulfilled request and a Pending request exist for hosp01 | 1: Open the tracker and read the partial request<br>2: Cancel the Pending request<br>3: Attempt to cancel the partially fulfilled request | Two requests in differing states | The partial request shows the issued quantity and the outstanding shortfall. The Pending request cancels successfully. The partially fulfilled request cannot be cancelled because units have been issued | Not executed | Pending |
 
-### 8.5 SF-5 Donation Camp and Drive Management
+### A.5 SF-5 Donation Camp and Drive Management
 
 Covers REQ-32 to REQ-37.
 
@@ -190,7 +432,7 @@ Covers REQ-32 to REQ-37.
 | ST-18 | Donor Portal | Verify a donor can browse and enrol in an upcoming camp | Donor signed in, a Scheduled camp exists | 1: Open Upcoming Camps<br>2: Confirm camps are ordered by date<br>3: Click Enrol on the nearest camp<br>4: Read the confirmation<br>5: Return to the listing | Camp on 15-10-2026 | Camps are listed in ascending date order. Enrolment succeeds with an on-screen confirmation, and the camp then shows the donor as enrolled | Not executed | Pending |
 | ST-19 | Camp Management | Verify camp performance is reported correctly on closure | An active camp with recorded collections, staff signed in | 1: Record collections at the camp<br>2: Click Close Camp and confirm<br>3: Read the camp summary<br>4: Open the Camp Performance Report | Target 150, 87 units collected | The camp shows Completed, 87 units collected against a target of 150, and the report shows an achievement of 58 percent | Not executed | Pending |
 
-### 8.6 SF-6 Search, Notification and Reporting
+### A.6 SF-6 Search, Notification and Reporting
 
 Covers REQ-38 to REQ-46.
 
@@ -217,7 +459,7 @@ Covers REQ-38 to REQ-46.
 | ST-23 | Reporting | Verify report export and hospital data scoping through the interface | Signed in as hosp01, then as hosp02 | 1: As hosp01 generate and export the Request and Issue Report as CSV<br>2: Open the CSV<br>3: Repeat as hosp02 and compare the two files | Requests for two hospitals | Each CSV contains only the signing-in hospital's records, and each carries the provenance header. Neither file contains the other hospital's data | Not executed | Pending |
 | ST-24 | Administration | Verify an administrator can manage users, hospitals and configuration | Signed in as admin01 | 1: Register a new hospital<br>2: Create a hospital user linked to it<br>3: Sign in as that user and raise a request<br>4: As admin, deactivate the hospital<br>5: Attempt to raise another request as that user | New hospital: City Care Hospital, licence LIC-2026-3391 | The hospital and user are created and the first request succeeds. After deactivation the second request is refused, satisfying BR-7 | Not executed | Pending |
 
-### 8.7 Nonfunctional, Safety and Security System Tests
+### A.7 Nonfunctional, Safety and Security System Tests
 
 These cases verify the nonfunctional requirements traced in Appendix C.1 of the SRS.
 
@@ -232,21 +474,4 @@ These cases verify the nonfunctional requirements traced in Appendix C.1 of the 
 
 ---
 
-## 9. Execution Status
-
-No test case has been executed yet, because Deliverable 1 covers requirements and test design only. The table below is the planned coverage against which execution will be tracked.
-
-| Level | Planned | Executed | Passed | Failed | Pending |
-|---|---|---|---|---|---|
-| Unit | 48 | 0 | 0 | 0 | 48 |
-| Integration | 26 | 0 | 0 | 0 | 26 |
-| System | 30 | 0 | 0 | 0 | 30 |
-| **Total** | **104** | **0** | **0** | **0** | **104** |
-
-Design-time coverage is nonetheless complete. All 46 functional requirements, REQ-1 to REQ-46, are mapped to at least one test case in Appendix C of the SRS, satisfying NFR-Q6. That mapping is verified mechanically by `tools/check_traceability.py`.
-
-The exit criteria in Section 5 apply to the execution cycle, not to this document.
-
----
-
-**End of Test Plan, Version 1.0**
+**End of Software Test Plan, Version 1.0**
