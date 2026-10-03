@@ -65,16 +65,16 @@
 
 | Name | Date | Reason For Changes | Version |
 |---|---|---|---|
-| G A Aadish | 08 Sep 2026 | Initial document skeleton, Section 1 Introduction and Section 2 Overall Description drafted. | 0.1 |
-| Niveditha | 08 Sep 2026 | Section 3 External Interface Requirements added; screen inventory, error message and confirmation standards defined. | 0.2 |
-| Dhanya K M | 08 Sep 2026 | Section 4 Analysis Models added: use case, ER, DFD Level 0 and DFD Level 1 Sheets A and B. | 0.3 |
-| Balaraj R | 08 Sep 2026 | Section 5 System Features SF-1 to SF-3 with functional requirements REQ-1 to REQ-23. | 0.4 |
-| G A Aadish | 09 Sep 2026 | Section 5 System Features SF-4 to SF-6 with functional requirements REQ-24 to REQ-46. | 0.5 |
-| Niveditha | 09 Sep 2026 | Section 6 Nonfunctional Requirements and Section 7 Other Requirements. | 0.6 |
-| Dhanya K M | 09 Sep 2026 | Appendix A Glossary and Appendix B Field Layouts. | 0.7 |
-| Balaraj R | 09 Sep 2026 | Appendix C Requirement Traceability Matrix populated against test case IDs. | 0.8 |
-| Balaraj R | 10 Sep 2026 | Appendix C reconciled against the completed Test Plan; requirement numbering audited. | 0.9 |
-| All Members | 10 Sep 2026 | Peer review, consistency and proofreading pass. Approved as Version 1.0 for submission. | 1.0 |
+| G A Aadish | 09 Sep 2026 | Initial document skeleton, Section 1 Introduction and Section 2 Overall Description drafted. | 0.1 |
+| G A Aadish | 09 Sep 2026 | Section 5 System Features SF-4 to SF-6 with functional requirements REQ-24 to REQ-46. | 0.2 |
+| Niveditha | 11 Sep 2026 | Section 6 Nonfunctional Requirements and Section 7 Other Requirements. | 0.3 |
+| Dhanya K M | 11 Sep 2026 | Section 4 Analysis Models added: use case, ER, DFD Level 0 and DFD Level 1 Sheets A and B. | 0.4 |
+| Dhanya K M | 11 Sep 2026 | Appendix A Glossary and Appendix B Field Layouts. | 0.5 |
+| Niveditha | 29 Sep 2026 | Section 3 External Interface Requirements added; screen inventory, error message and confirmation standards defined. | 0.6 |
+| Balaraj R | 02 Oct 2026 | Section 5 System Features SF-1 to SF-3 with functional requirements REQ-1 to REQ-23. | 0.7 |
+| Balaraj R | 02 Oct 2026 | Appendix C Requirement Traceability Matrix populated against test case IDs. | 0.8 |
+| Balaraj R | 02 Oct 2026 | Appendix C reconciled against the completed Test Plan; requirement numbering audited. | 0.9 |
+| All Members | 02 Oct 2026 | Peer review, consistency and proofreading pass. Approved as Version 1.0 for submission. | 1.0 |
 
 ---
 

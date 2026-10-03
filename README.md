@@ -11,7 +11,7 @@ A web-based system that manages the full life cycle of donated blood, from donor
 |---|---|---|
 | Software Requirements Specification | [docs/SRS.md](docs/SRS.md) | 1 |
 | Test Plan | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, being rebuilt in IEEE STP format for 2 |
-| Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2, in progress |
+| Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2 |
 
 See [COMMIT-PLAN.md](COMMIT-PLAN.md) for Deliverable 1's commit history and [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for Deliverable 2's, including what's still outstanding.
 
