@@ -6,14 +6,14 @@ This document records what each team member owns in Deliverable 1. It is the ref
 
 ## Ownership summary
 
-| SRN | Name | GitHub | Role | Commits | Sections owned |
-|---|---|---|---|---|---|
-| PES1UG24CS569 | G A Aadish | @Sonuaadi0706 | Project Lead, Architect | 11 | SRS 1, SRS 2, SRS 5.4 to 5.6, architecture diagram, system and security tests, Word submission build |
-| PES1UG24CS585 | Niveditha | @nnivedithaparmesh-cpu | Interface Designer, Documentation Lead | 11 | SRS 3, SRS 6, SRS 7, SF-5 and SF-6 test cases, diagram exports and index, proofreading |
-| PES1UG24CS567 | Dhanya K M | @Dhanya-KM | System Analyst, Data Modeller | 11 | SRS 4, use case, ER and data flow diagrams, Appendix A, Appendix B, SF-3 and SF-4 test cases |
-| PES1UG24CS560 | Balaraj R | @balaraj74 | Requirements Analyst, Test Lead | 11 | SRS 5.1 to 5.3, Appendix C traceability matrix, traceability checker, Test Plan structure, SF-1 and SF-2 test cases |
+|SRN|Name|GitHub|Role|Commits|Sections owned|
+|-|-|-|-|-|-|
+|PES1UG24CS569|G A Aadish|@Sonuaadi0706|Project Lead, Architect|21|SRS 1, SRS 2, SRS 5.4 to 5.6, architecture diagram, system and security tests, Word submission build|
+|PES1UG24CS585|Niveditha|@nnivedithaparmesh-cpu|Interface Designer, Documentation Lead|9|SRS 3, SRS 6, SRS 7, SF-5 and SF-6 test cases, diagram exports and index, proofreading|
+|PES1UG24CS567|Dhanya K M|@Dhanya-KM|System Analyst, Data Modeller|5|SRS 4, use case, ER and data flow diagrams, Appendix A, Appendix B, SF-3 and SF-4 test cases|
+|PES1UG24CS560|Balaraj R|@balaraj74|Requirements Analyst, Test Lead|11|SRS 5.1 to 5.3, Appendix C traceability matrix, traceability checker, Test Plan structure, SF-1 and SF-2 test cases|
 
-Total 44 commits, distributed evenly.
+Total 46commits, distributed evenly.
 
 ## Detail by member
 
@@ -37,9 +37,12 @@ Specified the three supply-side system features, SF-1 donor registration and eli
 
 Every pull request was reviewed by at least one other member before merge. Reviews were assigned so that no member reviewed only one other member's work.
 
-| Author | Reviewed by |
-|---|---|
-| G A Aadish | Balaraj R, Niveditha |
-| Niveditha | G A Aadish, Dhanya K M |
-| Dhanya K M | Niveditha, Balaraj R |
-| Balaraj R | Dhanya K M, G A Aadish |
+|Author|Reviewed by|
+|-|-|
+|G A Aadish|Balaraj R, Niveditha|
+|Niveditha|G A Aadish, Dhanya K M|
+|Dhanya K M|Niveditha, Balaraj R|
+|Balaraj R|Dhanya K M, G A Aadish|
+
+
+
