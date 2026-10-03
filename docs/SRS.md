@@ -324,26 +324,47 @@ Detailed visual design is documented separately in the user interface specificat
 
 ## 4. Analysis Models
 
-The analysis models for the system are maintained as diagram sources in the `diagrams/` directory of the project repository and are reproduced here by reference.
+The analysis models for the system are maintained as diagram sources in the `diagrams/` directory of the project repository. The use case diagram is shown in full below because it is the primary analysis model; the remaining models are referenced by file.
+
+### 4.1 Use Case Diagram
+
+![Use case diagram, grouped by system feature](../diagrams/use-case.png)
+
+*Figure: UML use case diagram. Actors are the Donor, Blood Bank Staff, Hospital User and Administrator, with the SMS and Email gateways as external system actors. Source: `diagrams/use-case.mmd`.*
+
+### 4.2 Use Case Summary
+
+| ID | Use Case | Primary Actor | Requirements |
+|---|---|---|---|
+| UC1 | Register as Donor | Donor | REQ-1 to REQ-5 |
+| UC2 | View Eligibility Status | Donor | REQ-6, REQ-8 |
+| UC3 | Enrol in Camp | Donor | REQ-34, REQ-35 |
+| UC4 | Screen Donor | Blood Bank Staff | REQ-6, REQ-7 |
+| UC5 | Record Collection | Blood Bank Staff | REQ-9 to REQ-11 |
+| UC6 | Enter Test Results | Blood Bank Staff | REQ-12 to REQ-14 |
+| UC7 | Separate Components | Blood Bank Staff | REQ-15 |
+| UC8 | Manage Inventory | Blood Bank Staff, Administrator | REQ-16 to REQ-21 |
+| UC9 | Discard Unit | Blood Bank Staff | REQ-22, REQ-23 |
+| UC10 | Raise Blood Request | Hospital User | REQ-24, REQ-25 |
+| UC11 | Track or Cancel Request | Hospital User | REQ-30, REQ-31, REQ-44 |
+| UC12 | Check Availability | Hospital User | REQ-38 |
+| UC13 | Approve or Reject Request | Blood Bank Staff | REQ-26, REQ-27 |
+| UC14 | Allocate and Issue Units | Blood Bank Staff | REQ-28 to REQ-30 |
+| UC15 | Manage Camp | Blood Bank Staff, Administrator | REQ-32, REQ-33, REQ-36, REQ-37 |
+| UC16 | Generate Reports | Staff, Hospital User, Administrator | REQ-42 to REQ-44 |
+| UC17 | Manage Users and Roles | Administrator | REQ-45 |
+| UC18 | Configure Parameters | Administrator | REQ-46 |
+| UC19 | Send Notification | System (SMS and Email gateways) | REQ-39 to REQ-41 |
+
+### 4.3 Other Models
 
 | Model | Source File | Purpose |
 |---|---|---|
-| Use Case Diagram | `diagrams/use-case.mmd` | Actors and the use cases each may perform |
 | Entity Relationship Diagram | `diagrams/er-diagram.mmd` | Persistent entities, attributes and cardinalities |
 | Data Flow Diagram, Level 0 | `diagrams/dfd-level0.mmd` | System context and external entities |
 | Data Flow Diagram, Level 1 Sheet A | `diagrams/dfd-level1a-supply.mmd` | Processes 1.0 to 4.0, the supply side |
 | Data Flow Diagram, Level 1 Sheet B | `diagrams/dfd-level1b-demand.mmd` | Processes 5.0 to 9.0, demand, camps and reporting |
 | Architecture Diagram | `diagrams/architecture.mmd` | Tier decomposition and external gateways |
-
-**Actors.** Donor, Blood Bank Staff, Hospital User, Administrator, and two external system actors, the SMS Gateway and the Email Gateway.
-
-**Principal entities.** Donor, Donation, BloodUnit, ScreeningTest, Hospital, BloodRequest, RequestLineItem, Issue, Camp, CampEnrolment, User, Role, Notification and AuditLog. Attributes and cardinalities are given in the ER source and the field layouts in Appendix B.
-
-**Principal processes in the Level 1 data flow.** Nine processes are identified: 1.0 register and screen donor, 2.0 record collection, 3.0 test and quarantine unit, 4.0 maintain inventory, 5.0 receive and approve request, 6.0 allocate and issue units, 7.0 manage camp, 8.0 generate report and 9.0 dispatch notification. The data stores are D1 Donor Store, D2 Unit Store, D3 Request Store, D4 Camp Store and D5 Audit Store.
-
-The Level 1 diagram is drawn on two sheets so that it remains legible. Sheet A carries processes 1.0 to 4.0, the path by which blood enters the system. Sheet B carries processes 5.0 to 9.0, the path by which blood leaves the system together with camp management, reporting and notification. Flows crossing between the sheets are marked with off-sheet connectors naming the process at the far end.
-
----
 
 ## 5. System Features
 
