@@ -5,6 +5,16 @@ Organisation: [SE-miniproject1](https://github.com/SE-miniproject1) · Repositor
 
 A web-based system that manages the full life cycle of donated blood, from donor registration and eligibility screening, through collection, screening tests, component separation and storage, to the fulfilment of blood requests raised by hospitals.
 
+## Documents
+
+| Document | File | Deliverable |
+|---|---|---|
+| Software Requirements Specification | [docs/SRS.md](docs/SRS.md) | 1 |
+| Test Plan | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, being rebuilt in IEEE STP format for 2 |
+| Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2, in progress |
+
+See [COMMIT-PLAN.md](COMMIT-PLAN.md) for Deliverable 1's commit history and [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for Deliverable 2's, including what's still outstanding.
+
 ## Team
 
 | SRN | Name | GitHub | Primary Responsibility |
