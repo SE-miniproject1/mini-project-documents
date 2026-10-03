@@ -2,7 +2,7 @@
 
 ## for Blood Bank Management System
 
-**Version 0.1 draft**
+**Version 1.0 approved**
 
 **Prepared by**
 
@@ -16,10 +16,9 @@
 **Organization:** SE-miniproject1
 **Course:** Software Engineering — Mini Project
 **Date Created:** 08 September 2026
-
+**Date Approved:** 10 September 2026
 
 ---
-
 
 ## Table of Contents
 
@@ -60,7 +59,6 @@
 - [Appendix B: Field Layouts](#appendix-b-field-layouts)
 - [Appendix C: Requirement Traceability Matrix](#appendix-c-requirement-traceability-matrix)
 
-
 ---
 
 ## Revision History
@@ -68,9 +66,17 @@
 | Name | Date | Reason For Changes | Version |
 |---|---|---|---|
 | G A Aadish | 08 Sep 2026 | Initial document skeleton, Section 1 Introduction and Section 2 Overall Description drafted. | 0.1 |
+| Niveditha | 08 Sep 2026 | Section 3 External Interface Requirements added; screen inventory, error message and confirmation standards defined. | 0.2 |
+| Dhanya K M | 08 Sep 2026 | Section 4 Analysis Models added: use case, ER, DFD Level 0 and DFD Level 1 Sheets A and B. | 0.3 |
+| Balaraj R | 08 Sep 2026 | Section 5 System Features SF-1 to SF-3 with functional requirements REQ-1 to REQ-23. | 0.4 |
+| G A Aadish | 09 Sep 2026 | Section 5 System Features SF-4 to SF-6 with functional requirements REQ-24 to REQ-46. | 0.5 |
+| Niveditha | 09 Sep 2026 | Section 6 Nonfunctional Requirements and Section 7 Other Requirements. | 0.6 |
+| Dhanya K M | 09 Sep 2026 | Appendix A Glossary and Appendix B Field Layouts. | 0.7 |
+| Balaraj R | 09 Sep 2026 | Appendix C Requirement Traceability Matrix populated against test case IDs. | 0.8 |
+| Balaraj R | 10 Sep 2026 | Appendix C reconciled against the completed Test Plan; requirement numbering audited. | 0.9 |
+| All Members | 10 Sep 2026 | Peer review, consistency and proofreading pass. Approved as Version 1.0 for submission. | 1.0 |
 
 ---
-
 
 ## 1. Introduction
 
@@ -122,9 +128,7 @@ The following are explicitly **out of scope** for Release 1.0: laboratory instru
 6. OWASP Foundation, *OWASP Application Security Verification Standard, Version 4.0*. Basis of the security requirements in Section 6.3.
 7. Project repository: https://github.com/SE-miniproject1/mini-project-documents
 
-
 ---
-
 
 ## 2. Overall Description
 
@@ -235,109 +239,109 @@ Requirements REQ-40 through REQ-46 in Section 5.6 pertain principally to UC-4. R
 
 **DEP-4** The system reuses no components from other projects. All application code is written for this project.
 
-
 ---
 
 ## 3. External Interface Requirements
+
 ### 3.1 User Interfaces
 
-The Blood Bank Management System shall provide browser-based user interfaces for four user classes: Donors, Blood Bank Staff, Hospital Users and Administrators. The interfaces shall use a consistent layout with a header, navigation area, main content area, action controls and notification/error area.
+The system presents four role-scoped web interfaces. All are served as responsive HTML rendered by the server, progressively enhanced with client-side scripting.
 
-#### 3.1.1 Donor Portal
+**UI-1 General characteristics.** All screens share a common layout comprising a header carrying the system name and the signed-in user's name and role, a left navigation panel scoped to the user's role, a main content region, and a footer. On viewports narrower than 768 pixels the navigation panel collapses into a menu control.
 
-The Donor Portal shall allow donors to:
-- Register and maintain their profile and contact information.
-- View their eligibility status and next eligible donation date.
-- View their donation history.
-- Browse upcoming donation camps and enrol in eligible camps.
-- Receive confirmation and notification messages.
+**UI-2 Standard controls.** Every screen shall carry a Help control in the header opening context-sensitive guidance. Every data entry form shall carry Save and Cancel controls, with Cancel returning to the previous screen without persisting changes. Every list screen shall support column sorting and pagination at 25 rows per page.
 
-The interface shall be usable on mobile browsers because donors may access the system from mobile devices. The interface shall display clear validation messages when entered information is invalid or when a donor is not eligible for an action.
+**UI-3 Keyboard shortcuts.** For the staff console, the following shortcuts shall be provided, because staff perform high-volume repetitive entry: Alt+N new record, Alt+S save, Alt+F focus search, Escape cancel current dialog.
 
-#### 3.1.2 Blood Bank Staff Console
+**UI-4 Error message standard.** Errors shall be displayed adjacent to the field in error, in red, prefixed with the field label, and shall state the corrective action. A summary banner shall appear at the top of the form listing all errors. Error text shall never expose stack traces, SQL, or internal identifiers.
 
-The Staff Console shall provide screens for:
-- Donor registration and eligibility screening.
-- Recording blood donation and collection details.
-- Recording screening results and component separation.
-- Managing blood inventory and expiry information.
-- Processing hospital blood requests.
-- Managing donation camps.
-- Searching inventory and generating operational reports.
+**UI-5 Confirmation standard.** Any irreversible operation, including issuing a unit, discarding a unit and deactivating a user, shall require an explicit confirmation dialog naming the specific record affected.
 
-The Staff Console shall use dense, keyboard-efficient screens suitable for continuous use during working hours. Tables, filters, search controls and status indicators shall be used where appropriate.
+**UI-6 Screen inventory.** The following screens shall be provided.
 
-#### 3.1.3 Hospital Portal
+| Screen | User Class | Purpose |
+|---|---|---|
+| Login and Password Reset | All | Authentication |
+| Donor Registration | UC-1 | Self-registration |
+| Donor Dashboard | UC-1 | Eligibility status, next eligible date, history |
+| Camp Listing and Enrolment | UC-1 | Browse and enrol in camps |
+| Donor Search and Screening | UC-2 | Locate donor, record screening |
+| Collection Entry | UC-2 | Record a donation, generate unit |
+| Test Result Entry | UC-2 | Record screening test outcomes |
+| Inventory Console | UC-2, UC-4 | Stock by group, component, status, expiry |
+| Request Queue | UC-2 | Review and act on hospital requests |
+| Issue and Cross-match | UC-2 | Allocate specific units to a request |
+| Hospital Request Form | UC-3 | Raise a request |
+| Hospital Request Tracker | UC-3 | Status and issue history |
+| Camp Management | UC-2, UC-4 | Create and manage camps |
+| User and Role Administration | UC-4 | Accounts, roles, hospital registration |
+| Configuration | UC-4 | Eligibility and expiry parameters |
+| Reports | UC-2, UC-3, UC-4 | Generate and export reports |
 
-The Hospital Portal shall allow authorised hospital users to:
-- Raise blood requests.
-- Specify blood group, component, quantity, urgency and required-by date and time.
-- View the status of their requests.
-- View issue history for their own hospital.
-- Cancel eligible requests.
+**UI-7 Accessibility.** Screens shall meet WCAG 2.1 Level AA for colour contrast, keyboard operability and form labelling.
 
-The interface shall clearly distinguish request states such as Pending, Approved, Partially Fulfilled, Fulfilled, Rejected and Cancelled. Donor identities shall not be displayed to hospital users.
+Detailed visual design is documented separately in the user interface specification and is not part of this SRS.
 
-#### 3.1.4 Administrator Console
+### 3.2 Software Interfaces
 
-The Administrator Console shall provide screens for:
-- Managing user accounts and roles.
-- Registering and managing hospitals.
-- Configuring eligibility and expiry parameters.
-- Viewing reports.
-- Viewing audit logs.
+**SI-1 Database.** PostgreSQL 15 or later, accessed through the Django ORM over the psycopg driver. Data items exchanged are the persistent entities described in Appendix B. The interface is a local or private-network TCP connection using connection pooling. Credentials are supplied through environment variables and never committed to source control.
 
-Administrative functions shall only be accessible to authenticated users with administrator privileges.
+**SI-2 Web framework.** Django 5.x. The system uses its authentication, session, ORM, form validation, template and administrative subsystems. Incoming data items are HTTP request objects; outgoing data items are rendered HTML responses, JSON responses and file downloads.
 
-#### 3.1.5 Common Interface Requirements
+**SI-3 Email gateway.** An SMTP relay reached over TLS on port 587. Outgoing data items are notification messages carrying recipient address, subject and body. No inbound mail is processed. The service required is reliable one-way delivery. Delivery failures are logged and retried as specified in REQ-39.
 
-All user interfaces shall:
-- Use consistent navigation, labels, buttons and form layouts.
-- Display required fields clearly.
-- Validate user input before submission.
-- Display clear error messages identifying the field or action that caused the error.
-- Provide confirmation messages after successful operations.
-- Clearly display important statuses such as eligibility, inventory status and request status.
-- Prevent users from accessing functions for which they do not have permission.
-- Support the browser environments specified in Section 2.4.
-- Remain usable from a 360-pixel-wide mobile viewport up to a 1920-pixel-wide desktop viewport.
+**SI-4 SMS gateway.** A third-party HTTP API. Outgoing data items are a recipient mobile number and a message body of at most 160 characters. The API is invoked over HTTPS with a bearer token held in configuration. Responses carry a delivery status which is persisted against the notification record.
 
-### 3.2 Hardware Interfaces
+**SI-5 PDF and spreadsheet generation.** A server-side reporting library generates PDF and CSV artefacts. Incoming data items are report parameter sets; outgoing data items are binary files streamed to the browser.
 
-The Blood Bank Management System shall operate on standard computing devices used by donors, blood bank staff, hospital users and administrators.
+**SI-6 Shared data.** The donor identifier, unit identifier and request identifier are the data items shared across the donor management, inventory and request management components. These identifiers are generated centrally as specified in REQ-2, REQ-10 and REQ-24 and are treated as immutable once assigned. No global shared memory area is used; all sharing is through the database.
 
-- Client devices shall include desktop computers, laptops, tablets and mobile devices with a supported web browser.
-- The system shall use standard keyboard, mouse and touch-screen input devices supported by the client device.
-- Blood bank staff may use barcode or scanning devices where available for identifying blood units and donor records.
-- The system shall interface with display devices through the user's web browser.
-- No specialised hardware shall be mandatory for normal system operation.
+### 3.3 Communications Interfaces
 
-### 3.3 Software Interfaces
+**CI-1 Protocol.** All client-server communication shall use HTTP over TLS 1.2 or higher. Plain HTTP requests shall be redirected to HTTPS. HTTP Strict Transport Security shall be enabled.
 
-The Blood Bank Management System shall provide software interfaces with the following components:
+**CI-2 Message format.** Form submissions use `application/x-www-form-urlencoded` or `multipart/form-data`. Asynchronous calls exchange `application/json` encoded as UTF-8. Report downloads use `application/pdf` or `text/csv`.
 
-- **Web Browser:** Users shall access the system through supported web browsers.
-- **Database Management System:** The application shall communicate with the database for storing and retrieving user, donor, hospital, blood inventory, donation, request and transaction information.
-- **Authentication and Authorization:** The system shall use authenticated user accounts and role-based access control to restrict access to authorised functions.
-- **Notification Services:** The system may interface with notification services for sending confirmations, reminders and important status notifications.
-- **Reporting Services:** The system shall provide software interfaces for generating operational and administrative reports.
-- **Audit Logging:** Security-sensitive and important user actions shall be recorded through the system's audit logging mechanism.
+**CI-3 Session management.** Sessions are maintained by a server-side session store keyed by a cookie marked Secure, HttpOnly and SameSite=Lax.
 
-### 3.4 Communication Interfaces
+**CI-4 Electronic mail.** Notification email is sent over SMTP with STARTTLS. Messages are sent as multipart alternative carrying both plain text and HTML parts.
 
-The Blood Bank Management System shall use standard web-based communication mechanisms.
+**CI-5 Data transfer rate.** No single page response shall require more than 1 MB of transfer excluding cached static assets, so that the system remains usable on a 2 Mbps connection.
 
-- Communication between client browsers and the application server shall use HTTP/HTTPS.
-- HTTPS shall be used for authenticated and sensitive communication.
-- The system shall use standard request-response communication between the client and server.
-- Data exchanged between the client and server shall use structured formats supported by the application.
-- Communication errors or unavailable services shall be reported to the user using clear error messages.
-- The system shall maintain secure communication when transmitting sensitive user, donor, hospital and blood inventory information.
+**CI-6 Synchronisation.** Notification dispatch is asynchronous and shall not block the user transaction that triggered it. A failed dispatch shall not roll back the originating transaction.
+
+**CI-7 Security of communication.** No personally identifiable donor data shall be placed in a URL query string. All such data shall be transmitted in the request body.
+
+### 3.4 Hardware Interfaces
+
+**HI-1 Barcode scanner.** The system shall accept blood unit identifiers from a USB or Bluetooth barcode scanner operating in keyboard-wedge mode. No device driver interface is required, because the scanner presents itself as a keyboard and the unit identifier field simply receives the scanned characters followed by a carriage return.
+
+**HI-2 Label printer.** Unit labels shall be produced as a printable document rendered by the browser's print pipeline. No direct printer interface is required.
+
+**HI-3 Server hardware.** Minimum server specification is 4 virtual CPUs, 8 GB RAM and 100 GB storage. No specialised hardware is required.
+
 ---
 
 ## 4. Analysis Models
 
-*Content pending — to be drafted by Dhanya K M.*
+The analysis models for the system are maintained as diagram sources in the `diagrams/` directory of the project repository and are reproduced here by reference.
+
+| Model | Source File | Purpose |
+|---|---|---|
+| Use Case Diagram | `diagrams/use-case.mmd` | Actors and the use cases each may perform |
+| Entity Relationship Diagram | `diagrams/er-diagram.mmd` | Persistent entities, attributes and cardinalities |
+| Data Flow Diagram, Level 0 | `diagrams/dfd-level0.mmd` | System context and external entities |
+| Data Flow Diagram, Level 1 Sheet A | `diagrams/dfd-level1a-supply.mmd` | Processes 1.0 to 4.0, the supply side |
+| Data Flow Diagram, Level 1 Sheet B | `diagrams/dfd-level1b-demand.mmd` | Processes 5.0 to 9.0, demand, camps and reporting |
+| Architecture Diagram | `diagrams/architecture.mmd` | Tier decomposition and external gateways |
+
+**Actors.** Donor, Blood Bank Staff, Hospital User, Administrator, and two external system actors, the SMS Gateway and the Email Gateway.
+
+**Principal entities.** Donor, Donation, BloodUnit, ScreeningTest, Hospital, BloodRequest, RequestLineItem, Issue, Camp, CampEnrolment, User, Role, Notification and AuditLog. Attributes and cardinalities are given in the ER source and the field layouts in Appendix B.
+
+**Principal processes in the Level 1 data flow.** Nine processes are identified: 1.0 register and screen donor, 2.0 record collection, 3.0 test and quarantine unit, 4.0 maintain inventory, 5.0 receive and approve request, 6.0 allocate and issue units, 7.0 manage camp, 8.0 generate report and 9.0 dispatch notification. The data stores are D1 Donor Store, D2 Unit Store, D3 Request Store, D4 Camp Store and D5 Audit Store.
+
+The Level 1 diagram is drawn on two sheets so that it remains legible. Sheet A carries processes 1.0 to 4.0, the path by which blood enters the system. Sheet B carries processes 5.0 to 9.0, the path by which blood leaves the system together with camp management, reporting and notification. Flows crossing between the sheets are marked with off-sheet connectors naming the process at the far end.
 
 ---
 
@@ -347,7 +351,115 @@ The functional requirements are organised by system feature, which are the major
 
 Priority is stated as High, Medium or Low, supported by component ratings for benefit, penalty, cost and risk, each on a scale of 1 to 9.
 
-*Content pending — SF-1 to SF-3 to be drafted by Balaraj R.*
+### 5.1 Donor Registration and Eligibility Screening
+
+#### 5.1.1 Description and Priority
+
+This feature allows a person to register as a donor, maintains their demographic, contact and medical profile, and determines whether they are currently eligible to donate. Eligibility is decided from age, weight, haemoglobin level, the interval since the last donation, and declared medical conditions. Without this feature no other feature can operate, because every unit of blood traces back to a screened donor.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 4, Risk 4.
+
+#### 5.1.2 Stimulus/Response Sequences
+
+**Sequence 1, self-registration.** The donor opens the registration screen and submits personal, contact and medical details. The system validates the input, checks that the mobile number and email are not already registered, creates the donor record, assigns a donor identifier and displays a confirmation carrying that identifier. The system sends a welcome notification.
+
+**Sequence 2, duplicate registration.** The donor submits a registration whose mobile number already exists. The system rejects the submission and displays an error inviting the donor to sign in or reset their password. No record is created.
+
+**Sequence 3, staff-assisted screening.** Staff search for a donor by identifier, mobile number or name. The system displays the donor profile with current eligibility status. Staff enter the measured weight, haemoglobin and blood pressure. The system re-evaluates eligibility and displays the outcome with the governing reason.
+
+**Sequence 4, ineligible donor.** Staff record a haemoglobin value below the configured threshold. The system marks the donor temporarily ineligible, records the reason and the review date, and prevents any collection from being recorded against that donor.
+
+**Sequence 5, deferral expiry.** A donor previously deferred reaches their review date. On the next eligibility evaluation the system clears the temporary deferral and restores eligible status.
+
+#### 5.1.3 Functional Requirements
+
+**REQ-1:** The system shall provide a donor registration function capturing full name, date of birth, gender, blood group, mobile number, email address, postal address with city and PIN code, and an emergency contact.
+
+**REQ-2:** The system shall assign every successfully registered donor a unique, immutable donor identifier of the form `DNR` followed by eight digits, and shall display this identifier on the confirmation screen.
+
+**REQ-3:** The system shall reject a registration whose mobile number or email address is already associated with an active donor record, and shall display the message "This mobile number is already registered. Please sign in or reset your password." No partial record shall be persisted.
+
+**REQ-4:** The system shall validate that the donor's age, computed from date of birth, is at least 18 years and at most 65 years on the date of registration. A donor outside this range shall be rejected with the message "Donors must be between 18 and 65 years of age."
+
+**REQ-5:** The system shall record a donor's declared medical history against a configured list of permanent deferral conditions and temporary deferral conditions, and shall mark the donor permanently ineligible if any permanent deferral condition is declared.
+
+**REQ-6:** The system shall evaluate donor eligibility at the point of screening against all of the following, and shall report every failing criterion, not merely the first: age between 18 and 65 years, body weight at least 50 kilograms, haemoglobin at least 12.5 grams per decilitre, systolic blood pressure between 100 and 140 millimetres of mercury, and at least 90 days elapsed since the donor's last whole blood donation.
+
+**REQ-7:** The system shall prevent a collection from being recorded against a donor whose current eligibility status is not Eligible, and shall display the governing deferral reason and review date.
+
+**REQ-8:** The system shall compute and display the donor's next eligible donation date as the date of last donation plus the configured donation interval, and shall clear a temporary deferral automatically once its review date has passed.
+
+### 5.2 Blood Donation and Collection Management
+
+#### 5.2.1 Description and Priority
+
+This feature records a donation event, creates the resulting blood unit or units, captures mandatory screening test results, and moves units between quarantine, available and discarded states based on those results. It is the point at which blood enters the system and it carries the highest safety consequence of any feature, because an untested or infected unit released into inventory could cause patient harm.
+
+**Priority: High.** Benefit 9, Penalty 9, Cost 6, Risk 7.
+
+#### 5.2.2 Stimulus/Response Sequences
+
+**Sequence 1, record a collection.** Staff select an eligible donor and record the collection date and time, the volume collected, the bag lot number and the collecting technician. The system creates a blood unit in Quarantined status, assigns a unit identifier, computes the expiry date from the component shelf life, and updates the donor's last donation date.
+
+**Sequence 2, adverse reaction.** Staff record that the donation was aborted because the donor experienced an adverse reaction. The system records the partial volume, marks the unit Discarded with reason Aborted Collection, and defers the donor for the configured recovery period.
+
+**Sequence 3, enter test results.** Staff open the unit and record results for the mandatory screening panel. Where all results are non-reactive the system moves the unit to Available. Where any result is reactive the system moves the unit to Discarded with reason Reactive Screening and raises a confidential alert to the administrator.
+
+**Sequence 4, component separation.** Staff separate a whole blood unit into components. The system closes the parent unit, creates a child unit per component, propagates the donor and test linkage to each child, and computes a distinct expiry date per component from its own shelf life.
+
+#### 5.2.3 Functional Requirements
+
+**REQ-9:** The system shall record a donation event capturing the donor identifier, collection date and time, volume in millilitres, bag lot number, collection site which is either the centre or a named camp, and the identity of the recording staff member.
+
+**REQ-10:** The system shall assign every collected unit a unique, immutable unit identifier of the form `BU` followed by ten digits, and shall render it as a scannable barcode on the unit label.
+
+**REQ-11:** The system shall create every new unit in Quarantined status, and shall not permit a Quarantined unit to be issued, reserved or included in an availability count.
+
+**REQ-12:** The system shall require results for the mandatory screening panel comprising HIV, Hepatitis B, Hepatitis C, Syphilis and Malaria before a unit may leave Quarantined status, and shall reject any attempt to release a unit with an incomplete panel.
+
+**REQ-13:** The system shall move a unit to Available status when, and only when, every test in the mandatory panel is recorded as Non-Reactive.
+
+**REQ-14:** The system shall move a unit to Discarded status with reason Reactive Screening when any test in the mandatory panel is recorded as Reactive, shall make that unit permanently unissuable, and shall notify the administrator. The donor's identity in this notification shall be restricted to the administrator role.
+
+**REQ-15:** The system shall support separation of a whole blood unit into packed red cells, plasma and platelet components, shall create a separate child unit for each component with its own identifier and its own expiry date derived from the component shelf life in Section 6.5, shall link each child to the parent unit and the originating donor, and shall close the parent unit so that it can no longer be issued.
+
+### 5.3 Blood Inventory and Stock Management
+
+#### 5.3.1 Description and Priority
+
+This feature maintains the real-time state of every blood unit held by the blood bank, including its group, component type, storage location, status and expiry. It supports stock queries, expiry management, transfer between storage locations, and the discard workflow. It is the feature that delivers the product's primary objective of real-time visibility.
+
+**Priority: High.** Benefit 9, Penalty 8, Cost 5, Risk 4.
+
+#### 5.3.2 Stimulus/Response Sequences
+
+**Sequence 1, view stock.** Staff open the inventory console. The system displays counts of Available units grouped by blood group and component type, with expiry buckets.
+
+**Sequence 2, filter stock.** Staff apply filters for blood group, component and storage location. The system returns the matching units with identifier, expiry date and status.
+
+**Sequence 3, unit expires.** A unit's expiry date passes. On the next scheduled evaluation the system moves it to Expired status, removes it from availability counts and records the transition in the audit log.
+
+**Sequence 4, near-expiry alert.** A unit enters the configured near-expiry window. The system flags it on the console and includes it in the daily near-expiry digest sent to staff.
+
+**Sequence 5, manual discard.** Staff discard a unit for a stated reason such as breakage or temperature excursion. The system requires a reason, requires confirmation naming the unit, moves the unit to Discarded and writes an audit record carrying the acting user.
+
+#### 5.3.3 Functional Requirements
+
+**REQ-16:** The system shall maintain for every blood unit its unit identifier, donor identifier, blood group, component type, volume, collection date, expiry date, storage location, and current status drawn from the set Quarantined, Available, Reserved, Issued, Expired and Discarded.
+
+**REQ-17:** The system shall display current stock as counts of Available units grouped by blood group and component type, and shall refresh this view to reflect any committed change within 5 seconds.
+
+**REQ-18:** The system shall permit filtering and searching of inventory by blood group, component type, storage location, status and expiry date range, in any combination.
+
+**REQ-19:** The system shall transition any unit whose expiry date has passed to Expired status automatically, shall exclude Expired units from all availability counts and search results returning issuable stock, and shall perform this evaluation at least once every 24 hours.
+
+**REQ-20:** The system shall flag every Available unit whose expiry date falls within the configured near-expiry window, which defaults to 7 days, and shall include such units in a daily digest notification to blood bank staff.
+
+**REQ-21:** The system shall permit staff to record the transfer of a unit between storage locations, capturing the source location, destination location, timestamp and acting user, without altering the unit's status.
+
+**REQ-22:** The system shall require a reason drawn from a configured list and an explicit confirmation naming the unit before permitting a manual discard, and shall not permit an Issued unit to be discarded.
+
+**REQ-23:** The system shall write an immutable audit record for every unit status transition, capturing the unit identifier, previous status, new status, timestamp, acting user and reason where applicable. Audit records shall not be editable or deletable through any application function.
 
 ### 5.4 Hospital Blood Request and Issue
 
@@ -574,7 +686,11 @@ This feature provides availability search across the inventory, dispatches notif
 **BR-8** Blood group compatibility for issue in Release 1.0 is exact match only. Compatible-group substitution, such as issuing O negative to any recipient, is a manual clinical decision and is not automated by the system.
 
 **BR-9** Donor identity is confidential. It is visible to blood bank staff and administrators only, never to hospital users.
+
 **BR-10** No donor record, unit record, request record or audit record may be permanently deleted. Records are deactivated or superseded, never removed.
+
+---
+
 ## 7. Other Requirements
 
 **OR-1 Database requirements.** The schema shall be normalised to at least third normal form. Every table shall carry a surrogate primary key, a creation timestamp and a last-modified timestamp. Foreign key constraints shall be enforced at the database level and shall not rely solely on application logic. All schema changes shall be applied through versioned migration files held in source control.
@@ -590,26 +706,258 @@ This feature provides availability search across the inventory, dispatches notif
 **OR-6 Documentation.** The delivered system shall be accompanied by a user manual per user class, an installation and deployment guide, and API documentation generated from source docstrings.
 
 **OR-7 Logging.** The application shall write structured logs at INFO level for business events and at ERROR level for failures. Logs shall never contain passwords, session tokens or full donor medical histories.
+
 **OR-8 Environment separation.** Development, test and production environments shall be separate. Production data shall never be copied to a development environment without anonymisation of donor personal data.
 
 ---
 
 ## Appendix A: Glossary
 
-*Content pending — to be drafted by Dhanya K M.*
+| Term | Definition |
+|---|---|
+| **Adverse Reaction** | An unwanted physical response experienced by a donor during or after donation, such as fainting or haematoma. |
+| **Aphaeresis** | A collection procedure in which a specific blood component is separated during collection and the remainder returned to the donor. Not supported in Release 1.0. |
+| **Audit Log** | An immutable record of a significant system event, capturing what changed, when, and which user caused it. |
+| **BBMS** | Blood Bank Management System, the product specified by this document. |
+| **Blood Group** | The classification of blood by ABO and Rh antigens, giving eight values: A+, A-, B+, B-, AB+, AB-, O+, O-. |
+| **Blood Unit** | A single collected and labelled quantity of blood or a blood component, uniquely identified and independently tracked. |
+| **Camp** | A blood donation drive conducted at a venue away from the blood bank premises. |
+| **Component** | A constituent separated from whole blood, such as packed red cells, plasma or platelets. |
+| **Cross-match** | The compatibility test performed between donor unit and recipient before transfusion. Performed clinically; recorded but not computed by the system. |
+| **CSRF** | Cross-Site Request Forgery, an attack in which a user's authenticated session is used to submit an unintended request. |
+| **Deferral** | A period during which a donor is not permitted to donate. Temporary deferral has a review date; permanent deferral does not. |
+| **Donor** | A person who gives blood, and a user class of the system. |
+| **Eligibility** | The state of a donor being permitted to donate, determined by the criteria in REQ-6. |
+| **Expiry Date** | The date after which a unit may no longer be issued, computed from collection date plus component shelf life. |
+| **FFP** | Fresh Frozen Plasma. |
+| **Haemoglobin** | The oxygen-carrying protein in red cells, measured in grams per decilitre and used as an eligibility criterion. |
+| **Issue** | The act of releasing a specific unit from the blood bank to a hospital against an approved request. |
+| **Near-Expiry** | The state of an Available unit whose expiry date falls within the configured warning window. |
+| **ORM** | Object Relational Mapper, the layer through which the application reads and writes the database. |
+| **OWASP** | Open Worldwide Application Security Project, publisher of the security standards referenced in Section 6.3. |
+| **PRBC** | Packed Red Blood Cells. |
+| **Quarantine** | The status of a unit that has been collected but not yet cleared by screening, during which it cannot be issued. |
+| **RBAC** | Role-Based Access Control, the model by which permissions are granted to roles rather than to individuals. |
+| **Reactive** | A screening test result indicating the probable presence of an infectious marker, causing the unit to be discarded. |
+| **Reserved** | The status of a unit allocated to an approved request but not yet physically issued. |
+| **RPO / RTO** | Recovery Point Objective and Recovery Time Objective, the backup and recovery bounds in OR-2. |
+| **RTM** | Requirement Traceability Matrix, given in Appendix C. |
+| **Screening Panel** | The mandatory set of infectious disease tests listed in BR-5. |
+| **Shelf Life** | The number of days a component remains usable after collection, per BR-4. |
+| **SRS** | Software Requirements Specification, this document. |
+| **TLS** | Transport Layer Security, the protocol securing communication per CI-1. |
+| **Whole Blood** | Blood collected without separation into components. |
 
 ---
 
 ## Appendix B: Field Layouts
 
-*Content pending — to be drafted by Dhanya K M.*
+This appendix specifies the field layouts, attributes and report requirements for the system. A spreadsheet version is maintained at `appendices/Appendix-B-Field-Layouts.csv` in the project repository.
+
+### B.1 Donor Registration
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Donor ID | 11 | Alphanumeric | System-generated, format DNR + 8 digits | Y |
+| Full Name | 60 | String | Donor's full legal name | Y |
+| Date of Birth | 8 | Date | Used to compute age per REQ-4 | Y |
+| Gender | 10 | String | Male, Female or Other | Y |
+| Blood Group | 3 | String | One of the eight ABO-Rh values | Y |
+| Mobile Number | 10 | Numeric | Unique across active donors | Y |
+| Email Address | 100 | String | Unique across active donors | Y |
+| Address Line | 120 | String | Street address | Y |
+| City | 40 | String | City of residence | Y |
+| PIN Code | 6 | Numeric | Postal code | Y |
+| Weight | 5 | Decimal | Kilograms, minimum 50 per BR-3 | Y |
+| Haemoglobin | 4 | Decimal | Grams per decilitre, captured at screening | N |
+| Last Donation Date | 8 | Date | Null for a first-time donor | N |
+| Next Eligible Date | 8 | Date | Computed per REQ-8 | N |
+| Eligibility Status | 20 | String | Eligible, Temporarily Deferred, Permanently Deferred | Y |
+| Deferral Reason | 100 | String | Populated when status is not Eligible | N |
+| Emergency Contact Name | 60 | String | Contact in case of adverse reaction | Y |
+| Emergency Contact Number | 10 | Numeric | Contact number | Y |
+| Consent Timestamp | 14 | DateTime | Recorded per OR-4 | Y |
+| Registration Date | 8 | Date | Date the record was created | Y |
+
+### B.2 Blood Unit
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Unit ID | 12 | Alphanumeric | System-generated, format BU + 10 digits | Y |
+| Donor ID | 11 | Alphanumeric | Foreign key to donor | Y |
+| Parent Unit ID | 12 | Alphanumeric | Populated for a component split from a parent | N |
+| Blood Group | 3 | String | Inherited from the donor | Y |
+| Component Type | 25 | String | Whole Blood, PRBC, FFP, Platelets, Cryoprecipitate | Y |
+| Volume | 4 | Numeric | Millilitres | Y |
+| Collection Date | 8 | Date | Date of collection | Y |
+| Expiry Date | 8 | Date | Collection date plus shelf life per BR-4 | Y |
+| Storage Location | 30 | String | Refrigerator or freezer identifier | Y |
+| Status | 15 | String | Quarantined, Available, Reserved, Issued, Expired, Discarded | Y |
+| Bag Lot Number | 20 | Alphanumeric | Manufacturer lot of the collection bag | Y |
+| Collection Site | 30 | String | Centre, or the camp identifier per REQ-36 | Y |
+| Discard Reason | 60 | String | Populated only when status is Discarded | N |
+
+### B.3 Screening Test Result
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Test ID | 12 | Alphanumeric | System-generated | Y |
+| Unit ID | 12 | Alphanumeric | Foreign key to blood unit | Y |
+| Test Name | 25 | String | HIV, HBV, HCV, Syphilis or Malaria | Y |
+| Result | 15 | String | Reactive or Non-Reactive | Y |
+| Tested On | 8 | Date | Date the test was performed | Y |
+| Tested By | 60 | String | Technician who recorded the result | Y |
+
+### B.4 Hospital Blood Request
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Request ID | 11 | Alphanumeric | System-generated, format REQ + 8 digits | Y |
+| Hospital ID | 10 | Alphanumeric | Foreign key to registered hospital | Y |
+| Blood Group | 3 | String | Requested group | Y |
+| Component Type | 25 | String | Requested component | Y |
+| Quantity Requested | 3 | Numeric | Positive integer per REQ-25 | Y |
+| Quantity Issued | 3 | Numeric | Defaults to zero | Y |
+| Urgency | 10 | String | Routine, Urgent or Emergency | Y |
+| Required By | 14 | DateTime | Must not be in the past per REQ-25 | Y |
+| Patient Reference | 20 | Alphanumeric | Hospital's own reference, never a patient name | Y |
+| Status | 20 | String | Pending, Approved, Partially Fulfilled, Fulfilled, Rejected, Cancelled | Y |
+| Rejection Reason | 100 | String | Populated only when status is Rejected | N |
+| Raised On | 14 | DateTime | Timestamp of submission | Y |
+
+### B.5 Hospital
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Hospital ID | 10 | Alphanumeric | System-generated | Y |
+| Hospital Name | 100 | String | Registered name | Y |
+| Licence Number | 25 | Alphanumeric | Regulatory licence identifier | Y |
+| Address Line | 120 | String | Street address | Y |
+| City | 40 | String | City | Y |
+| PIN Code | 6 | Numeric | Postal code | Y |
+| Contact Person | 60 | String | Named liaison | Y |
+| Contact Number | 10 | Numeric | Contact number | Y |
+| Contact Email | 100 | String | Contact email | Y |
+| Is Active | 1 | Boolean | Inactive hospitals cannot raise requests | Y |
+
+### B.6 Donation Camp
+
+| Field | Length | Data Type | Description | Is Mandatory |
+|---|---|---|---|---|
+| Camp ID | 10 | Alphanumeric | System-generated | Y |
+| Camp Name | 80 | String | Display name | Y |
+| Venue Address | 150 | String | Full venue address | Y |
+| Camp Date | 8 | Date | Must be in the future at creation per REQ-33 | Y |
+| Start Time | 5 | Time | Opening time | Y |
+| End Time | 5 | Time | Must be later than start time | Y |
+| Organiser Name | 60 | String | Sponsoring organisation or person | Y |
+| Organiser Contact | 10 | Numeric | Contact number | Y |
+| Target Units | 4 | Numeric | Planned collection target | Y |
+| Units Collected | 4 | Numeric | Actual, computed on close per REQ-37 | N |
+| Status | 15 | String | Scheduled, Completed or Cancelled | Y |
+
+### B.7 Report Requirements
+
+The fields to be included in each report are as follows.
+
+| Registration Report | Collection Report | Inventory Status Report |
+|---|---|---|
+| Donor ID | Unit ID | Blood Group |
+| Full Name | Donor ID | Component Type |
+| Blood Group | Blood Group | Available Count |
+| Mobile Number | Component Type | Reserved Count |
+| City | Volume | Quarantined Count |
+| Registration Date | Collection Date | Near-Expiry Count |
+| Eligibility Status | Collection Site | Expired Count |
+| Last Donation Date | Bag Lot Number | Storage Location |
+| Next Eligible Date | Screening Outcome | Oldest Expiry Date |
+| Total Donations | Current Status | Total Volume |
+
+| Expiry Report | Request and Issue Report | Camp Performance Report |
+|---|---|---|
+| Unit ID | Request ID | Camp ID |
+| Blood Group | Hospital Name | Camp Name |
+| Component Type | Blood Group | Camp Date |
+| Collection Date | Component Type | Venue |
+| Expiry Date | Quantity Requested | Organiser Name |
+| Days To Expiry | Quantity Issued | Donors Enrolled |
+| Storage Location | Urgency | Donors Attended |
+| Status | Raised On | Target Units |
+| Discard Reason | Fulfilled On | Units Collected |
+| Recorded By | Status | Achievement Percentage |
 
 ---
 
 ## Appendix C: Requirement Traceability Matrix
 
-*Content pending — to be drafted by Balaraj R.*
+Every functional requirement is traced to its architecture component, design element, code file and verifying test cases. Test case identifiers refer to the companion document `docs/Test-Plan.md`.
+
+| Sl. No | Requirement ID | Brief Description of Requirement | Architecture Reference | Design Reference | Code File Reference | Test Case ID | System Test Case ID |
+|---|---|---|---|---|---|---|---|
+| 1 | REQ-1 | Donor registration capturing personal, contact and medical details | Application Tier / Donor Management | DD-1.1 Donor Registration Form | `donors/forms.py`, `donors/views.py` | UT-01, IT-01 | ST-01 |
+| 2 | REQ-2 | Unique immutable donor identifier DNR + 8 digits | Application Tier / Donor Management | DD-1.2 Identifier Generator | `donors/services/id_generator.py` | UT-02 | ST-01 |
+| 3 | REQ-3 | Reject duplicate mobile number or email | Application Tier / Donor Management | DD-1.3 Uniqueness Validator | `donors/validators.py` | UT-03, IT-01 | ST-02 |
+| 4 | REQ-4 | Age between 18 and 65 validated from date of birth | Application Tier / Donor Management | DD-1.4 Age Rule | `donors/validators.py` | UT-04 | ST-02 |
+| 5 | REQ-5 | Record medical history and apply permanent deferral | Application Tier / Donor Management | DD-1.5 Deferral Rules | `donors/models.py`, `donors/services/eligibility.py` | UT-05, IT-02 | ST-03 |
+| 6 | REQ-6 | Evaluate all eligibility criteria and report every failure | Application Tier / Donor Management | DD-1.6 Eligibility Engine | `donors/services/eligibility.py` | UT-06, UT-07, IT-02 | ST-03 |
+| 7 | REQ-7 | Block collection against a non-eligible donor | Application Tier / Collection | DD-2.1 Collection Guard | `collection/services/guard.py` | UT-08, IT-03 | ST-04 |
+| 8 | REQ-8 | Compute next eligible date and auto-clear deferral | Application Tier / Donor Management | DD-1.7 Interval Calculator | `donors/services/eligibility.py` | UT-09, IT-04 | ST-04 |
+| 9 | REQ-9 | Record donation event with site and staff | Application Tier / Collection | DD-2.2 Collection Entry | `collection/views.py`, `collection/models.py` | UT-10, IT-05 | ST-05 |
+| 10 | REQ-10 | Unique immutable unit identifier BU + 10 digits with barcode | Application Tier / Collection | DD-2.3 Unit Identifier and Label | `inventory/services/id_generator.py` | UT-11 | ST-05 |
+| 11 | REQ-11 | New units created Quarantined and not issuable | Application Tier / Inventory | DD-3.1 Unit State Machine | `inventory/models.py` | UT-12, IT-06 | ST-06 |
+| 12 | REQ-12 | Mandatory screening panel complete before release | Application Tier / Collection | DD-2.4 Screening Panel | `collection/services/screening.py` | UT-13, IT-07 | ST-06 |
+| 13 | REQ-13 | Release to Available only when all results Non-Reactive | Application Tier / Collection | DD-2.5 Release Rule | `collection/services/screening.py` | UT-14, IT-07 | ST-07 |
+| 14 | REQ-14 | Discard on reactive result and alert administrator | Application Tier / Collection | DD-2.6 Reactive Handling | `collection/services/screening.py`, `notifications/dispatcher.py` | UT-15, IT-08 | ST-07 |
+| 15 | REQ-15 | Component separation with per-component expiry and linkage | Application Tier / Collection | DD-2.7 Component Separation | `collection/services/separation.py` | UT-16, IT-09 | ST-08 |
+| 16 | REQ-16 | Maintain full unit attribute set and status | Data Tier / Unit Store | DD-3.2 BloodUnit Entity | `inventory/models.py` | UT-17 | ST-09 |
+| 17 | REQ-17 | Stock counts by group and component refreshed within 5 seconds | Application Tier / Inventory | DD-3.3 Inventory Console | `inventory/views.py`, `inventory/services/stock.py` | UT-18, IT-10 | ST-09 |
+| 18 | REQ-18 | Filter and search inventory on combined criteria | Application Tier / Inventory | DD-3.4 Inventory Query | `inventory/services/stock.py` | UT-19, IT-10 | ST-10 |
+| 19 | REQ-19 | Auto-expire units and exclude from availability | Application Tier / Inventory | DD-3.5 Expiry Job | `inventory/tasks/expiry.py` | UT-20, IT-11 | ST-10 |
+| 20 | REQ-20 | Flag near-expiry units and send daily digest | Application Tier / Inventory | DD-3.6 Near-Expiry Alert | `inventory/tasks/expiry.py`, `notifications/dispatcher.py` | UT-21, IT-11 | ST-11 |
+| 21 | REQ-21 | Record inter-location transfer without status change | Application Tier / Inventory | DD-3.7 Transfer | `inventory/services/transfer.py` | UT-22, IT-12 | ST-11 |
+| 22 | REQ-22 | Require reason and confirmation for manual discard | Application Tier / Inventory | DD-3.8 Discard Workflow | `inventory/views.py` | UT-23, IT-12 | ST-12 |
+| 23 | REQ-23 | Immutable audit record for every status transition | Data Tier / Audit Store | DD-3.9 Audit Writer | `audit/services/writer.py` | UT-24, IT-13 | ST-12 |
+| 24 | REQ-24 | Hospital raises request with unique identifier | Application Tier / Request Mgmt | DD-4.1 Request Form | `requests/forms.py`, `requests/views.py` | UT-25, IT-14 | ST-13 |
+| 25 | REQ-25 | Reject non-positive quantity and past required-by date | Application Tier / Request Mgmt | DD-4.2 Request Validator | `requests/validators.py` | UT-26 | ST-13 |
+| 26 | REQ-26 | Queue ordered by urgency then required-by | Application Tier / Request Mgmt | DD-4.3 Queue Ordering | `requests/services/queue.py` | UT-27, IT-15 | ST-14 |
+| 27 | REQ-27 | Approve, reject or partially fulfil with reason | Application Tier / Request Mgmt | DD-4.4 Approval Workflow | `requests/services/workflow.py` | UT-28, IT-15 | ST-14 |
+| 28 | REQ-28 | Allocate only matching, Available, unexpired units | Application Tier / Request Mgmt | DD-4.5 Allocation Rules | `requests/services/allocation.py` | UT-29, UT-30, IT-16 | ST-15 |
+| 29 | REQ-29 | Reserve then issue, recording full issue detail | Application Tier / Request Mgmt | DD-4.6 Issue Recording | `requests/services/allocation.py`, `inventory/models.py` | UT-31, IT-16 | ST-15 |
+| 30 | REQ-30 | Set Fulfilled or Partially Fulfilled and record shortfall | Application Tier / Request Mgmt | DD-4.7 Fulfilment State | `requests/services/workflow.py` | UT-32, IT-17 | ST-16 |
+| 31 | REQ-31 | Hospital cancels own request and reservations released | Application Tier / Request Mgmt | DD-4.8 Cancellation | `requests/services/workflow.py` | UT-33, IT-17 | ST-16 |
+| 32 | REQ-32 | Create camp with venue, schedule, organiser and target | Application Tier / Camp Mgmt | DD-5.1 Camp Form | `camps/forms.py`, `camps/views.py` | UT-34, IT-18 | ST-17 |
+| 33 | REQ-33 | Reject past camp date and invalid time range | Application Tier / Camp Mgmt | DD-5.2 Camp Validator | `camps/validators.py` | UT-35 | ST-17 |
+| 34 | REQ-34 | Publish scheduled camps and permit donor enrolment | Application Tier / Camp Mgmt | DD-5.3 Camp Listing | `camps/views.py`, `camps/services/enrolment.py` | UT-36, IT-19 | ST-18 |
+| 35 | REQ-35 | Refuse enrolment when donor not eligible on camp date | Application Tier / Camp Mgmt | DD-5.4 Enrolment Eligibility | `camps/services/enrolment.py` | UT-37, IT-19 | ST-18 |
+| 36 | REQ-36 | Record camp as collection site on collected units | Application Tier / Camp Mgmt | DD-5.5 Camp Collection Link | `collection/models.py` | UT-38, IT-20 | ST-19 |
+| 37 | REQ-37 | Close camp, report actual against target, block further entry | Application Tier / Camp Mgmt | DD-5.6 Camp Closure | `camps/services/closure.py` | UT-39, IT-20 | ST-19 |
+| 38 | REQ-38 | Availability search returning counts without donor data | Application Tier / Reporting | DD-6.1 Availability Search | `search/services/availability.py` | UT-40, IT-21 | ST-20 |
+| 39 | REQ-39 | Asynchronous dispatch with retry and email fallback | Application Tier / Notification | DD-6.2 Dispatcher | `notifications/dispatcher.py` | UT-41, IT-22 | ST-21 |
+| 40 | REQ-40 | Eligibility and camp reminder notifications | Application Tier / Notification | DD-6.3 Reminder Jobs | `notifications/tasks/reminders.py` | UT-42, IT-22 | ST-21 |
+| 41 | REQ-41 | Shortage appeal with 30-day per-donor suppression | Application Tier / Notification | DD-6.4 Shortage Appeal | `notifications/tasks/shortage.py` | UT-43, IT-23 | ST-22 |
+| 42 | REQ-42 | Generate the six specified reports over a date range | Application Tier / Reporting | DD-6.5 Report Engine | `reports/services/generator.py` | UT-44, IT-24 | ST-22 |
+| 43 | REQ-43 | Export every report as PDF and CSV with provenance header | Application Tier / Reporting | DD-6.6 Export | `reports/services/export.py` | UT-45, IT-24 | ST-23 |
+| 44 | REQ-44 | Scope every report and search to the user's authorisation | Application Tier / Auth and RBAC | DD-6.7 Data Scoping | `accounts/permissions.py` | UT-46, IT-25 | ST-23 |
+| 45 | REQ-45 | Administer users, roles and hospital registration | Application Tier / Auth and RBAC | DD-6.8 User Administration | `accounts/views.py`, `accounts/models.py` | UT-47, IT-26 | ST-24 |
+| 46 | REQ-46 | Configure operational parameters without code change | Application Tier / Configuration | DD-6.9 Configuration Store | `config/models.py`, `config/services/settings.py` | UT-48, IT-26 | ST-24 |
+
+### C.1 Nonfunctional Requirement Traceability
+
+| Sl. No | Requirement ID | Brief Description | Verification Method | System Test Case ID |
+|---|---|---|---|---|
+| 47 | NFR-P1 | Screen render within 3 seconds at 50 concurrent users | Load test | ST-25 |
+| 48 | NFR-P2 | Availability search within 2 seconds at 50,000 units | Load test | ST-25 |
+| 49 | NFR-S1 | Untested unit can never be issued | Negative test | ST-26 |
+| 50 | NFR-S2 | Expired unit can never be issued | Negative test | ST-26 |
+| 51 | NFR-S3 | Group mismatch allocation prevented | Negative test | ST-27 |
+| 52 | NFR-S4 | Concurrent double allocation prevented | Concurrency test | ST-27 |
+| 53 | NFR-SEC5 | Server-side role enforcement on every request | Security test | ST-28 |
+| 54 | NFR-SEC6 | Hospital and donor data isolation | Security test | ST-28 |
+| 55 | NFR-SEC7 | Donor identity never exposed to hospital users | Security test | ST-29 |
+| 56 | NFR-SEC9 | No OWASP Top Ten vulnerability classes present | Security scan and manual test | ST-29 |
+| 57 | NFR-Q5 | Unit test line coverage at least 70 percent | Coverage report | ST-30 |
+| 58 | NFR-Q6 | Every functional requirement covered by a test case | Traceability review | ST-30 |
 
 ---
 
-*Draft in progress — Deliverable 1, Blood Bank Management System. Not yet complete or reviewed.*
+**End of Software Requirements Specification, Version 1.0**

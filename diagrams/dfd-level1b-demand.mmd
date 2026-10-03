@@ -1,0 +1,65 @@
+%% Blood Bank Management System - Data Flow Diagram, Level 1 (Sheet B: Demand, Camps and Reporting)
+%% SRS Section 4. Processes 5.0 to 9.0, the path by which blood leaves the system,
+%% together with camp management, reporting and notification.
+%% Sheet A covers processes 1.0 to 4.0.
+flowchart TB
+    HOSP([Hospital User])
+    STAFFB([Blood Bank Staff])
+    ADMIN([Administrator])
+    DONORB([Donor])
+    GATEWAY([SMS / Email Gateways])
+
+    P5["5.0<br/>Receive and<br/>Approve Request"]
+    P6["6.0<br/>Allocate and<br/>Issue Units"]
+    P7["7.0<br/>Manage<br/>Camp"]
+    P8["8.0<br/>Generate<br/>Report"]
+    P9["9.0<br/>Dispatch<br/>Notification"]
+
+    D2B[("D2  Unit Store")]
+    D3[("D3  Request Store")]
+    D4[("D4  Camp Store")]
+    D5B[("D5  Audit Store")]
+
+    FROM_A(["From Sheet A<br/>4.0 Maintain Inventory"])
+    TO_A(["To Sheet A<br/>2.0 Record Collection"])
+    ALERTS(["From Sheet A<br/>3.0 and 4.0 alerts"])
+    STORES_A(["From Sheet A<br/>D1 Donor Store"])
+
+    HOSP -->|"blood request, cancellation"| P5
+    STAFFB -->|"approval or rejection"| P5
+    P5 -->|"request record"| D3
+    D3 -->|"request queue"| P5
+    P5 -->|"queue and decisions"| STAFFB
+    P5 -->|"approval or rejection"| P9
+
+    P5 -->|"approved request"| P6
+    STAFFB -->|"allocation decision"| P6
+    FROM_A -->|"available units"| P6
+    P6 -->|"reserved then issued unit"| D2B
+    P6 -->|"issue record and fulfilment status"| D3
+    P6 -->|"status transition"| D5B
+    P6 -->|"issue confirmation"| P9
+
+    STAFFB -->|"camp details"| P7
+    ADMIN -->|"camp details"| P7
+    P7 -->|"camp and enrolment records"| D4
+    D4 -->|"camp listing"| P7
+    P7 -->|"camp listing and confirmation"| DONORB
+    P7 -->|"camp site"| TO_A
+    P7 -->|"camp reminder"| P9
+
+    STORES_A -->|"donor data"| P8
+    D2B -->|"unit data"| P8
+    D3 -->|"request data"| P8
+    D4 -->|"camp data"| P8
+    D5B -->|"audit records"| P8
+    P8 -->|"reports and exports"| STAFFB
+    P8 -->|"scoped reports"| HOSP
+    P8 -->|"all reports and audit"| ADMIN
+
+    ALERTS -->|"reactive alert, near-expiry digest"| P9
+    P9 -->|"message"| GATEWAY
+    GATEWAY -->|"delivery status"| P9
+    P9 -->|"notification"| DONORB
+    P9 -->|"notification"| HOSP
+    P9 -->|"confidential alert"| ADMIN

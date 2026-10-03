@@ -1,0 +1,31 @@
+%% Blood Bank Management System - Data Flow Diagram, Level 0 (Context Diagram)
+%% SRS Section 4
+flowchart LR
+    DONOR([Donor])
+    STAFF([Blood Bank Staff])
+    HOSP([Hospital User])
+    ADMIN([Administrator])
+    SMS([SMS Gateway])
+    MAIL([Email Gateway])
+
+    SYS[["0<br/>Blood Bank<br/>Management System"]]
+
+    DONOR -->|"registration details,<br/>camp enrolment"| SYS
+    SYS -->|"donor ID, eligibility status,<br/>camp confirmation"| DONOR
+
+    STAFF -->|"screening values, collection data,<br/>test results, allocation decisions"| SYS
+    SYS -->|"donor profile, unit IDs,<br/>stock levels, request queue"| STAFF
+
+    HOSP -->|"blood request, cancellation,<br/>availability query"| SYS
+    SYS -->|"request ID and status,<br/>available quantity, issue record"| HOSP
+
+    ADMIN -->|"user and role changes,<br/>hospital registration, configuration"| SYS
+    SYS -->|"audit log, all reports,<br/>reactive screening alert"| ADMIN
+
+    SYS -->|"recipient number,<br/>message body"| SMS
+    SMS -->|"delivery status"| SYS
+
+    SYS -->|"recipient address,<br/>subject and body"| MAIL
+    MAIL -->|"delivery status"| SYS
+
+    DONOR ~~~ STAFF ~~~ HOSP ~~~ ADMIN

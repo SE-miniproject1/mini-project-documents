@@ -1,0 +1,73 @@
+Section,Field,Length,Data Type,Description,Is Mandatory
+B.1 Donor Registration,Donor ID,11,Alphanumeric,"System-generated, format DNR + 8 digits",Y
+B.1 Donor Registration,Full Name,60,String,Donor's full legal name,Y
+B.1 Donor Registration,Date of Birth,8,Date,Used to compute age per REQ-4,Y
+B.1 Donor Registration,Gender,10,String,"Male, Female or Other",Y
+B.1 Donor Registration,Blood Group,3,String,One of the eight ABO-Rh values,Y
+B.1 Donor Registration,Mobile Number,10,Numeric,Unique across active donors,Y
+B.1 Donor Registration,Email Address,100,String,Unique across active donors,Y
+B.1 Donor Registration,Address Line,120,String,Street address,Y
+B.1 Donor Registration,City,40,String,City of residence,Y
+B.1 Donor Registration,PIN Code,6,Numeric,Postal code,Y
+B.1 Donor Registration,Weight,5,Decimal,"Kilograms, minimum 50 per BR-3",Y
+B.1 Donor Registration,Haemoglobin,4,Decimal,"Grams per decilitre, captured at screening",N
+B.1 Donor Registration,Last Donation Date,8,Date,Null for a first-time donor,N
+B.1 Donor Registration,Next Eligible Date,8,Date,Computed per REQ-8,N
+B.1 Donor Registration,Eligibility Status,20,String,"Eligible, Temporarily Deferred, Permanently Deferred",Y
+B.1 Donor Registration,Deferral Reason,100,String,Populated when status is not Eligible,N
+B.1 Donor Registration,Emergency Contact Name,60,String,Contact in case of adverse reaction,Y
+B.1 Donor Registration,Emergency Contact Number,10,Numeric,Contact number,Y
+B.1 Donor Registration,Consent Timestamp,14,DateTime,Recorded per OR-4,Y
+B.1 Donor Registration,Registration Date,8,Date,Date the record was created,Y
+B.2 Blood Unit,Unit ID,12,Alphanumeric,"System-generated, format BU + 10 digits",Y
+B.2 Blood Unit,Donor ID,11,Alphanumeric,Foreign key to donor,Y
+B.2 Blood Unit,Parent Unit ID,12,Alphanumeric,Populated for a component split from a parent,N
+B.2 Blood Unit,Blood Group,3,String,Inherited from the donor,Y
+B.2 Blood Unit,Component Type,25,String,"Whole Blood, PRBC, FFP, Platelets, Cryoprecipitate",Y
+B.2 Blood Unit,Volume,4,Numeric,Millilitres,Y
+B.2 Blood Unit,Collection Date,8,Date,Date of collection,Y
+B.2 Blood Unit,Expiry Date,8,Date,Collection date plus shelf life per BR-4,Y
+B.2 Blood Unit,Storage Location,30,String,Refrigerator or freezer identifier,Y
+B.2 Blood Unit,Status,15,String,"Quarantined, Available, Reserved, Issued, Expired, Discarded",Y
+B.2 Blood Unit,Bag Lot Number,20,Alphanumeric,Manufacturer lot of the collection bag,Y
+B.2 Blood Unit,Collection Site,30,String,"Centre, or the camp identifier per REQ-36",Y
+B.2 Blood Unit,Discard Reason,60,String,Populated only when status is Discarded,N
+B.3 Screening Test Result,Test ID,12,Alphanumeric,System-generated,Y
+B.3 Screening Test Result,Unit ID,12,Alphanumeric,Foreign key to blood unit,Y
+B.3 Screening Test Result,Test Name,25,String,"HIV, HBV, HCV, Syphilis or Malaria",Y
+B.3 Screening Test Result,Result,15,String,Reactive or Non-Reactive,Y
+B.3 Screening Test Result,Tested On,8,Date,Date the test was performed,Y
+B.3 Screening Test Result,Tested By,60,String,Technician who recorded the result,Y
+B.4 Hospital Blood Request,Request ID,11,Alphanumeric,"System-generated, format REQ + 8 digits",Y
+B.4 Hospital Blood Request,Hospital ID,10,Alphanumeric,Foreign key to registered hospital,Y
+B.4 Hospital Blood Request,Blood Group,3,String,Requested group,Y
+B.4 Hospital Blood Request,Component Type,25,String,Requested component,Y
+B.4 Hospital Blood Request,Quantity Requested,3,Numeric,Positive integer per REQ-25,Y
+B.4 Hospital Blood Request,Quantity Issued,3,Numeric,Defaults to zero,Y
+B.4 Hospital Blood Request,Urgency,10,String,"Routine, Urgent or Emergency",Y
+B.4 Hospital Blood Request,Required By,14,DateTime,Must not be in the past per REQ-25,Y
+B.4 Hospital Blood Request,Patient Reference,20,Alphanumeric,"Hospital's own reference, never a patient name",Y
+B.4 Hospital Blood Request,Status,20,String,"Pending, Approved, Partially Fulfilled, Fulfilled, Rejected, Cancelled",Y
+B.4 Hospital Blood Request,Rejection Reason,100,String,Populated only when status is Rejected,N
+B.4 Hospital Blood Request,Raised On,14,DateTime,Timestamp of submission,Y
+B.5 Hospital,Hospital ID,10,Alphanumeric,System-generated,Y
+B.5 Hospital,Hospital Name,100,String,Registered name,Y
+B.5 Hospital,Licence Number,25,Alphanumeric,Regulatory licence identifier,Y
+B.5 Hospital,Address Line,120,String,Street address,Y
+B.5 Hospital,City,40,String,City,Y
+B.5 Hospital,PIN Code,6,Numeric,Postal code,Y
+B.5 Hospital,Contact Person,60,String,Named liaison,Y
+B.5 Hospital,Contact Number,10,Numeric,Contact number,Y
+B.5 Hospital,Contact Email,100,String,Contact email,Y
+B.5 Hospital,Is Active,1,Boolean,Inactive hospitals cannot raise requests,Y
+B.6 Donation Camp,Camp ID,10,Alphanumeric,System-generated,Y
+B.6 Donation Camp,Camp Name,80,String,Display name,Y
+B.6 Donation Camp,Venue Address,150,String,Full venue address,Y
+B.6 Donation Camp,Camp Date,8,Date,Must be in the future at creation per REQ-33,Y
+B.6 Donation Camp,Start Time,5,Time,Opening time,Y
+B.6 Donation Camp,End Time,5,Time,Must be later than start time,Y
+B.6 Donation Camp,Organiser Name,60,String,Sponsoring organisation or person,Y
+B.6 Donation Camp,Organiser Contact,10,Numeric,Contact number,Y
+B.6 Donation Camp,Target Units,4,Numeric,Planned collection target,Y
+B.6 Donation Camp,Units Collected,4,Numeric,"Actual, computed on close per REQ-37",N
+B.6 Donation Camp,Status,15,String,"Scheduled, Completed or Cancelled",Y
