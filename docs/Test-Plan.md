@@ -14,8 +14,8 @@
 | PES1UG24CS585 | Niveditha | nnivedithaparmesh-cpu | Test Engineer. SF-5 and SF-6 test cases, reporting and notification tests. |
 
 **Organization:** SE-miniproject1
-**Date:** 02 October 2026
-**Status:** Draft. Restructured to the IEEE-style STP layout required for Deliverable 2. The detailed test cases from Deliverable 1 are retained unchanged in Appendix A.
+**Date:** 04 October 2026
+**Status:** Final, for submission. Restructured to the IEEE-style STP layout required for Deliverable 2. The detailed test cases from Deliverable 1 are retained unchanged in Appendix A.
 
 ---
 
