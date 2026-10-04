@@ -12,6 +12,8 @@ Each diagram is held as a Mermaid source file, which GitHub renders directly, an
 | Data Flow Diagram, Level 1, Sheet A | [`dfd-level1a-supply.mmd`](dfd-level1a-supply.mmd) | [`dfd-level1a-supply.png`](dfd-level1a-supply.png) |
 | Data Flow Diagram, Level 1, Sheet B | [`dfd-level1b-demand.mmd`](dfd-level1b-demand.mmd) | [`dfd-level1b-demand.png`](dfd-level1b-demand.png) |
 | System Architecture | [`architecture.mmd`](architecture.mmd) | [`architecture.png`](architecture.png) |
+| Sequence: collection, screening and release | [`sequence-collection-release.mmd`](sequence-collection-release.mmd) | [`sequence-collection-release.png`](sequence-collection-release.png) |
+| Sequence: hospital request through to issue | [`sequence-request-issue.mmd`](sequence-request-issue.mmd) | [`sequence-request-issue.png`](sequence-request-issue.png) |
 
 ---
 
@@ -509,4 +511,89 @@ flowchart TB
 
     NOTIF --> SMSG
     NOTIF --> SMTP
+```
+
+## Sequence Diagram, Collection, Screening and Release to Inventory
+
+Covers REQ-9 to REQ-14. SAD section 4.2.1.
+
+```mermaid
+%% BBMS - Sequence: record collection, screen, and release to inventory
+%% SAD Section 4.2.1; covers REQ-9 to REQ-14
+sequenceDiagram
+    actor Staff
+    participant Console as Staff Console
+    participant Collection as Collection and Screening
+    participant Inventory as Inventory Management
+    participant Audit as Audit Writer
+    participant DB as PostgreSQL
+
+    Staff->>Console: Select eligible donor, start collection
+    Console->>Collection: record_collection(donor_id, volume, site)
+    Collection->>DB: verify donor.eligibility_status == Eligible
+    DB-->>Collection: Eligible
+    Collection->>DB: INSERT BloodUnit (status=Quarantined)
+    Collection->>Audit: log(unit created, Quarantined)
+    Collection-->>Console: unit_id, status=Quarantined
+    Console-->>Staff: Unit BU1000000123 created, Quarantined
+
+    Staff->>Console: Enter mandatory screening panel results
+    Console->>Collection: record_test_results(unit_id, results[])
+
+    alt all five tests Non-Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Available
+        Collection->>Audit: log(Quarantined -> Available)
+        Collection->>Inventory: notify_available(unit_id)
+        Collection-->>Console: status=Available
+        Console-->>Staff: Unit released to inventory
+    else any test Reactive
+        Collection->>DB: UPDATE BloodUnit SET status=Discarded, reason="Reactive Screening"
+        Collection->>Audit: log(Quarantined -> Discarded)
+        Collection->>Collection: queue admin alert (REQ-14)
+        Collection-->>Console: status=Discarded
+        Console-->>Staff: Unit discarded, reason shown
+    end
+```
+
+## Sequence Diagram, Hospital Request through to Issued Units
+
+Covers REQ-24 to REQ-29. SAD section 4.2.2.
+
+```mermaid
+%% BBMS - Sequence: hospital emergency request through to issued units
+%% SAD Section 4.2.2; covers REQ-24 to REQ-29
+sequenceDiagram
+    actor Hospital as Hospital User
+    participant Portal as Hospital Portal
+    participant ReqSvc as Request and Issue
+    participant Notif as Notification Dispatcher
+    actor Staff
+    participant Console as Staff Console
+    participant Inv as Inventory Management
+    participant DB as PostgreSQL
+
+    Hospital->>Portal: Raise request (group O-, qty 2, Emergency)
+    Portal->>ReqSvc: create_request(hospital_id, group, qty, urgency)
+    ReqSvc->>DB: INSERT BloodRequest (status=Pending)
+    ReqSvc->>Notif: enqueue(staff, "new emergency request")
+    Notif-->>ReqSvc: enqueued (non-blocking)
+    ReqSvc-->>Portal: request_id=REQ10000042, status=Pending
+    Portal-->>Hospital: Confirmation shown
+
+    Staff->>Console: Open request queue (Emergency first)
+    Console->>ReqSvc: approve_request(request_id)
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Approved
+    Staff->>Console: Allocate matching units
+    Console->>ReqSvc: allocate_units(request_id, unit_ids[])
+    ReqSvc->>Inv: reserve(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Reserved (row-locked)
+    Inv-->>ReqSvc: reserved
+    Staff->>Console: Confirm issue
+    Console->>ReqSvc: confirm_issue(request_id)
+    ReqSvc->>Inv: issue(unit_ids[])
+    Inv->>DB: UPDATE BloodUnit SET status=Issued
+    ReqSvc->>DB: UPDATE BloodRequest SET status=Fulfilled
+    ReqSvc->>Notif: enqueue(hospital, "request fulfilled")
+    Notif-->>Hospital: SMS/email: units issued
+    ReqSvc-->>Console: status=Fulfilled
 ```

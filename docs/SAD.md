@@ -12,8 +12,8 @@
 | PES1UG24CS569 | G A Aadish | Sonuaadi0706 | Project Lead / Architect |
 | PES1UG24CS585 | Niveditha | nnivedithaparmesh-cpu | Interface Designer / Documentation Lead |
 
-**Date:** 01 October 2026
-**Status:** Draft
+**Date:** 04 October 2026
+**Status:** Final, for submission
 
 ---
 
@@ -24,7 +24,7 @@
 | 0.1 | 01 Oct 2026 | G A Aadish | Document skeleton, Section 1 Introduction, Section 2 Overview, Section 3 Architecture. |
 | 0.2 | 02 Oct 2026 | G A Aadish | Section 4.1 Design Overview, 4.2 UML Sequence Diagrams, 4.3 API Design. |
 | 0.3 | 02 Oct 2026 | G A Aadish | Section 4.4 Error Handling, 4.5 UX Design, 4.6 Open Issues, Section 5 Appendices. |
-| 1.0 | — | All Members | Consistency pass, approved for submission. |
+| 1.0 | 04 Oct 2026 | G A Aadish | Audit against the Deliverable 2 checklist and the SRS. Status and dates aligned. |
 
 ## Approvals
 

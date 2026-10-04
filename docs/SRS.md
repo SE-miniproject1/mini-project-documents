@@ -16,7 +16,7 @@
 **Organization:** SE-miniproject1
 **Course:** Software Engineering — Mini Project
 **Date Created:** 08 September 2026
-**Date Approved:** 10 September 2026
+**Date Approved:** 04 October 2026
 
 ---
 
@@ -63,18 +63,19 @@
 
 ## Revision History
 
+Rows follow the commit history of this file.
+
 | Name | Date | Reason For Changes | Version |
 |---|---|---|---|
-| G A Aadish | 09 Sep 2026 | Initial document skeleton, Section 1 Introduction and Section 2 Overall Description drafted. | 0.1 |
-| G A Aadish | 09 Sep 2026 | Section 5 System Features SF-4 to SF-6 with functional requirements REQ-24 to REQ-46. | 0.2 |
-| Niveditha | 11 Sep 2026 | Section 6 Nonfunctional Requirements and Section 7 Other Requirements. | 0.3 |
-| Dhanya K M | 11 Sep 2026 | Section 4 Analysis Models added: use case, ER, DFD Level 0 and DFD Level 1 Sheets A and B. | 0.4 |
-| Dhanya K M | 11 Sep 2026 | Appendix A Glossary and Appendix B Field Layouts. | 0.5 |
-| Niveditha | 29 Sep 2026 | Section 3 External Interface Requirements added; screen inventory, error message and confirmation standards defined. | 0.6 |
-| Balaraj R | 02 Oct 2026 | Section 5 System Features SF-1 to SF-3 with functional requirements REQ-1 to REQ-23. | 0.7 |
-| Balaraj R | 02 Oct 2026 | Appendix C Requirement Traceability Matrix populated against test case IDs. | 0.8 |
-| Balaraj R | 02 Oct 2026 | Appendix C reconciled against the completed Test Plan; requirement numbering audited. | 0.9 |
-| All Members | 02 Oct 2026 | Peer review, consistency and proofreading pass. Approved as Version 1.0 for submission. | 1.0 |
+| G A Aadish | 09 Sep 2026 | SRS skeleton, cover page, Section 1 Introduction and Section 2 Overall Description. | 0.1 |
+| G A Aadish | 09 Sep 2026 | Section 5 System Features SF-4 to SF-6, REQ-24 to REQ-46. | 0.2 |
+| Niveditha | 11 Sep 2026 | Section 6 Other Nonfunctional Requirements and Section 7 Other Requirements. | 0.3 |
+| Niveditha | 29 Sep 2026 | Section 3 External Interface Requirements. | 0.4 |
+| G A Aadish | 01 Oct 2026 | Security objectives SEC-OBJ-1 and SEC-OBJ-2 added to section 6.3. | 0.5 |
+| Balaraj R | 02 Oct 2026 | Section 5 System Features SF-1 to SF-3, REQ-1 to REQ-23. Section 4 text, Appendix A Glossary, Appendix B Field Layouts and Appendix C Requirement Traceability Matrix landed in the same commit. | 0.6 |
+| Dhanya K M | 03 Oct 2026 | Use case diagram embedded in section 4, with a use case summary table. | 0.7 |
+| Niveditha, Balaraj R | 03 Oct 2026 | Revision history dates corrected. | 0.8 |
+| G A Aadish | 04 Oct 2026 | Final audit against the Deliverable 1 and 2 checklists. Cover date, status lines and cross-references aligned. Revision history rebuilt from the commit log. Version 1.0 for submission. | 1.0 |
 
 ---
 

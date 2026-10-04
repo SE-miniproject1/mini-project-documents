@@ -6,6 +6,28 @@ The source PDF, `SE_Mini_Project_Delivereables_Part-1.pdf`, is dated **28 Septem
 
 ---
 
+## Status on 04 October 2026
+
+Every item in this plan is done and merged to `main`.
+
+| Task | Owner | Pull request |
+|---|---|---|
+| Security objectives in SRS 6.3 | Aadish | #12 |
+| Complete SAD | Aadish | #13 |
+| This plan, README pointer | Aadish | #14, #15 |
+| Deliverable 1 package: SF-1 to SF-3, Appendix C, tools | Balaraj | #6 |
+| D2 use case diagram and summary in SRS section 4 | Dhanya | #16 |
+| D4 revision history dates | Niveditha, Balaraj | #17 |
+| D3 contribution record | Dhanya | #18, rewritten from the commit log in the audit pull request |
+| D1 Test Plan in IEEE STP layout, with security validation | Balaraj | #19 |
+| D5 Word versions of the SRS, SAD and Test Plan | Niveditha | #20 |
+
+A final audit checked every section against the Deliverable 1 templates and the Deliverable 2 PDF, ran the traceability script, rendered every diagram, and corrected stale text in the README, the contribution record, the SRS cover and revision history, and the SAD and Test Plan status lines. The Word files were rebuilt last.
+
+The sections below are the original plan, kept as a record.
+
+---
+
 ## 1. What Deliverable 2 requires, and where it stands
 
 | # | Requirement from the PDF | Where it lives | Status |
@@ -63,11 +85,11 @@ Each person commits only under their own name. The prepared drafts are in `Deliv
 
 Task D5 has to come last because it reads the Markdown masters. If anything merges after it, rerun the build.
 
-## 5. Known issues to fix before submitting
+## 5. Issues found and how they were resolved
 
-- **CONTRIBUTIONS.md and the SRS revision history in PR #6 describe the original three-day plan.** Dates and commit counts there do not match what happened. D3 and D4 correct this.
-- **Two Copilot comments on PR #6** (about REQ-4 and REQ-6) refer to an earlier revision and no longer match the text. Balaraj should confirm they no longer apply and resolve them.
-- **No test has been executed.** Every Actual Result and Test Result stays `Not executed` and `Pending` until the system is built.
+- The contribution record and the SRS revision history described the original plan, not the real history. Both were rebuilt from the commit log in the audit pull request.
+- The two Copilot comments on PR #6 referred to an earlier revision of REQ-4 and REQ-6 and no longer match the text.
+- No test has been executed. Every Actual Result and Test Result stays `Not executed` and `Pending` until the system is built.
 
 ## 6. Working agreement
 

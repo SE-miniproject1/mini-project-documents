@@ -1,4 +1,4 @@
-# Blood Bank Management System — Deliverable 1
+# Blood Bank Management System — Deliverables 1 and 2
 
 Software Engineering Mini Project, PES University.
 Organisation: [SE-miniproject1](https://github.com/SE-miniproject1) · Repository: [mini-project-documents](https://github.com/SE-miniproject1/mini-project-documents)
@@ -9,11 +9,12 @@ A web-based system that manages the full life cycle of donated blood, from donor
 
 | Document | File | Deliverable |
 |---|---|---|
-| Software Requirements Specification | [docs/SRS.md](docs/SRS.md) | 1 |
-| Test Plan | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, being rebuilt in IEEE STP format for 2 |
+| Software Requirements Specification | [docs/SRS.md](docs/SRS.md) | 1, extended for 2 with security objectives and an embedded use case diagram |
+| Software Test Plan, IEEE layout | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, restructured for 2 |
 | Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2 |
+| Word copies for submission | [submission/](submission/) | 1 and 2 |
 
-See [COMMIT-PLAN.md](COMMIT-PLAN.md) for Deliverable 1's commit history and [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for Deliverable 2's, including what's still outstanding.
+Plans and records: [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for the Deliverable 2 schedule and [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for what the git history shows about who did what.
 
 ## Team
 
@@ -24,18 +25,17 @@ See [COMMIT-PLAN.md](COMMIT-PLAN.md) for Deliverable 1's commit history and [COM
 | PES1UG24CS569 | G A Aadish | [@Sonuaadi0706](https://github.com/Sonuaadi0706) | Project Lead, Architect |
 | PES1UG24CS585 | Niveditha | [@nnivedithaparmesh-cpu](https://github.com/nnivedithaparmesh-cpu) | Interface Designer, Documentation Lead |
 
-## What is in this deliverable
+## What is in the repository
 
 | Artefact | Location |
 |---|---|
-| Software Requirements Specification | [docs/SRS.md](docs/SRS.md) |
-| Test Plan, 104 test cases | [docs/Test-Plan.md](docs/Test-Plan.md) |
-| Analysis models, all six diagrams | [diagrams/Diagrams.md](diagrams/Diagrams.md) |
-| Appendix B field layouts, spreadsheet form | [appendices/Appendix-B-Field-Layouts.csv](appendices/Appendix-B-Field-Layouts.csv) |
-| Appendix B report requirements | [appendices/Appendix-B-Report-Requirements.csv](appendices/Appendix-B-Report-Requirements.csv) |
-| Word documents for submission | [submission/](submission/) |
-| Per-member contribution record | [CONTRIBUTIONS.md](CONTRIBUTIONS.md) |
-| Commit sequence followed by the team | [COMMIT-PLAN.md](COMMIT-PLAN.md) |
+| Requirements, 46 functional and the NFR series | [docs/SRS.md](docs/SRS.md) |
+| Test Plan, 112 test cases | [docs/Test-Plan.md](docs/Test-Plan.md) |
+| Architecture and design, with two sequence diagrams | [docs/SAD.md](docs/SAD.md) |
+| All eight diagrams, Mermaid source and PNG | [diagrams/Diagrams.md](diagrams/Diagrams.md) |
+| Appendix B field layouts and report requirements, spreadsheet form | [appendices/](appendices/) |
+| Build and traceability scripts | [tools/](tools/) |
+| Contribution record | [CONTRIBUTIONS.md](CONTRIBUTIONS.md) |
 
 ## Document summary
 
@@ -50,7 +50,7 @@ The SRS follows the IEEE 830 structure given in the course template. It specifie
 | SF-5 | Donation Camp and Drive Management | REQ-32 to REQ-37 |
 | SF-6 | Search, Notification and Reporting | REQ-38 to REQ-46 |
 
-The Test Plan carries **104 test cases**: 48 unit, 26 integration and 30 system. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS.
+The Test Plan carries **112 test cases**: 48 unit, 26 integration, 30 system and 8 security validation. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS and in section 13 of the Test Plan. No test has been executed, because the system has not been implemented. Every result column reads `Not executed` and `Pending`.
 
 ## Traceability
 
@@ -68,7 +68,7 @@ The Markdown files in `docs/` are the masters. The `.docx` files in `submission/
 pip install -r tools/requirements.txt && python3 tools/build_docx.py
 ```
 
-The build applies heading styles, repeating table headers, page numbering, landscape orientation for the wide test case tables, and embeds the six diagram images into SRS section 4.
+The build applies heading styles, repeating table headers, page numbering, landscape orientation for the wide test case tables, and embeds the diagram images into the SRS and the SAD.
 
 ## Regenerating the diagram images
 
@@ -85,4 +85,4 @@ Python 3.11 with Django 5.x, PostgreSQL 15, served by Gunicorn behind Nginx. Nod
 
 ## Working agreement
 
-The default branch is protected. All changes reach it through a pull request carrying at least one approving review from another team member. Branch names follow `docs/<area>` or `diagrams/<area>`.
+Changes reach `main` through a pull request, with a reviewer requested on each. Not every pull request received a recorded approval, and `CONTRIBUTIONS.md` lists which did not. Branch names follow `docs/<area>`, `diagrams/<area>` or `build/<area>`.
