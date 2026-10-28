@@ -240,3 +240,11 @@ BBMS_DEFAULT_STORAGE_LOCATION = "FRIDGE-A1"
 # Available units this close to their expiry date are flagged and listed in the daily digest
 # (SRS REQ-20). Held here until the configuration screen exists (US-26).
 BBMS_NEAR_EXPIRY_DAYS = 7
+
+# Components a whole blood unit can be separated into (SRS REQ-15), with where each is shelved
+# and a typical volume to suggest on the form.
+BBMS_SEPARATION = {
+    "PRBC": {"storage": "FRIDGE-A1", "suggested_ml": 200},
+    "FFP": {"storage": "FREEZER-B1", "suggested_ml": 150},
+    "Platelets": {"storage": "PLATELET-AGITATOR-1", "suggested_ml": 50},
+}
