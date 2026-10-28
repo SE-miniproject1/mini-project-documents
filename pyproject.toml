@@ -1,0 +1,20 @@
+[tool.ruff]
+line-length = 99
+target-version = "py312"
+extend-exclude = ["submission", "tools"]
+
+[tool.ruff.lint]
+# PEP 8 (pycodestyle), pyflakes, import order, bugbear, naming. SRS constraint CON-3.
+select = ["E", "W", "F", "I", "B", "N"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["E501"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/migrations/*", "src/manage.py", "src/bbms/wsgi.py", "src/bbms/asgi.py"]
+
+[tool.coverage.report]
+# SRS NFR-Q5: unit test line coverage of at least 70 percent.
+fail_under = 70
+show_missing = true
