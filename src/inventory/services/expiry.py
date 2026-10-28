@@ -13,6 +13,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 from accounts.models import Role, User
+from core import config
 from inventory.models import BloodUnit, InvalidTransitionError, Status
 
 logger = logging.getLogger(__name__)
@@ -41,7 +42,7 @@ def expire_due_units(today=None, by=None):
 def near_expiry_units(today=None, window=None):
     """Available units that expire within the window, soonest first (SRS REQ-20)."""
     today = today or date.today()
-    window = settings.BBMS_NEAR_EXPIRY_DAYS if window is None else window
+    window = config.near_expiry_days() if window is None else window
     units = list(
         BloodUnit.objects.filter(
             status=Status.AVAILABLE,
@@ -80,7 +81,7 @@ def send_expiry_digest(today=None):
     ]
     try:
         send_mail(
-            f"{len(units)} blood unit(s) expiring within {settings.BBMS_NEAR_EXPIRY_DAYS} days",
+            f"{len(units)} blood unit(s) expiring within {config.near_expiry_days()} days",
             "These available units expire soon. Use or transfer them first.\n\n"
             + "\n".join(lines)
             + "\n",

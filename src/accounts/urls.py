@@ -8,6 +8,12 @@ app_name = "accounts"
 urlpatterns = [
     path("login/", views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("users/", views.user_admin, name="user_admin"),
+    path("users/new/", views.user_create, name="user_create"),
+    path("users/<int:pk>/", views.user_edit, name="user_edit"),
+    path("hospitals/", views.hospital_list, name="hospital_list"),
+    path("hospitals/new/", views.hospital_create, name="hospital_create"),
+    path("hospitals/<int:pk>/", views.hospital_edit, name="hospital_edit"),
     path("password/change/", views.PasswordChangeView.as_view(), name="password_change"),
     path(
         "password/change/done/",

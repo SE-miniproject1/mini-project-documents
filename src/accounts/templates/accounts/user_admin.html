@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+{% block title %}Users and roles{% endblock %}
+{% block content %}
+<h1>Users and roles</h1>
+<p class="actions">
+  <a class="btn primary" href="{% url 'accounts:user_create' %}" data-shortcut="new">New user</a>
+  <a class="btn" href="{% url 'accounts:hospital_list' %}">Hospitals</a>
+</p>
+<form method="get" class="search-bar">
+  <div><label for="q">User name, email or surname</label><input type="text" id="q" name="q" value="{{ q }}" data-shortcut="search"></div>
+  <div><label for="role">Role</label>
+    <select id="role" name="role"><option value="">All roles</option>
+      {% for value, label in roles %}<option value="{{ value }}"{% if value == role %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select></div>
+  <button type="submit" class="btn primary">Filter</button>
+</form>
+<div class="scroll-x">
+<table class="data">
+  <thead><tr>
+    {% sort_header sort "username" "User name" %}
+    <th scope="col">Email</th>
+    {% sort_header sort "role" "Role" %}
+    <th scope="col">Hospital</th>
+    {% sort_header sort "status" "Status" %}
+    <th scope="col">Actions</th>
+  </tr></thead>
+  <tbody>
+    {% for user in page %}
+    <tr>
+      <th scope="row">{{ user.username }}</th><td>{{ user.email }}</td><td>{{ user.display_role }}</td>
+      <td>{{ user.hospital|default:"" }}</td>
+      <td>{% if user.is_active %}Active{% else %}Deactivated{% endif %}{% if user.locked_until %} (locked){% endif %}</td>
+      <td><a href="{% url 'accounts:user_edit' user.pk %}">Edit</a></td>
+    </tr>
+    {% empty %}<tr><td colspan="6">No users match.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "core/_pagination.html" %}
+{% endblock %}
