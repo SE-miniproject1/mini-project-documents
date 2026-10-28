@@ -8,7 +8,7 @@ from donors.models import Donor
 
 from .forms import CampForm
 from .models import Camp, CampStatus
-from .services import CampError, create_camp, enrol_donor, upcoming_camps
+from .services import CampError, attainment, close_camp, create_camp, enrol_donor, upcoming_camps
 
 
 @role_required(Role.DONOR)
@@ -66,5 +66,26 @@ def detail(request, camp_id):
     return render(
         request,
         "camps/detail.html",
-        {"camp": camp, "enrolments": camp.enrolments.select_related("donor")},
+        {
+            "camp": camp,
+            "enrolments": camp.enrolments.select_related("donor"),
+            "attainment": attainment(camp),
+        },
     )
+
+
+@role_required(*STAFF_ROLES)
+def close(request, camp_id):
+    camp = get_object_or_404(Camp, camp_id=camp_id)
+    if request.method == "POST":
+        try:
+            camp = close_camp(camp, by=request.user)
+        except CampError as problem:
+            messages.error(request, str(problem))
+        else:
+            messages.success(
+                request,
+                f"{camp.name} is completed: {camp.units_collected} of "
+                f"{camp.target_units} units collected.",
+            )
+    return redirect("camps:detail", camp_id=camp_id)

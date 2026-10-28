@@ -2,6 +2,8 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.utils import timezone
 
+from camps.models import Camp, CampStatus
+
 from .models import TestName, TestResult
 
 MIN_VOLUME_ML = 200
@@ -23,11 +25,10 @@ class CollectionForm(forms.Form):
         max_length=20,
         validators=[RegexValidator(r"^[A-Za-z0-9-]+$", "Use letters, digits and hyphens only.")],
     )
-    collection_site = forms.CharField(
+    collection_site = forms.ChoiceField(
         label="Collection site",
-        max_length=30,
         initial="Centre",
-        help_text="Centre, or the camp ID when collected at a camp.",
+        help_text="The centre, or the camp where the donation was taken.",
     )
     collected_at = forms.DateTimeField(
         label="Collected at",
@@ -37,6 +38,11 @@ class CollectionForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        today = timezone.localdate()
+        camps = Camp.objects.filter(status=CampStatus.SCHEDULED, camp_date__lte=today)
+        self.fields["collection_site"].choices = [("Centre", "Centre")] + [
+            (camp.camp_id, f"{camp.name} ({camp.camp_id})") for camp in camps
+        ]
         self.fields["collected_at"].initial = timezone.localtime().replace(second=0, microsecond=0)
 
     def clean_collected_at(self):
