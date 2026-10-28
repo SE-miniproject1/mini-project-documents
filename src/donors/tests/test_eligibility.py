@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from decimal import Decimal
 
+from django.conf import settings
 from django.core import checks
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -162,18 +163,12 @@ class NextEligibleDateTests(TestCase):
     def test_no_donation_gives_no_date(self):
         self.assertIsNone(next_eligible_date(None))
 
-    @override_settings(
-        BBMS_ELIGIBILITY={
-            **__import__("django.conf").conf.settings.BBMS_ELIGIBILITY,
-            "donation_interval_days": 120,
-        }
-    )
     def test_a_longer_configured_interval_is_used(self):
-        self.assertEqual(next_eligible_date(date(2026, 6, 1)), date(2026, 9, 29))
+        longer = {**settings.BBMS_ELIGIBILITY, "donation_interval_days": 120}
+        with override_settings(BBMS_ELIGIBILITY=longer):
+            self.assertEqual(next_eligible_date(date(2026, 6, 1)), date(2026, 9, 29))
 
     def test_the_interval_can_never_be_set_below_ninety_days(self):
-        from django.conf import settings
-
         too_short = {**settings.BBMS_ELIGIBILITY, "donation_interval_days": 60}
         with override_settings(BBMS_ELIGIBILITY=too_short):
             errors = checks.run_checks()
