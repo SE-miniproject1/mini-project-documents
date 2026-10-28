@@ -4,4 +4,5 @@
 <h1>Sign in</h1>
 {% include "core/_form.html" with submit_label="Sign in" %}
 <p><a href="{% url 'accounts:password_reset' %}">Forgotten your password?</a></p>
+<p>New donor? <a href="{% url 'donors:register' %}">Register here</a>.</p>
 {% endblock %}

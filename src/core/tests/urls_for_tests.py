@@ -45,7 +45,18 @@ urlpatterns = [
     path("form/", sample_form, name="sample_form"),
     path("broken/", broken),
     path("page/", page, name="page"),
-    path("donors/", include(([path("me/", stub("me"), name="dashboard")], "donors"))),
+    path(
+        "donors/",
+        include(
+            (
+                [
+                    path("me/", stub("me"), name="dashboard"),
+                    path("register/", stub("register"), name="register"),
+                ],
+                "donors",
+            )
+        ),
+    ),
     path("inventory/", include(([path("", stub("inv"), name="console")], "inventory"))),
     path("requests/", include(([path("new/", stub("new"), name="new")], "requests"))),
 ]

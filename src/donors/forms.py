@@ -1,0 +1,104 @@
+from django import forms
+from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
+from django.utils import timezone
+
+from accounts.models import Role, User
+
+from .models import Donor
+from .notifications import send_welcome
+from .services.id_generator import generate_donor_id
+
+CONSENT_TEXT = (
+    "I consent to my personal and medical details being stored and used by the blood bank "
+    "for donor screening, donation and traceability."
+)
+
+
+class DonorRegistrationForm(forms.ModelForm):
+    """Self-registration (SRS REQ-1, UC-1). Creates the donor and a sign-in account together."""
+
+    password1 = forms.CharField(
+        label="Password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
+    password2 = forms.CharField(
+        label="Confirm password",
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
+    consent = forms.BooleanField(
+        label=CONSENT_TEXT,
+        error_messages={"required": "You must give consent to register."},
+    )
+
+    class Meta:
+        model = Donor
+        fields = [
+            "full_name",
+            "date_of_birth",
+            "gender",
+            "blood_group",
+            "mobile_number",
+            "email",
+            "address_line",
+            "city",
+            "pin_code",
+            "weight_kg",
+            "emergency_contact_name",
+            "emergency_contact_number",
+        ]
+        widgets = {
+            "date_of_birth": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+        }
+        labels = {
+            "mobile_number": "Mobile number",
+            "address_line": "Address",
+            "pin_code": "PIN code",
+            "weight_kg": "Weight (kg)",
+            "emergency_contact_name": "Emergency contact name",
+            "emergency_contact_number": "Emergency contact number",
+        }
+
+    def clean(self):
+        cleaned = super().clean()
+        first, second = cleaned.get("password1"), cleaned.get("password2")
+        if first and second:
+            if first != second:
+                self.add_error("password2", "The two passwords do not match.")
+            else:
+                probe = User(
+                    username="candidate",
+                    email=cleaned.get("email", ""),
+                    first_name=(cleaned.get("full_name") or "").split(" ")[0],
+                )
+                try:
+                    validate_password(first, user=probe)
+                except forms.ValidationError as error:
+                    self.add_error("password1", error)
+        return cleaned
+
+    def save(self, commit=True):
+        """Create the donor, its account and the identifier in one transaction (SRS REQ-3)."""
+        if not commit:
+            raise ValueError("Registration always saves.")
+        with transaction.atomic():
+            donor_id = generate_donor_id()
+            name = self.cleaned_data["full_name"].strip()
+            first, _, last = name.partition(" ")
+            user = User.objects.create_user(
+                username=donor_id,
+                email=self.cleaned_data["email"],
+                password=self.cleaned_data["password1"],
+                role=Role.DONOR,
+                first_name=first,
+                last_name=last,
+            )
+            donor = super().save(commit=False)
+            donor.donor_id = donor_id
+            donor.user = user
+            donor.consent_timestamp = timezone.now()
+            donor.save()
+        transaction.on_commit(lambda: send_welcome(donor))
+        return donor
