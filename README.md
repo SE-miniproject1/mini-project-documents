@@ -60,6 +60,29 @@ Appendix C of the SRS is the requirement traceability matrix. It maps each requi
 python3 tools/check_traceability.py
 ```
 
+## Running the application
+
+The application is a Django 5.2 project in `src/`. Python 3.12 or newer is needed.
+
+```bash
+python3.12 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+cd src
+python manage.py migrate
+python manage.py runserver
+```
+
+Configuration comes from environment variables, listed in `.env.example`. Development uses SQLite. Production uses PostgreSQL through `requirements-postgres.txt`.
+
+Checks that CI runs on every push and pull request:
+
+```bash
+ruff check src && ruff format --check src       # PEP 8, imports, bugbear
+python src/manage.py check
+python src/manage.py makemigrations --check --dry-run
+coverage run src/manage.py test src && coverage report   # fails under 70 percent
+```
+
 ## Rebuilding the Word submission copies
 
 The Markdown files in `docs/` are the masters. The `.docx` files in `submission/` are generated from them, so edit the Markdown and rebuild rather than editing Word directly.

@@ -29,3 +29,11 @@ venv/
 # Build scratch
 scratch/
 *.log
+
+# Django application
+*.sqlite3
+.env
+staticfiles/
+.coverage
+htmlcov/
+.ruff_cache/
