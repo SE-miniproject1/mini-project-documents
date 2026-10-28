@@ -57,7 +57,8 @@ class ErrorPageTests(TestCase):
         self.client.raise_request_exception = False
         make_user("staff", role=Role.STAFF)
         self.client.login(username="staff", password=STRONG_PASSWORD)
-        response = self.client.get("/broken/")
+        with self.assertLogs("django.request", level="ERROR"):
+            response = self.client.get("/broken/")
         self.assertEqual(response.status_code, 500)
         self.assertContains(response, "Something went wrong", status_code=500)
         for leaked in ("SELECT", "internal_table", "Traceback", "ValueError"):
@@ -66,4 +67,6 @@ class ErrorPageTests(TestCase):
     def test_not_found_and_forbidden_pages_are_friendly(self):
         make_user("donor", role=Role.DONOR)
         self.client.login(username="donor", password=STRONG_PASSWORD)
-        self.assertContains(self.client.get("/missing-page/"), "Page not found", status_code=404)
+        with self.assertLogs("django.request", level="WARNING"):
+            response = self.client.get("/missing-page/")
+        self.assertContains(response, "Page not found", status_code=404)

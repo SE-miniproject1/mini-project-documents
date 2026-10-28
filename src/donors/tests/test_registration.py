@@ -127,7 +127,10 @@ class RegistrationFlowTests(TestCase):
         self.assertIn(Donor.objects.get().donor_id, mail.outbox[0].body)
 
     def test_a_failed_welcome_email_does_not_undo_the_registration(self):
-        with self.settings(EMAIL_BACKEND="django.core.mail.backends.dummy.NoSuchBackend"):
+        with (
+            self.settings(EMAIL_BACKEND="django.core.mail.backends.dummy.NoSuchBackend"),
+            self.assertLogs("donors.notifications", level="ERROR"),
+        ):
             with self.captureOnCommitCallbacks(execute=True):
                 self.client.post(reverse(REGISTER), registration_data())
         self.assertEqual(Donor.objects.count(), 1)

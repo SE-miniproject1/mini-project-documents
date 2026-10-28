@@ -8,6 +8,7 @@ from accounts.models import Role, User
 from .models import Donor
 from .notifications import send_welcome
 from .services.id_generator import generate_donor_id
+from .validators import ensure_email_unused, ensure_mobile_unused, validate_age
 
 CONSENT_TEXT = (
     "I consent to my personal and medical details being stored and used by the blood bank "
@@ -60,6 +61,21 @@ class DonorRegistrationForm(forms.ModelForm):
             "emergency_contact_name": "Emergency contact name",
             "emergency_contact_number": "Emergency contact number",
         }
+
+    def clean_date_of_birth(self):
+        date_of_birth = self.cleaned_data["date_of_birth"]
+        validate_age(date_of_birth)
+        return date_of_birth
+
+    def clean_mobile_number(self):
+        mobile_number = self.cleaned_data["mobile_number"]
+        ensure_mobile_unused(mobile_number)
+        return mobile_number
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        ensure_email_unused(email)
+        return email
 
     def clean(self):
         cleaned = super().clean()

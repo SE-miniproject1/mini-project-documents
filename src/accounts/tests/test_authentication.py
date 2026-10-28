@@ -152,7 +152,10 @@ class LockoutTests(TestCase):
         self.assertNotContains(response, "locked")
 
     def test_a_mail_failure_does_not_break_sign_in(self):
-        with override_settings(EMAIL_BACKEND="django.core.mail.backends.dummy.NoSuchBackend"):
+        with (
+            override_settings(EMAIL_BACKEND="django.core.mail.backends.dummy.NoSuchBackend"),
+            self.assertLogs("accounts.lockout", level="ERROR"),
+        ):
             with self.captureOnCommitCallbacks(execute=True):
                 for _ in range(5):
                     self._attempt("wrong-password")
