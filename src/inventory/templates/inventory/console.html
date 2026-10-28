@@ -7,6 +7,22 @@
   {% include "inventory/_live.html" %}
 </div>
 
+{% if near_expiry %}
+<h2>Expiring soon</h2>
+<table class="data">
+  <thead><tr><th scope="col">Unit</th><th scope="col">Blood group</th><th scope="col">Component</th><th scope="col">Expires</th><th scope="col">Days left</th></tr></thead>
+  <tbody>
+    {% for unit in near_expiry %}
+    <tr>
+      <td>{{ unit.unit_id }}</td><td>{{ unit.blood_group }}</td><td>{{ unit.get_component_type_display }}</td>
+      <td>{{ unit.expiry_date|date:"d-m-Y" }}</td>
+      <td><span class="badge bad">{{ unit.days_left }} day{{ unit.days_left|pluralize }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
 <h2>Units waiting for test results</h2>
 <table class="data">
   <thead>

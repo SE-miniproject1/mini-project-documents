@@ -236,3 +236,7 @@ BBMS_SHELF_LIFE_DAYS = {
 
 # Where a unit is shelved when it is released from quarantine. Staff can move it later (REQ-21).
 BBMS_DEFAULT_STORAGE_LOCATION = "FRIDGE-A1"
+
+# Available units this close to their expiry date are flagged and listed in the daily digest
+# (SRS REQ-20). Held here until the configuration screen exists (US-26).
+BBMS_NEAR_EXPIRY_DAYS = 7
