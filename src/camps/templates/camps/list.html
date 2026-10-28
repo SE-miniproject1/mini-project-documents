@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block title %}Upcoming camps{% endblock %}
+{% block content %}
+<h1>Upcoming donation camps</h1>
+<div class="scroll-x">
+<table class="data">
+  <thead><tr><th scope="col">Camp</th><th scope="col">Date</th><th scope="col">Time</th><th scope="col">Venue</th><th scope="col">Action</th></tr></thead>
+  <tbody>
+    {% for camp in camps %}
+    <tr>
+      <th scope="row">{{ camp.name }}</th><td>{{ camp.camp_date|date:"d-m-Y" }}</td>
+      <td>{{ camp.start_time|time:"H:i" }} to {{ camp.end_time|time:"H:i" }}</td><td>{{ camp.venue_address }}</td>
+      <td>{% if camp.pk in enrolled %}Enrolled{% else %}
+        <form method="post" action="{% url 'camps:enrol' camp.camp_id %}" class="inline">{% csrf_token %}<button type="submit" class="btn primary">Enrol</button></form>{% endif %}</td>
+    </tr>
+    {% empty %}<tr><td colspan="5">No camps are scheduled.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
