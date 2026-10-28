@@ -8,8 +8,13 @@
   <dt>Venue</dt><dd>{{ camp.venue_address }}</dd>
   <dt>Organiser</dt><dd>{{ camp.organiser_name }}, {{ camp.organiser_contact }}</dd>
   <dt>Target</dt><dd>{{ camp.target_units }} units</dd>
-  {% if camp.units_collected is not None %}<dt>Collected</dt><dd>{{ camp.units_collected }} units</dd>{% endif %}
+  {% if camp.units_collected is not None %}<dt>Collected</dt><dd>{{ camp.units_collected }} of {{ camp.target_units }} units ({{ attainment }} percent of target)</dd>{% endif %}
 </dl>
+{% if camp.status == 'Scheduled' %}
+<form method="post" action="{% url 'camps:close' camp.camp_id %}">{% csrf_token %}
+  <button type="submit" class="btn">Close camp and report units collected</button>
+</form>
+{% endif %}
 <h2>Enrolled donors ({{ enrolments|length }})</h2>
 <table class="data">
   <thead><tr><th scope="col">Donor</th><th scope="col">Name</th><th scope="col">Blood group</th><th scope="col">Enrolled</th></tr></thead>
