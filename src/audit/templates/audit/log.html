@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<h1>Audit log</h1>
+<p class="muted">Entries cannot be changed or removed.</p>
+<form method="get" class="search-bar">
+  <div>
+    <label for="event">Event</label>
+    <select id="event" name="event">
+      <option value="">All events</option>
+      {% for value, label in events %}<option value="{{ value }}"{% if value == event %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="q">User, record or reason</label>
+    <input type="text" id="q" name="q" value="{{ query }}" data-shortcut="search">
+  </div>
+  <button type="submit" class="btn primary">Filter</button>
+</form>
+<div class="scroll-x">
+<table class="data">
+  <thead>
+    <tr>
+      {% sort_header sort "time" "Time" %}
+      {% sort_header sort "event" "Event" %}
+      {% sort_header sort "actor" "User" %}
+      {% sort_header sort "entity" "Record" %}
+      <th scope="col">Change</th>
+      <th scope="col">Reason</th>
+      <th scope="col">From</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in page %}
+    <tr>
+      <td>{{ entry.occurred_at|date:"d-m-Y H:i:s" }}</td>
+      <td>{{ entry.get_event_display }}</td>
+      <td>{{ entry.actor_username|default:"system" }}</td>
+      <td>{{ entry.entity_type }} {{ entry.entity_id }}</td>
+      <td>{% if entry.previous_value or entry.new_value %}{{ entry.previous_value }} &rarr; {{ entry.new_value }}{% endif %}</td>
+      <td>{{ entry.reason }}</td>
+      <td>{{ entry.source_ip|default:"" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">No entries match.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "core/_pagination.html" %}
+{% endblock %}

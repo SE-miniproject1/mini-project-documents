@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "donors",
     "collection",
     "inventory",
+    "audit",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     # SRS NFR-SEC1: every view needs a signed-in user unless it opts out with
     # @login_not_required (login, password reset, registration, health probe).
     "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "audit.middleware.CurrentRequestMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
