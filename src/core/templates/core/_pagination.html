@@ -1,0 +1,8 @@
+{% load bbms_ui %}
+{% if page.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Pages">
+  {% if page.has_previous %}<a href="{% page_url page.previous_page_number %}">Previous</a>{% endif %}
+  <span>Page {{ page.number }} of {{ page.paginator.num_pages }} ({{ page.paginator.count }} rows)</span>
+  {% if page.has_next %}<a href="{% page_url page.next_page_number %}">Next</a>{% endif %}
+</nav>
+{% endif %}
