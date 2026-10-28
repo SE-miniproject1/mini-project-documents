@@ -5,6 +5,7 @@ committed (SRS SI-1). See `.env.example` for the full list.
 """
 
 import os
+import sys
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "accounts",
     "core",
 ]
 
@@ -58,6 +60,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # SRS NFR-SEC1: every view needs a signed-in user unless it opts out with
+    # @login_not_required (login, password reset, registration, health probe).
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -129,3 +134,67 @@ LOGGING = {
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "structured"}},
     "root": {"handlers": ["console"], "level": "INFO"},
 }
+
+# ---------------------------------------------------------------------------
+# Authentication and sessions (SRS section 6.3)
+# ---------------------------------------------------------------------------
+AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ["accounts.backends.LockoutBackend"]
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "accounts:login"
+
+# NFR-SEC3: at least 10 characters with a letter, a digit and a special character,
+# and no password from the common-password (known-compromised) list.
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 10},
+    },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {"NAME": "accounts.validators.ComplexityValidator"},
+]
+
+# NFR-SEC2: Django's default PBKDF2-SHA256 with a per-password salt is a deliberately slow
+# key derivation function. Only the automated tests swap it for a fast hasher.
+TESTING = "test" in sys.argv
+if TESTING:
+    PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
+# NFR-SEC4: lock for 15 minutes after 5 consecutive failures.
+BBMS_LOCKOUT_THRESHOLD = 5
+BBMS_LOCKOUT_MINUTES = 15
+
+# NFR-SEC11: sessions expire after 30 minutes of inactivity. Saving on every request makes
+# the expiry slide with activity. Logout flushes the session and a password change
+# invalidates every other session through Django's session auth hash.
+SESSION_COOKIE_AGE = 30 * 60
+SESSION_SAVE_EVERY_REQUEST = True
+
+# SRS CI-1 and CI-3: Secure, HttpOnly, SameSite=Lax cookies, HTTPS only, HSTS. Switched on in
+# production, where Nginx terminates TLS and forwards X-Forwarded-Proto.
+SECURE_DEPLOYMENT = env_bool("BBMS_SECURE", ENVIRONMENT == "production")
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SECURE = SECURE_DEPLOYMENT
+CSRF_COOKIE_SECURE = SECURE_DEPLOYMENT
+SECURE_SSL_REDIRECT = SECURE_DEPLOYMENT
+SECURE_HSTS_SECONDS = 31536000 if SECURE_DEPLOYMENT else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = SECURE_DEPLOYMENT
+if SECURE_DEPLOYMENT:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Email: the console in development; an SMTP relay over STARTTLS in production (SRS SI-3).
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@bbms.local")
+if ENVIRONMENT == "production":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+    EMAIL_USE_TLS = True
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
