@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+{% block title %}Request queue{% endblock %}
+{% block content %}
+<h1>Request queue</h1>
+<p class="muted">Emergency first, then Urgent and Routine, earliest required-by first.</p>
+<p class="actions">
+  {% if show == 'open' %}<a class="btn" href="?show=all">Show closed requests too</a>{% else %}<a class="btn" href="?show=open">Show open requests only</a>{% endif %}
+</p>
+<div class="scroll-x">
+<table class="data">
+  <thead><tr>
+    <th scope="col">Request</th><th scope="col">Urgency</th><th scope="col">Hospital</th><th scope="col">Blood</th>
+    <th scope="col">Units</th><th scope="col">Required by</th><th scope="col">Status</th>
+  </tr></thead>
+  <tbody>
+    {% for r in page %}
+    <tr{% if r.urgency == 'Emergency' %} class="emergency"{% endif %}>
+      <th scope="row"><a href="{% url 'requests:detail' r.request_id %}">{{ r.request_id }}</a></th>
+      <td>{% if r.urgency == 'Emergency' %}<strong>EMERGENCY</strong>{% else %}{{ r.urgency }}{% endif %}</td>
+      <td>{{ r.hospital.name }}</td>
+      <td>{{ r.blood_group }} {{ r.component_type }}</td>
+      <td>{{ r.quantity_issued }} of {{ r.quantity_requested }}</td>
+      <td>{{ r.required_by|date:"d-m-Y H:i" }}</td>
+      <td>{{ r.status }}</td>
+    </tr>
+    {% empty %}<tr><td colspan="7">No requests are waiting.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "core/_pagination.html" %}
+{% endblock %}
