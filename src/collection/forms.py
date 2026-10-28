@@ -2,6 +2,8 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.utils import timezone
 
+from .models import TestName, TestResult
+
 MIN_VOLUME_ML = 200
 MAX_VOLUME_ML = 600
 
@@ -42,3 +44,35 @@ class CollectionForm(forms.Form):
         if collected_at > timezone.now():
             raise forms.ValidationError("The collection time cannot be in the future.")
         return collected_at
+
+
+class ScreeningResultsForm(forms.Form):
+    """One select per test that has no result yet. Blank means not tested yet."""
+
+    tested_on = forms.DateField(
+        label="Tested on", widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d")
+    )
+
+    def __init__(self, *args, pending, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["tested_on"].initial = timezone.localdate()
+        for name in pending:
+            self.fields[name] = forms.ChoiceField(
+                label=TestName(name).label,
+                required=False,
+                choices=[("", "Not tested yet"), *TestResult.choices],
+            )
+
+    def clean_tested_on(self):
+        tested_on = self.cleaned_data["tested_on"]
+        if tested_on > timezone.localdate():
+            raise forms.ValidationError("The test date cannot be in the future.")
+        return tested_on
+
+    def entered(self):
+        """The results filled in, as {test name: result}."""
+        return {
+            name: value
+            for name, value in self.cleaned_data.items()
+            if name != "tested_on" and value
+        }
