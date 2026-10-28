@@ -138,6 +138,7 @@ LOGGING = {
     },
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "structured"}},
     "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {"pyBarcode": {"level": "WARNING"}},  # only SVG output is used
 }
 
 # ---------------------------------------------------------------------------

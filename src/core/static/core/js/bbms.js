@@ -9,6 +9,11 @@
     });
   }
 
+  // Print buttons (unit labels). No inline script, so the page works under a strict policy.
+  document.querySelectorAll("[data-print]").forEach(function (button) {
+    button.addEventListener("click", function () { window.print(); });
+  });
+
   if (document.body.dataset.shortcuts !== "on") { return; }
 
   // event.code is used so the shortcuts work on any keyboard layout, including macOS

@@ -101,3 +101,9 @@ dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1.
 dl.facts dt { font-weight: 600; }
 dl.facts dd { margin: 0; }
 .btn-disabled { display: inline-block; color: var(--muted); text-decoration: line-through; cursor: not-allowed; }
+
+.donor-id { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1.15rem; }
+.label-card { border: 2px solid var(--ink); padding: 1rem 1.5rem; max-width: 22rem; }
+.label-card .barcode { display: block; width: 100%; height: auto; }
+.label-id { font: 700 1.2rem ui-monospace, Menlo, Consolas, monospace; text-align: center; margin: .3rem 0; }
+.label-group { font-size: 3rem; font-weight: 800; text-align: center; margin: 0; line-height: 1.1; }
