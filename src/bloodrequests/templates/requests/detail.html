@@ -15,6 +15,44 @@
   {% if req.rejection_reason %}<dt>Rejection reason</dt><dd>{{ req.rejection_reason }}</dd>{% endif %}
 </dl>
 {% if req.is_open %}<p>Available now: <strong>{{ available }}</strong> unit{{ available|pluralize }} of {{ req.blood_group }} {{ req.component_type }}.</p>{% endif %}
+{% if allocations %}
+<h2>Units</h2>
+<table class="data">
+  <thead><tr><th scope="col">Unit</th><th scope="col">Expires</th><th scope="col">State</th>{% if can_allocate %}<th scope="col">Actions</th>{% endif %}</tr></thead>
+  <tbody>
+    {% for a in allocations %}
+    <tr><th scope="row">{{ a.unit.unit_id }}</th><td>{{ a.unit.expiry_date|date:"d-m-Y" }}</td>
+      <td>{{ a.state }}{% if a.state == 'Issued' %} {{ a.issued_at|date:"d-m-Y H:i" }}{% endif %}{% if a.state == 'Released' %} ({{ a.release_reason }}){% endif %}</td>
+      {% if can_allocate %}<td>{% if a.state == 'Reserved' %}<form method="post" action="{% url 'requests:release' req.request_id a.pk %}" class="inline">{% csrf_token %}<button type="submit" class="btn">Release</button></form>{% endif %}</td>{% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if can_allocate %}
+<h2>Allocate units</h2>
+{% if candidates %}
+<form method="post" action="{% url 'requests:allocate' req.request_id %}">
+  {% csrf_token %}
+  <fieldset><legend>Available {{ req.blood_group }} {{ req.component_type }}, earliest expiry first</legend>
+    {% for unit in candidates %}
+    <div><label><input type="checkbox" name="unit_ids" value="{{ unit.unit_id }}"> {{ unit.unit_id }}, expires {{ unit.expiry_date|date:"d-m-Y" }}, {{ unit.volume_ml }} ml</label></div>
+    {% endfor %}
+  </fieldset>
+  <button type="submit" class="btn primary">Reserve selected units</button>
+</form>
+{% else %}<p>No {{ req.blood_group }} {{ req.component_type }} units are available.</p>{% endif %}
+{% if has_reserved %}
+<form method="post" action="{% url 'requests:issue' req.request_id %}">
+  {% csrf_token %}<button type="submit" class="btn primary">Confirm issue of reserved units</button>
+</form>
+{% endif %}
+{% endif %}
+{% if can_cancel %}
+<form method="post" action="{% url 'requests:cancel' req.request_id %}">
+  {% csrf_token %}<button type="submit" class="btn">Cancel this request</button>
+</form>
+{% endif %}
 {% if is_staff and req.status == 'Pending' %}
 <h2>Decision</h2>
 <form method="post" action="{% url 'requests:approve' req.request_id %}" class="inline">
