@@ -10,10 +10,7 @@ class ApplicationUserAdmin(UserAdmin):
     """Manage application users and their assigned roles."""
 
     fieldsets = UserAdmin.fieldsets + (("Application role", {"fields": ("role",)}),)
-
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        ("Application role", {"fields": ("role",)}),
-    )
+    add_fieldsets = UserAdmin.add_fieldsets + (("Application role", {"fields": ("role",)}),)
 
     list_display = (
         "username",
