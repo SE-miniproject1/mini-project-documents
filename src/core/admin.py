@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
@@ -8,9 +9,7 @@ from .models import Hospital, SystemConfiguration, User
 class ApplicationUserAdmin(UserAdmin):
     """Manage application users and their assigned roles."""
 
-    fieldsets = UserAdmin.fieldsets + (
-        ("Application role", {"fields": ("role",)}),
-    )
+    fieldsets = UserAdmin.fieldsets + (("Application role", {"fields": ("role",)}),)
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         ("Application role", {"fields": ("role",)}),
