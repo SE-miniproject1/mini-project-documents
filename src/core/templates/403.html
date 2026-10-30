@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Access denied{% endblock %}
+{% block content %}
+<h1>Access denied</h1>
+<p>You do not have permission to use this screen. If you think you should, ask an administrator.</p>
+<p><a href="{% url 'home' %}">Back to the home page</a></p>
+{% endblock %}
