@@ -1,0 +1,39 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+{% block title %}Donor search and screening{% endblock %}
+{% block content %}
+<h1>Donor search and screening</h1>
+<form method="get" role="search" class="search-bar">
+  <label for="q">Donor ID, mobile number or name</label>
+  <input type="text" id="q" name="q" value="{{ query }}" data-shortcut="search" autofocus>
+  <button type="submit" class="btn primary">Search</button>
+</form>
+<table class="data">
+  <thead>
+    <tr>
+      {% sort_header sort "id" "Donor ID" %}
+      {% sort_header sort "name" "Name" %}
+      {% sort_header sort "group" "Blood group" %}
+      {% sort_header sort "status" "Eligibility" %}
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for donor in page %}
+    <tr>
+      <td>{{ donor.donor_id }}</td>
+      <td>{{ donor.full_name }}</td>
+      <td>{{ donor.blood_group }}</td>
+      <td>
+        <span class="badge {% if donor.eligibility_status == 'Eligible' %}ok{% else %}bad{% endif %}">{{ donor.eligibility_status }}</span>
+        {% if donor.deferral_reason %}<br><small>{{ donor.deferral_reason }}{% if donor.deferral_review_date %}, review {{ donor.deferral_review_date|date:"d-m-Y" }}{% endif %}</small>{% endif %}
+      </td>
+      <td><a href="{% url 'donors:screen' donor.donor_id %}">Screen</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No donors match.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% include "core/_pagination.html" %}
+{% endblock %}

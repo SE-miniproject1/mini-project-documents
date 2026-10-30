@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% block title %}Screening result{% endblock %}
+{% block content %}
+<h1>Screening result for {{ donor.full_name }}</h1>
+<p>
+  <span class="badge {% if screening.outcome == 'Eligible' %}ok{% else %}bad{% endif %}">{{ screening.outcome }}</span>
+</p>
+{% if reasons %}
+<h2>Reasons</h2>
+<ul>{% for reason in reasons %}<li>{{ reason }}</li>{% endfor %}</ul>
+{% if screening.review_date %}<p>Review on <strong>{{ screening.review_date|date:"d-m-Y" }}</strong>.</p>{% endif %}
+{% else %}
+<p>Every criterion is met.</p>
+{% endif %}
+<dl class="facts">
+  <dt>Weight</dt><dd>{{ screening.weight_kg }} kg</dd>
+  <dt>Haemoglobin</dt><dd>{{ screening.haemoglobin }} g/dL</dd>
+  <dt>Systolic blood pressure</dt><dd>{{ screening.systolic_bp }} mmHg</dd>
+  <dt>Screened</dt><dd>{{ screening.screened_at|date:"d-m-Y H:i" }} by {{ screening.screened_by.get_username }}</dd>
+</dl>
+<p class="actions"><a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Back to search</a></p>
+{% endblock %}

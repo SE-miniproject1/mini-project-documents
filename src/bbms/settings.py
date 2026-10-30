@@ -6,6 +6,7 @@ committed (SRS SI-1). See `.env.example` for the full list.
 
 import os
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
@@ -200,3 +201,21 @@ if ENVIRONMENT == "production":
     EMAIL_USE_TLS = True
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# ---------------------------------------------------------------------------
+# Donor eligibility rules (SRS REQ-6, REQ-8, BR-2, BR-3)
+# ---------------------------------------------------------------------------
+# Held here until the administrator configuration screen (US-26, REQ-46) exists. Decimals
+# keep every comparison exact, as NFR-Q4 requires.
+BBMS_ELIGIBILITY = {
+    "min_age": 18,
+    "max_age": 65,
+    "min_weight_kg": Decimal("50"),
+    "min_haemoglobin": Decimal("12.5"),
+    "min_systolic": 100,
+    "max_systolic": 140,
+    "donation_interval_days": 90,
+    # How long a physical-criteria deferral (weight, haemoglobin, blood pressure) lasts
+    # before the donor is re-evaluated. The SRS does not state a figure.
+    "deferral_review_days": 30,
+}

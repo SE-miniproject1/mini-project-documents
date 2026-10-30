@@ -1,8 +1,19 @@
+import logging
+
 from django.contrib.auth.decorators import login_not_required
 from django.db import IntegrityError
-from django.shortcuts import redirect, render
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
-from .forms import DonorRegistrationForm
+from accounts.permissions import STAFF_ROLES, role_required
+from core.listing import apply_sort, paginate
+
+from .forms import DonorRegistrationForm, ScreeningForm
+from .models import Donor, DonorScreening
+from .services.eligibility import apply_screening
+
+logger = logging.getLogger(__name__)
 
 SESSION_KEY = "registered_donor_id"
 
@@ -31,3 +42,66 @@ def registered(request):
     if not donor_id:
         return redirect("accounts:login")
     return render(request, "donors/registered.html", {"donor_id": donor_id})
+
+
+@role_required(*STAFF_ROLES)
+def search(request):
+    """Find a donor by ID, mobile number or name (UC4)."""
+    query = request.GET.get("q", "").strip()
+    donors = Donor.objects.filter(is_active=True)
+    if query:
+        donors = donors.filter(
+            Q(donor_id__icontains=query)
+            | Q(mobile_number__contains=query)
+            | Q(full_name__icontains=query)
+        )
+    donors, sort = apply_sort(
+        request,
+        donors,
+        {
+            "id": "donor_id",
+            "name": "full_name",
+            "group": "blood_group",
+            "status": "eligibility_status",
+        },
+        default="id",
+    )
+    return render(
+        request,
+        "donors/search.html",
+        {"page": paginate(request, donors), "query": query, "sort": sort},
+    )
+
+
+@role_required(*STAFF_ROLES)
+def screen(request, donor_id):
+    donor = get_object_or_404(Donor, donor_id=donor_id, is_active=True)
+    form = ScreeningForm(request.POST or None, initial={"weight_kg": donor.weight_kg})
+    if request.method == "POST" and form.is_valid():
+        screening, result = apply_screening(donor, screened_by=request.user, **form.cleaned_data)
+        logger.info(
+            "screening recorded donor_id=%s outcome=%s user_id=%s",
+            donor.donor_id,
+            result.status,
+            request.user.pk,
+        )
+        return redirect("donors:screening_result", pk=screening.pk)
+    return render(
+        request,
+        "donors/screen.html",
+        {"donor": donor, "form": form, "cancel_url": reverse("donors:search")},
+    )
+
+
+@role_required(*STAFF_ROLES)
+def screening_result(request, pk):
+    screening = get_object_or_404(DonorScreening.objects.select_related("donor"), pk=pk)
+    return render(
+        request,
+        "donors/screening_result.html",
+        {
+            "screening": screening,
+            "donor": screening.donor,
+            "reasons": [r for r in screening.reasons.split("\n") if r],
+        },
+    )

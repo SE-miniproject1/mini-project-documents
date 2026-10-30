@@ -26,6 +26,14 @@ def age_on(date_of_birth, on):
     return on.year - date_of_birth.year - (0 if birthday_passed else 1)
 
 
+def add_years(start, years):
+    """The same calendar day `years` later. 29 February moves to 1 March in a non-leap year."""
+    try:
+        return start.replace(year=start.year + years)
+    except ValueError:
+        return date(start.year + years, 3, 1)
+
+
 def validate_age(date_of_birth, today=None):
     today = today or date.today()
     if not MIN_AGE <= age_on(date_of_birth, today) <= MAX_AGE:
