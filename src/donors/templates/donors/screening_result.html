@@ -18,5 +18,10 @@
   <dt>Systolic blood pressure</dt><dd>{{ screening.systolic_bp }} mmHg</dd>
   <dt>Screened</dt><dd>{{ screening.screened_at|date:"d-m-Y H:i" }} by {{ screening.screened_by.get_username }}</dd>
 </dl>
-<p class="actions"><a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Back to search</a></p>
+<p class="actions">
+  {% url 'collection:new' donor.donor_id as collect_url %}
+  {% if collect_url and can_collect %}<a class="btn primary" href="{{ collect_url }}" data-shortcut="new">Start collection</a>{% endif %}
+  <a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Back to search</a>
+</p>
+{% if collect_url and not can_collect %}<p>Collection cannot start: {{ collect_note }}</p>{% endif %}
 {% endblock %}

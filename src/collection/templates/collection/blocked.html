@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}Collection not allowed{% endblock %}
+{% block content %}
+<h1>Collection not allowed</h1>
+<p><span class="badge bad">Not eligible to donate</span></p>
+<p>{{ donor.full_name }} ({{ donor.donor_id }}) cannot donate now.</p>
+<p><strong>{{ blocked.describe }}</strong></p>
+<p class="actions"><a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Back to donor search</a></p>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% block title %}Donation recorded{% endblock %}
+{% block content %}
+<h1>Donation recorded</h1>
+<p>Unit <strong class="donor-id">{{ unit.unit_id }}</strong> was created and is <span class="badge">{{ unit.status }}</span>. It cannot be used until its screening tests are complete.</p>
+<dl class="facts">
+  <dt>Blood group</dt><dd>{{ unit.blood_group }}</dd>
+  <dt>Component</dt><dd>{{ unit.get_component_type_display }}</dd>
+  <dt>Volume</dt><dd>{{ unit.volume_ml }} ml</dd>
+  <dt>Collected</dt><dd>{{ unit.collection_date|date:"d-m-Y" }}</dd>
+  <dt>Expires</dt><dd>{{ unit.expiry_date|date:"d-m-Y" }}</dd>
+  <dt>Bag lot</dt><dd>{{ unit.bag_lot_number }}</dd>
+</dl>
+<p class="actions">
+  <a class="btn primary" href="{% url 'inventory:label' unit.unit_id %}">Print label</a>
+  <a class="btn" href="{% url 'donors:search' %}" data-shortcut="new">Next donor</a>
+</p>
+{% endblock %}
