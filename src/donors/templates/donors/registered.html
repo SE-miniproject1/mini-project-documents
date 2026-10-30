@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Registration successful{% endblock %}
+{% block content %}
+<h1>Registration successful</h1>
+<p>Your donor ID is <strong class="donor-id">{{ donor_id }}</strong>.</p>
+<p>Use it as your username, with the password you chose, to <a href="{% url 'accounts:login' %}">sign in</a>. A welcome email has been sent.</p>
+{% endblock %}

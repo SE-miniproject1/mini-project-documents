@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Register as a donor{% endblock %}
+{% block content %}
+<h1>Register as a donor</h1>
+<p>Fill in your details. You will get a donor ID, which is also your username.</p>
+{% include "core/_form.html" with submit_label="Register" cancel_url="/accounts/login/" %}
+{% endblock %}
