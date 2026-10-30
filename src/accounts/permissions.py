@@ -19,6 +19,17 @@ STAFF_ROLES = (Role.STAFF, Role.ADMIN)
 
 
 def _deny(request, roles):
+    from audit.models import Event
+    from audit.services import record_event
+
+    record_event(
+        Event.AUTHZ_FAILURE,
+        actor=getattr(request, "user", None),
+        entity_type="Path",
+        entity_id=request.path[:40],
+        reason="Needs " + ", ".join(roles),
+        request=request,
+    )
     logger.warning(
         "authorisation failure user_id=%s role=%s path=%s needs=%s",
         getattr(request.user, "pk", None),
