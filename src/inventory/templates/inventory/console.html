@@ -14,7 +14,7 @@
   <tbody>
     {% for unit in near_expiry %}
     <tr>
-      <td>{{ unit.unit_id }}</td><td>{{ unit.blood_group }}</td><td>{{ unit.get_component_type_display }}</td>
+      <td><a href="{% url 'inventory:unit_detail' unit.unit_id %}">{{ unit.unit_id }}</a></td><td>{{ unit.blood_group }}</td><td>{{ unit.get_component_type_display }}</td>
       <td>{{ unit.expiry_date|date:"d-m-Y" }}</td>
       <td><span class="badge bad">{{ unit.days_left }} day{{ unit.days_left|pluralize }}</span></td>
     </tr>
@@ -22,6 +22,22 @@
   </tbody>
 </table>
 {% endif %}
+
+<h2>Whole blood available for separation</h2>
+<table class="data">
+  <thead><tr><th scope="col">Unit</th><th scope="col">Blood group</th><th scope="col">Volume</th><th scope="col">Expires</th><th scope="col">Actions</th></tr></thead>
+  <tbody>
+    {% for unit in whole_blood %}
+    <tr>
+      <td><a href="{% url 'inventory:unit_detail' unit.unit_id %}">{{ unit.unit_id }}</a></td><td>{{ unit.blood_group }}</td><td>{{ unit.volume_ml }} ml</td>
+      <td>{{ unit.expiry_date|date:"d-m-Y" }}</td>
+      <td><a href="{% url 'inventory:separate' unit.unit_id %}">Separate</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No whole blood is available.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 <h2>Units waiting for test results</h2>
 <table class="data">
@@ -37,7 +53,7 @@
   <tbody>
     {% for unit in page %}
     <tr>
-      <td>{{ unit.unit_id }}</td>
+      <td><a href="{% url 'inventory:unit_detail' unit.unit_id %}">{{ unit.unit_id }}</a></td>
       <td>{{ unit.blood_group }}</td>
       <td>{{ unit.get_component_type_display }}</td>
       <td>{{ unit.collection_date|date:"d-m-Y" }}</td>
