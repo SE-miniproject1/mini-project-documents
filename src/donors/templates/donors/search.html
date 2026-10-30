@@ -28,7 +28,15 @@
         <span class="badge {% if donor.eligibility_status == 'Eligible' %}ok{% else %}bad{% endif %}">{{ donor.eligibility_status }}</span>
         {% if donor.deferral_reason %}<br><small>{{ donor.deferral_reason }}{% if donor.deferral_review_date %}, review {{ donor.deferral_review_date|date:"d-m-Y" }}{% endif %}</small>{% endif %}
       </td>
-      <td><a href="{% url 'donors:screen' donor.donor_id %}">Screen</a></td>
+      <td>
+        <a href="{% url 'donors:screen' donor.donor_id %}">Screen</a>
+        {% url 'collection:new' donor.donor_id as collect_url %}
+        {% if collect_url %}
+        |
+        {% if donor.can_collect %}<a href="{{ collect_url }}" data-shortcut="new">Start collection</a>
+        {% else %}<span class="btn-disabled" aria-disabled="true">Start collection</span><br><small>{{ donor.collect_note }}</small>{% endif %}
+        {% endif %}
+      </td>
     </tr>
     {% empty %}
     <tr><td colspan="5">No donors match.</td></tr>

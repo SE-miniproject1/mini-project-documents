@@ -100,3 +100,4 @@ table.data td.num, table.data th.num { text-align: right; font-variant-numeric: 
 dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1.5rem; max-width: 36rem; }
 dl.facts dt { font-weight: 600; }
 dl.facts dd { margin: 0; }
+.btn-disabled { display: inline-block; color: var(--muted); text-decoration: line-through; cursor: not-allowed; }

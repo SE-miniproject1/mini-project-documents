@@ -54,17 +54,23 @@ def next_eligible_date(last_donation_date):
     return last_donation_date + timedelta(days=rules()["donation_interval_days"])
 
 
-def evaluate_eligibility(donor, *, weight_kg=None, haemoglobin=None, systolic_bp=None, on=None):
+def evaluate_eligibility(
+    donor, *, weight_kg=None, haemoglobin=None, systolic_bp=None, on=None, recorded=True
+):
     """Check a donor against every criterion.
 
     Measurements that are not supplied fall back to the donor's recorded weight and
     haemoglobin. Blood pressure is only checked when measured. A criterion that cannot
     be checked yet is skipped, not assumed to pass or fail.
+
+    With `recorded=False` the stored weight and haemoglobin are ignored, so only age
+    and the donation interval are checked. The nightly job uses this: an old reading is
+    not evidence about today, and re-using it would defer the donor again for ever.
     """
     on = on or date.today()
     cfg = rules()
-    weight = donor.weight_kg if weight_kg is None else weight_kg
-    haemo = donor.haemoglobin if haemoglobin is None else haemoglobin
+    weight = weight_kg if weight_kg is not None else (donor.weight_kg if recorded else None)
+    haemo = haemoglobin if haemoglobin is not None else (donor.haemoglobin if recorded else None)
     failures = []
 
     age = age_on(donor.date_of_birth, on)
@@ -177,3 +183,12 @@ def apply_screening(donor, *, weight_kg, haemoglobin, systolic_bp, screened_by, 
         review_date=result.review_date,
     )
     return screening, result
+
+
+def record_donation(donor, on):
+    """After a donation the donor waits out the interval (SRS REQ-8, NFR-S5). Does not save."""
+    donor.last_donation_date = on
+    donor.next_eligible_date = next_eligible_date(on)
+    donor.eligibility_status = Eligibility.TEMPORARY
+    donor.deferral_reason = "Donation interval not elapsed"
+    donor.deferral_review_date = donor.next_eligible_date

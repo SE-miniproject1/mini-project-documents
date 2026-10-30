@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from django.contrib.auth.decorators import login_not_required
 from django.db import IntegrityError
@@ -6,11 +7,13 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
+from accounts.models import Role
 from accounts.permissions import STAFF_ROLES, role_required
+from collection.services.guard import collection_status
 from core.listing import apply_sort, paginate
 
 from .forms import DonorRegistrationForm, ScreeningForm
-from .models import Donor, DonorScreening
+from .models import Donor, DonorScreening, Eligibility
 from .services.eligibility import apply_screening
 
 logger = logging.getLogger(__name__)
@@ -66,11 +69,11 @@ def search(request):
         },
         default="id",
     )
-    return render(
-        request,
-        "donors/search.html",
-        {"page": paginate(request, donors), "query": query, "sort": sort},
-    )
+    page = paginate(request, donors)
+    # Staff see, beside each donor, whether collection can start and why not (IT-03).
+    for donor in page:
+        donor.can_collect, donor.collect_note = collection_status(donor)
+    return render(request, "donors/search.html", {"page": page, "query": query, "sort": sort})
 
 
 @role_required(*STAFF_ROLES)
@@ -103,5 +106,24 @@ def screening_result(request, pk):
             "screening": screening,
             "donor": screening.donor,
             "reasons": [r for r in screening.reasons.split("\n") if r],
+        },
+    )
+
+
+@role_required(Role.DONOR)
+def dashboard(request):
+    """A donor's own eligibility, next eligible date and days remaining (UC2, REQ-8)."""
+    donor = get_object_or_404(Donor, user=request.user, is_active=True)
+    today = date.today()
+    days_remaining = None
+    if donor.next_eligible_date and donor.next_eligible_date > today:
+        days_remaining = (donor.next_eligible_date - today).days
+    return render(
+        request,
+        "donors/dashboard.html",
+        {
+            "donor": donor,
+            "eligible": donor.eligibility_status == Eligibility.ELIGIBLE,
+            "days_remaining": days_remaining,
         },
     )
