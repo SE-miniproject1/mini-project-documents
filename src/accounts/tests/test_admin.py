@@ -4,20 +4,7 @@ from django.urls import reverse
 from audit.models import AuditEntry, Event
 
 from ..models import Hospital, Role, User
-from .helpers import STRONG_PASSWORD, make_user
-
-
-def make_hospital(**overrides):
-    fields = {
-        "name": "City General",
-        "address": "1 MG Road, Bengaluru",
-        "licence_number": "KA-H-0001",
-        "contact_name": "Dr Rao",
-        "contact_phone": "9876543210",
-        "contact_email": "bloodbank@citygeneral.example",
-    }
-    fields.update(overrides)
-    return Hospital.objects.create(**fields)
+from .helpers import STRONG_PASSWORD, make_hospital, make_user
 
 
 class AdminTestCase(TestCase):

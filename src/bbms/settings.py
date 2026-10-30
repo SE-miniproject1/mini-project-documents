@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "donors",
     "collection",
     "inventory",
+    "bloodrequests",
     "audit",
 ]
 
