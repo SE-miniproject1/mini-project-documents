@@ -101,3 +101,22 @@ class Donor(models.Model):
         self.email = (self.email or "").strip().lower()
         super().save(*args, **kwargs)
         self._loaded_donor_id = self.donor_id
+
+
+class DonorScreening(models.Model):
+    """One screening visit: what was measured and the outcome (SRS REQ-6, UC4)."""
+
+    donor = models.ForeignKey(Donor, on_delete=models.PROTECT, related_name="screenings")
+    screened_at = models.DateTimeField(auto_now_add=True)
+    screened_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    weight_kg = models.DecimalField(max_digits=5, decimal_places=1)
+    haemoglobin = models.DecimalField(max_digits=4, decimal_places=1)
+    systolic_bp = models.PositiveSmallIntegerField()
+    outcome = models.CharField(max_length=20, choices=Eligibility.choices)
+    reasons = models.TextField(blank=True)
+    review_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-screened_at"]

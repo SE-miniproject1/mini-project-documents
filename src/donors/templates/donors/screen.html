@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+{% block title %}Screen donor{% endblock %}
+{% block content %}
+<h1>Screen {{ donor.full_name }}</h1>
+<dl class="facts">
+  <dt>Donor ID</dt><dd>{{ donor.donor_id }}</dd>
+  <dt>Blood group</dt><dd>{{ donor.blood_group }}</dd>
+  <dt>Last donation</dt><dd>{{ donor.last_donation_date|date:"d-m-Y"|default:"None" }}</dd>
+  <dt>Current status</dt><dd>{{ donor.eligibility_status }}</dd>
+</dl>
+{% include "core/_form.html" with submit_label="Evaluate" %}
+{% endblock %}

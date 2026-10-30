@@ -93,3 +93,11 @@ table.data td.num, table.data th.num { text-align: right; font-variant-numeric: 
   .site-header, .site-nav, .site-footer, .no-print { display: none !important; }
   .layout { display: block; }
 }
+
+.search-bar { display: flex; gap: .75rem; align-items: end; flex-wrap: wrap; margin-bottom: 1rem; }
+.search-bar label { display: block; font-weight: 600; }
+.search-bar input { min-width: 18rem; }
+dl.facts { display: grid; grid-template-columns: max-content 1fr; gap: .25rem 1.5rem; max-width: 36rem; }
+dl.facts dt { font-weight: 600; }
+dl.facts dd { margin: 0; }
+.btn-disabled { display: inline-block; color: var(--muted); text-decoration: line-through; cursor: not-allowed; }

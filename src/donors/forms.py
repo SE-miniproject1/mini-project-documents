@@ -7,6 +7,7 @@ from accounts.models import Role, User
 
 from .models import Donor
 from .notifications import send_welcome
+from .services.eligibility import apply_result, evaluate_eligibility
 from .services.id_generator import generate_donor_id
 from .validators import ensure_email_unused, ensure_mobile_unused, validate_age
 
@@ -115,6 +116,22 @@ class DonorRegistrationForm(forms.ModelForm):
             donor.donor_id = donor_id
             donor.user = user
             donor.consent_timestamp = timezone.now()
+            # Check what can already be checked, such as weight (SRS REQ-6).
+            apply_result(donor, evaluate_eligibility(donor))
             donor.save()
         transaction.on_commit(lambda: send_welcome(donor))
         return donor
+
+
+class ScreeningForm(forms.Form):
+    """Measurements taken by staff at screening (SRS REQ-6)."""
+
+    weight_kg = forms.DecimalField(
+        label="Weight (kg)", max_digits=5, decimal_places=1, min_value=1, max_value=300
+    )
+    haemoglobin = forms.DecimalField(
+        label="Haemoglobin (g/dL)", max_digits=4, decimal_places=1, min_value=1, max_value=25
+    )
+    systolic_bp = forms.IntegerField(
+        label="Systolic blood pressure (mmHg)", min_value=40, max_value=300
+    )
