@@ -9,6 +9,19 @@
     });
   }
 
+  // Live panels refresh themselves (SRS NFR-P5: a change is visible within 5 seconds).
+  // Without scripting the page still shows current data on every load.
+  document.querySelectorAll("[data-live]").forEach(function (panel) {
+    var interval = parseInt(panel.dataset.interval, 10) || 5000;
+    setInterval(function () {
+      if (document.hidden) { return; }
+      fetch(panel.dataset.live, { credentials: "same-origin", headers: { "X-Requested-With": "fetch" } })
+        .then(function (response) { return response.ok ? response.text() : null; })
+        .then(function (html) { if (html) { panel.innerHTML = html; } })
+        .catch(function () { /* keep the last good data */ });
+    }, interval);
+  });
+
   // Print buttons (unit labels). No inline script, so the page works under a strict policy.
   document.querySelectorAll("[data-print]").forEach(function (button) {
     button.addEventListener("click", function () { window.print(); });

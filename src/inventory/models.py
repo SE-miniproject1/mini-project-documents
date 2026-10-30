@@ -79,6 +79,13 @@ class BloodUnit(models.Model):
 
     class Meta:
         ordering = ["unit_id"]
+        indexes = [
+            # The stock grid and the availability search filter on these together.
+            models.Index(
+                fields=["status", "blood_group", "component_type"], name="unit_stock_idx"
+            ),
+            models.Index(fields=["status", "expiry_date"], name="unit_expiry_idx"),
+        ]
         constraints = [
             models.CheckConstraint(
                 condition=Q(expiry_date__gte=models.F("collection_date")),
