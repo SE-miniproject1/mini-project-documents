@@ -78,3 +78,50 @@ class BloodRequest(models.Model):
             RequestStatus.APPROVED,
             RequestStatus.PARTIAL,
         )
+
+
+class Allocation(models.Model):
+    """One unit set aside for one request, then issued or released (SRS REQ-28, REQ-29).
+
+    The row is the issue record: request, unit, issuing staff member, receiving hospital (via
+    the request) and timestamp. A unit can have only one live (unreleased) allocation, which the
+    database enforces, so two staff can never both claim it (SRS NFR-S3).
+    """
+
+    request = models.ForeignKey(BloodRequest, on_delete=models.PROTECT, related_name="allocations")
+    unit = models.ForeignKey(
+        "inventory.BloodUnit", on_delete=models.PROTECT, related_name="allocations"
+    )
+    allocated_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="+"
+    )
+    allocated_at = models.DateTimeField(auto_now_add=True)
+    issued_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT, related_name="+"
+    )
+    issued_at = models.DateTimeField(null=True, blank=True)
+    released_at = models.DateTimeField(null=True, blank=True)
+    release_reason = models.CharField(max_length=60, blank=True)
+
+    class Meta:
+        ordering = ["allocated_at", "pk"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["unit"],
+                condition=Q(released_at__isnull=True),
+                name="one_live_allocation_per_unit",
+            ),
+            models.CheckConstraint(
+                condition=Q(issued_at__isnull=True) | Q(released_at__isnull=True),
+                name="allocation_not_issued_and_released",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.request.request_id} <- {self.unit.unit_id}"
+
+    @property
+    def state(self):
+        if self.released_at:
+            return "Released"
+        return "Issued" if self.issued_at else "Reserved"

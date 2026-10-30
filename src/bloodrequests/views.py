@@ -6,8 +6,17 @@ from accounts.models import Role
 from accounts.permissions import STAFF_ROLES, role_required
 from core.listing import apply_sort, paginate
 
+from .allocation import (
+    ALLOCATABLE,
+    CANCELLABLE,
+    allocate_units,
+    cancel_request,
+    candidate_units,
+    issue_reserved,
+    release_allocation,
+)
 from .forms import RejectForm, RequestForm
-from .models import BloodRequest, RequestStatus
+from .models import Allocation, BloodRequest, RequestStatus
 from .services import RequestError, available_count, create_request, hospital_for
 from .workflow import OPEN_STATUSES, WorkflowError, approve_request, queue, reject_request
 
@@ -88,6 +97,18 @@ def detail(request, request_id):
             "available": available_count(blood_request.blood_group, blood_request.component_type),
             "is_staff": request.user.role == Role.STAFF,
             "reject_form": RejectForm(),
+            "allocations": blood_request.allocations.select_related("unit").order_by("pk"),
+            "can_allocate": request.user.role == Role.STAFF
+            and blood_request.status in ALLOCATABLE,
+            "candidates": candidate_units(blood_request)[:50]
+            if blood_request.status in ALLOCATABLE
+            else [],
+            "has_reserved": blood_request.allocations.filter(
+                released_at__isnull=True, issued_at__isnull=True
+            ).exists(),
+            "can_cancel": request.user.role == Role.HOSPITAL
+            and blood_request.status in CANCELLABLE
+            and not blood_request.quantity_issued,
         },
     )
 
@@ -131,4 +152,63 @@ def reject(request, request_id):
                 messages.success(request, f"Request {request_id} was rejected.")
         else:
             messages.error(request, "Choose a reason before rejecting a request.")
+    return redirect("requests:detail", request_id=request_id)
+
+
+def _staff_action(request, request_id, action, success):
+    blood_request = get_object_or_404(BloodRequest, request_id=request_id)
+    if request.method == "POST":
+        try:
+            action(blood_request)
+        except WorkflowError as problem:
+            messages.error(request, str(problem))
+        else:
+            messages.success(request, success)
+    return redirect("requests:detail", request_id=request_id)
+
+
+@role_required(Role.STAFF)
+def allocate(request, request_id):
+    return _staff_action(
+        request,
+        request_id,
+        lambda r: allocate_units(r, request.POST.getlist("unit_ids"), by=request.user),
+        "The chosen units are reserved.",
+    )
+
+
+@role_required(Role.STAFF)
+def issue(request, request_id):
+    return _staff_action(
+        request,
+        request_id,
+        lambda r: issue_reserved(r, by=request.user),
+        "The reserved units were issued.",
+    )
+
+
+@role_required(Role.STAFF)
+def release(request, request_id, allocation_id):
+    get_object_or_404(Allocation, pk=allocation_id, request__request_id=request_id)
+    return _staff_action(
+        request,
+        request_id,
+        lambda r: release_allocation(allocation_id, by=request.user),
+        "The unit was released back to stock.",
+    )
+
+
+@role_required(Role.HOSPITAL)
+def cancel(request, request_id):
+    hospital = hospital_for(request.user)
+    blood_request = get_object_or_404(BloodRequest, request_id=request_id)
+    if hospital is None or blood_request.hospital_id != hospital.pk:
+        raise Http404
+    if request.method == "POST":
+        try:
+            cancel_request(blood_request, by=request.user)
+        except WorkflowError as problem:
+            messages.error(request, str(problem))
+        else:
+            messages.success(request, f"Request {request_id} was cancelled.")
     return redirect("requests:detail", request_id=request_id)
