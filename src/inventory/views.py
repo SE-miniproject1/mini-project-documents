@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -6,6 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from accounts.permissions import STAFF_ROLES, role_required
+from core import config
 from core.listing import apply_sort, paginate
 
 from .forms import SeparationForm
@@ -42,7 +42,7 @@ def console(request):
         "statuses": status_counts(),
         "as_of": timezone.localtime(),
         "near_expiry": near_expiry,
-        "near_expiry_days": settings.BBMS_NEAR_EXPIRY_DAYS,
+        "near_expiry_days": config.near_expiry_days(),
     }
     if request.GET.get("partial"):
         return render(request, "inventory/_live.html", context)

@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% block title %}Request {{ req.request_id }}{% endblock %}
+{% block content %}
+<h1>Request {{ req.request_id }}</h1>
+<p><span class="badge {% if req.status == 'Fulfilled' %}ok{% elif req.status == 'Rejected' or req.status == 'Cancelled' %}bad{% endif %}">{{ req.status }}</span>
+  {% if req.urgency == 'Emergency' %}<strong>Emergency</strong>{% endif %}</p>
+<dl class="facts">
+  <dt>Hospital</dt><dd>{{ req.hospital.name }}</dd>
+  <dt>Blood</dt><dd>{{ req.blood_group }} {{ req.component_type }}</dd>
+  <dt>Units</dt><dd>{{ req.quantity_requested }} requested, {{ req.quantity_issued }} issued{% if req.is_open and req.quantity_issued %}, {{ req.shortfall }} outstanding{% endif %}</dd>
+  <dt>Urgency</dt><dd>{{ req.urgency }}</dd>
+  <dt>Required by</dt><dd>{{ req.required_by|date:"d-m-Y H:i" }}</dd>
+  <dt>Patient reference</dt><dd>{{ req.patient_reference }}</dd>
+  <dt>Raised</dt><dd>{{ req.raised_on|date:"d-m-Y H:i" }}</dd>
+  {% if req.rejection_reason %}<dt>Rejection reason</dt><dd>{{ req.rejection_reason }}</dd>{% endif %}
+</dl>
+{% if req.is_open %}<p>Available now: <strong>{{ available }}</strong> unit{{ available|pluralize }} of {{ req.blood_group }} {{ req.component_type }}.</p>{% endif %}
+{% endblock %}

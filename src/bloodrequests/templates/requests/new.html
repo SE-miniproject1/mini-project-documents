@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Raise a request{% endblock %}
+{% block content %}
+<h1>Raise a blood request</h1>
+<p>Emergency requests go to the top of the blood bank's queue. Use a patient reference code, never a name.</p>
+{% include "core/_form.html" with submit_label="Raise request" %}
+{% endblock %}

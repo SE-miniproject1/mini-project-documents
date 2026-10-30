@@ -2,9 +2,9 @@
 
 from datetime import timedelta
 
-from django.conf import settings
+from core import config
 
 
 def expiry_date_for(component_type, collection_date):
-    days = settings.BBMS_SHELF_LIFE_DAYS[component_type]
+    days = config.shelf_life_days(component_type)
     return collection_date + timedelta(days=days)
