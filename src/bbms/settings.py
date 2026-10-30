@@ -249,3 +249,14 @@ BBMS_SEPARATION = {
     "FFP": {"storage": "FREEZER-B1", "suggested_ml": 150},
     "Platelets": {"storage": "PLATELET-AGITATOR-1", "suggested_ml": 50},
 }
+
+# Reasons staff choose from when rejecting a hospital request (SRS REQ-27). The SRS says the
+# list is configured but does not give it; these are the usual blood bank reasons.
+BBMS_REJECTION_REASONS = [
+    "Insufficient stock of the requested group",
+    "Requested component is not stocked",
+    "Request details are unclear or incomplete",
+    "Duplicate of an existing request",
+    "Hospital is not authorised to receive blood",
+    "Request withdrawn by the hospital",
+]
