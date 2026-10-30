@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% block title %}{{ camp.name }}{% endblock %}
+{% block content %}
+<h1>{{ camp.name }}</h1>
+<p><span class="badge">{{ camp.status }}</span> {{ camp.camp_id }}</p>
+<dl class="facts">
+  <dt>Date</dt><dd>{{ camp.camp_date|date:"d-m-Y" }}, {{ camp.start_time|time:"H:i" }} to {{ camp.end_time|time:"H:i" }}</dd>
+  <dt>Venue</dt><dd>{{ camp.venue_address }}</dd>
+  <dt>Organiser</dt><dd>{{ camp.organiser_name }}, {{ camp.organiser_contact }}</dd>
+  <dt>Target</dt><dd>{{ camp.target_units }} units</dd>
+  {% if camp.units_collected is not None %}<dt>Collected</dt><dd>{{ camp.units_collected }} units</dd>{% endif %}
+</dl>
+<h2>Enrolled donors ({{ enrolments|length }})</h2>
+<table class="data">
+  <thead><tr><th scope="col">Donor</th><th scope="col">Name</th><th scope="col">Blood group</th><th scope="col">Enrolled</th></tr></thead>
+  <tbody>
+    {% for e in enrolments %}<tr><th scope="row">{{ e.donor.donor_id }}</th><td>{{ e.donor.full_name }}</td><td>{{ e.donor.blood_group }}</td><td>{{ e.enrolled_at|date:"d-m-Y" }}</td></tr>
+    {% empty %}<tr><td colspan="4">Nobody has enrolled yet.</td></tr>{% endfor %}
+  </tbody>
+</table>
+<p><a href="{% url 'camps:manage' %}" data-shortcut="cancel">Back to camps</a></p>
+{% endblock %}
