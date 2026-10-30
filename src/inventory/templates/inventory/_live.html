@@ -1,0 +1,29 @@
+<section aria-labelledby="stock-heading">
+  <h2 id="stock-heading">Available units by blood group and component</h2>
+  <p class="muted">{{ grid.total }} available. Updated {{ as_of|date:"H:i:s" }}. Quarantined, reserved, issued, expired and discarded units are not counted.</p>
+  <div class="scroll-x">
+  <table class="data stock">
+    <caption class="sr-only">Count of available units for each blood group and component</caption>
+    <thead>
+      <tr>
+        <th scope="col">Blood group</th>
+        {% for component in grid.components %}<th scope="col" class="num">{{ component }}</th>{% endfor %}
+        <th scope="col" class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for group, counts, total in grid.rows %}
+      <tr>
+        <th scope="row">{{ group }}</th>
+        {% for count in counts %}<td class="num{% if not count %} zero{% endif %}">{{ count }}</td>{% endfor %}
+        <td class="num"><strong>{{ total }}</strong></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <h2>All units by status</h2>
+  <ul class="status-tiles">
+    {% for status, count in statuses.items %}<li><span class="tile-count">{{ count }}</span> {{ status }}</li>{% endfor %}
+  </ul>
+</section>
