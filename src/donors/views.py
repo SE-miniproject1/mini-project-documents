@@ -81,7 +81,11 @@ def screen(request, donor_id):
     donor = get_object_or_404(Donor, donor_id=donor_id, is_active=True)
     form = ScreeningForm(request.POST or None, initial={"weight_kg": donor.weight_kg})
     if request.method == "POST" and form.is_valid():
-        screening, result = apply_screening(donor, screened_by=request.user, **form.cleaned_data)
+        data = dict(form.cleaned_data)
+        declared = list(data.pop("declared_conditions"))
+        screening, result = apply_screening(
+            donor, screened_by=request.user, declared=declared, **data
+        )
         logger.info(
             "screening recorded donor_id=%s outcome=%s user_id=%s",
             donor.donor_id,

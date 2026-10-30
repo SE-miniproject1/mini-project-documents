@@ -120,3 +120,57 @@ class DonorScreening(models.Model):
 
     class Meta:
         ordering = ["-screened_at"]
+
+
+class ConditionKind(models.TextChoices):
+    PERMANENT = "permanent", "Permanent deferral"
+    TEMPORARY = "temporary", "Temporary deferral"
+
+
+class DeferralCondition(models.Model):
+    """A medical condition a donor can declare, and what it means for donating (SRS REQ-5).
+
+    The list is configurable: administrators add, retire and change conditions without a
+    code change. Retired conditions stay in the database because earlier declarations
+    refer to them.
+    """
+
+    name = models.CharField(max_length=60, unique=True)
+    kind = models.CharField(max_length=10, choices=ConditionKind.choices)
+    # How long a temporary condition defers the donor. Empty for a permanent one.
+    deferral_days = models.PositiveSmallIntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["sort_order", "name"]
+        constraints = [
+            models.CheckConstraint(
+                condition=(Q(kind="permanent", deferral_days__isnull=True))
+                | (Q(kind="temporary", deferral_days__isnull=False, deferral_days__gt=0)),
+                name="condition_days_match_kind",
+            ),
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class DonorDeclaration(models.Model):
+    """One condition declared by one donor, with when and by whom it was recorded."""
+
+    donor = models.ForeignKey(Donor, on_delete=models.PROTECT, related_name="declarations")
+    condition = models.ForeignKey(DeferralCondition, on_delete=models.PROTECT, related_name="+")
+    declared_at = models.DateTimeField(auto_now_add=True)
+    # Empty when the donor declared it themselves at registration.
+    recorded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT, related_name="+"
+    )
+
+    class Meta:
+        ordering = ["declared_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["donor", "condition"], name="one_declaration_per_condition"
+            ),
+        ]
