@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "core",
     "donors",
     "collection",
+    "inventory",
 ]
 
 MIDDLEWARE = [
@@ -219,4 +220,13 @@ BBMS_ELIGIBILITY = {
     # How long a physical-criteria deferral (weight, haemoglobin, blood pressure) lasts
     # before the donor is re-evaluated. The SRS does not state a figure.
     "deferral_review_days": 30,
+}
+
+# Shelf life in days from collection, by component (SRS BR-4).
+BBMS_SHELF_LIFE_DAYS = {
+    "Whole Blood": 35,
+    "PRBC": 42,
+    "FFP": 365,
+    "Platelets": 5,
+    "Cryoprecipitate": 365,
 }
