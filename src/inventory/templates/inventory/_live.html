@@ -22,6 +22,11 @@
     </tbody>
   </table>
   </div>
+  <h2>Near expiry</h2>
+  <p>
+    {% if near_expiry %}<span class="badge bad">{{ near_expiry|length }} unit{{ near_expiry|length|pluralize }} expiring within {{ near_expiry_days }} days</span>
+    {% else %}<span class="badge ok">None expiring within {{ near_expiry_days }} days</span>{% endif %}
+  </p>
   <h2>All units by status</h2>
   <ul class="status-tiles">
     {% for status, count in statuses.items %}<li><span class="tile-count">{{ count }}</span> {{ status }}</li>{% endfor %}

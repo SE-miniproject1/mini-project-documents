@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -7,6 +8,7 @@ from core.listing import apply_sort, paginate
 
 from .models import BloodUnit, Status
 from .services.barcode import code128_svg
+from .services.expiry import near_expiry_units
 from .services.stock import status_counts, stock_grid
 
 
@@ -30,10 +32,13 @@ def console(request):
     `?partial=1` returns only the live panel, which the page fetches every few seconds so
     one person's change reaches everyone else well inside the 5 seconds NFR-P5 allows.
     """
+    near_expiry = near_expiry_units()
     context = {
         "grid": stock_grid(),
         "statuses": status_counts(),
         "as_of": timezone.localtime(),
+        "near_expiry": near_expiry,
+        "near_expiry_days": settings.BBMS_NEAR_EXPIRY_DAYS,
     }
     if request.GET.get("partial"):
         return render(request, "inventory/_live.html", context)
