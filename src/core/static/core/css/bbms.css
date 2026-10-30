@@ -107,3 +107,11 @@ dl.facts dd { margin: 0; }
 .label-card .barcode { display: block; width: 100%; height: auto; }
 .label-id { font: 700 1.2rem ui-monospace, Menlo, Consolas, monospace; text-align: center; margin: .3rem 0; }
 .label-group { font-size: 3rem; font-weight: 800; text-align: center; margin: 0; line-height: 1.1; }
+.sr-only { position: absolute; left: -9999px; }
+
+.muted { color: var(--muted); }
+.scroll-x { overflow-x: auto; }
+table.stock td.zero { color: var(--muted); }
+.status-tiles { list-style: none; padding: 0; display: flex; gap: .75rem; flex-wrap: wrap; }
+.status-tiles li { border: 1px solid var(--line); border-radius: 6px; padding: .5rem .9rem; background: var(--band); }
+.tile-count { font-weight: 800; font-size: 1.3rem; margin-right: .3rem; }

@@ -231,3 +231,6 @@ BBMS_SHELF_LIFE_DAYS = {
     "Platelets": 5,
     "Cryoprecipitate": 365,
 }
+
+# Where a unit is shelved when it is released from quarantine. Staff can move it later (REQ-21).
+BBMS_DEFAULT_STORAGE_LOCATION = "FRIDGE-A1"
