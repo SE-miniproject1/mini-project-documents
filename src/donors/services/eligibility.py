@@ -8,9 +8,9 @@ decimals, because this rule protects donors and recipients and must not round.
 from dataclasses import dataclass
 from datetime import date, timedelta
 
-from django.conf import settings
 from django.db import transaction
 
+from core import config
 from donors.models import ConditionKind, DonorDeclaration, DonorScreening, Eligibility
 from donors.validators import add_years, age_on
 
@@ -44,7 +44,7 @@ class EligibilityResult:
 
 
 def rules():
-    return settings.BBMS_ELIGIBILITY
+    return config.eligibility_rules()
 
 
 def next_eligible_date(last_donation_date):

@@ -23,6 +23,25 @@ class BBMSUserManager(UserManager):
         return super().create_superuser(username, email, password, **extra_fields)
 
 
+class Hospital(models.Model):
+    """A hospital that may raise blood requests (SRS REQ-45). Deactivated, never deleted."""
+
+    name = models.CharField(max_length=120)
+    address = models.CharField(max_length=250)
+    licence_number = models.CharField(max_length=40, unique=True)
+    contact_name = models.CharField(max_length=100)
+    contact_phone = models.CharField(max_length=20)
+    contact_email = models.EmailField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     """Every account has one role. Accounts are deactivated, never deleted (CON-6)."""
 
@@ -30,6 +49,9 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.DONOR)
     failed_login_count = models.PositiveSmallIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
+    hospital = models.ForeignKey(
+        Hospital, null=True, blank=True, on_delete=models.PROTECT, related_name="users"
+    )
 
     objects = BBMSUserManager()
     REQUIRED_FIELDS = ["email", "role"]
