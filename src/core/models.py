@@ -21,3 +21,22 @@ class IdSequence(models.Model):
             cls.objects.get_or_create(name=name, defaults={"last_value": start - 1})
             cls.objects.filter(name=name).update(last_value=F("last_value") + 1)
             return cls.objects.values_list("last_value", flat=True).get(name=name)
+
+
+class ConfigValue(models.Model):
+    """An administrator's override of a built-in default (SRS REQ-46).
+
+    Defaults live in settings; a row here wins. The value is read on every use, so a change
+    takes effect without a restart or a code change. Values are stored as text and parsed
+    by the schema in `core.config`.
+    """
+
+    key = models.CharField(max_length=60, unique=True)
+    value = models.CharField(max_length=40)
+    updated_by = models.ForeignKey(
+        "accounts.User", null=True, on_delete=models.PROTECT, related_name="+"
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.key}={self.value}"
