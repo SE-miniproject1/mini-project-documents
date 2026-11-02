@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block title %}Camp management{% endblock %}
+{% block content %}
+<h1>Camp management</h1>
+<p class="actions">
+  <a class="btn primary" href="{% url 'camps:new' %}" data-shortcut="new">Schedule a camp</a>
+  {% if show == 'open' %}<a class="btn" href="?show=all">Show completed and cancelled</a>{% else %}<a class="btn" href="?show=open">Show scheduled only</a>{% endif %}
+</p>
+<div class="scroll-x">
+<table class="data">
+  <thead><tr><th scope="col">Camp</th><th scope="col">Date</th><th scope="col">Venue</th><th scope="col">Target</th><th scope="col">Collected</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+    {% for camp in page %}
+    <tr>
+      <th scope="row"><a href="{% url 'camps:detail' camp.camp_id %}">{{ camp.name }}</a></th><td>{{ camp.camp_date|date:"d-m-Y" }}</td>
+      <td>{{ camp.venue_address }}</td><td>{{ camp.target_units }}</td><td>{{ camp.units_collected|default_if_none:"" }}</td><td>{{ camp.status }}</td>
+    </tr>
+    {% empty %}<tr><td colspan="6">No camps to show.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% include "core/_pagination.html" %}
+{% endblock %}
