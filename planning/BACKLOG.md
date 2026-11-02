@@ -43,3 +43,20 @@ Source: `docs/SRS.md` v1.0 (46 functional requirements, NFRs, constraints). Poin
 | US-27 | Safety rule tests and concurrency hardening | NFR-S1, NFR-S2, NFR-S3, NFR-S4 | 3 | High | Sprint 2 | Balaraj |
 | US-28 | Security, quality and performance hardening | NFR-SEC9, NFR-Q5, NFR-P1, NFR-P3 | 5 | Medium | Stretch | Balaraj |
 | US-29 | Documentation, deviations log and demo video | OR-6 | 2 | High | Sprint 2 | Niveditha |
+
+## Close-out, 02 Nov 2026
+
+Every Sprint 1 and Sprint 2 feature story is merged to `main`: the stacked pull requests #57, #61, #69, #70, #72, #73 and #75, then #87 for US-27. CI runs the suite on SQLite and on PostgreSQL 16.
+
+| Story | State | Note |
+|---|---|---|
+| US-01 to US-13, US-15 to US-19, US-21, US-22, US-26, US-27 | Merged | |
+| US-20 Cancel request (Stretch) | Merged | Built with US-19 in #73 |
+| US-29 Documentation, deviations log and demo video | Open | Deployment guide in #85; demo video in #66. The deviations log is kept up to date with each story |
+| US-14 Inventory filters, transfer and manual discard | Deferred | Not started. D-29 and D-32 stay open |
+| US-23 Availability search for hospitals | Deferred | Not started |
+| US-24 Notifications: dispatcher, reminders, shortage appeal | Deferred | Not started. Emails sent directly by each story stand in for now (D-54, D-57, D-67) |
+| US-25 Reports, export and data scoping | Deferred | Report definitions proposed in #86 |
+| US-28 Security, quality and performance hardening | Deferred | Proposed in #77 |
+
+Deferred stories stay open on the Stretch milestone and are not part of the Sprint 2 freeze.
