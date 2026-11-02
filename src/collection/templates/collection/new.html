@@ -1,0 +1,11 @@
+{% extends "core/base.html" %}
+{% block title %}Record a donation{% endblock %}
+{% block content %}
+<h1>Record a donation</h1>
+<dl class="facts">
+  <dt>Donor</dt><dd>{{ donor.full_name }} ({{ donor.donor_id }})</dd>
+  <dt>Blood group</dt><dd>{{ donor.blood_group }}</dd>
+  <dt>Status</dt><dd><span class="badge ok">Eligible</span></dd>
+</dl>
+{% include "core/_form.html" with submit_label="Save donation" %}
+{% endblock %}
