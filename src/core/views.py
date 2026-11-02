@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_not_required
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from .help_text import GENERAL, help_for
+
 
 @login_not_required
 def health(request):
@@ -11,3 +13,11 @@ def health(request):
 
 def home(request):
     return render(request, "core/home.html")
+
+
+def help_page(request):
+    """Help for the screen the user came from, passed as ?topic=<url name>."""
+    topic = request.GET.get("topic", "")
+    return render(
+        request, "core/help.html", {"topic_text": help_for(topic), "general_text": GENERAL}
+    )

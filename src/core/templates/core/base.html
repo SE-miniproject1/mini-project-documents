@@ -1,11 +1,58 @@
-<!doctype html>
+{% load static %}<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Blood Bank Management System{% endblock %}</title>
+  <title>{% block title %}Home{% endblock %} | Blood Bank Management System</title>
+  <link rel="stylesheet" href="{% static 'core/css/bbms.css' %}">
 </head>
-<body>
-  <main>{% block content %}{% endblock %}</main>
+<body{% if shortcuts_enabled %} data-shortcuts="on"{% endif %}>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    {% if user.is_authenticated %}
+    <button type="button" class="nav-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
+    {% endif %}
+    <a class="brand" href="{% url 'home' %}">Blood Bank Management System</a>
+    {% if user.is_authenticated %}
+    <div class="header-user">
+      <span class="whoami">{{ user.get_full_name|default:user.get_username }}, {{ user.display_role }}</span>
+      <a href="{% url 'help' %}{% if current_url_name %}?topic={{ current_url_name|urlencode }}{% endif %}">Help</a>
+      <a href="{% url 'accounts:password_change' %}">Change password</a>
+      <form method="post" action="{% url 'accounts:logout' %}" class="inline">{% csrf_token %}
+        <button type="submit" class="link-button">Sign out</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="header-user"><a href="{% url 'help' %}?topic=accounts:login">Help</a></div>
+    {% endif %}
+  </header>
+
+  <div class="layout{% if not user.is_authenticated %} no-nav{% endif %}">
+    {% if user.is_authenticated %}
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        {% for link in nav_links %}
+        <li><a href="{{ link.url }}"{% if link.url_name == current_url_name %} aria-current="page"{% endif %}>{{ link.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+    <main id="main" tabindex="-1">
+      {% if messages %}
+      <div class="messages" role="status">
+        {% for message in messages %}<p class="message {{ message.tags }}">{{ message }}</p>{% endfor %}
+      </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <span>Blood Bank Management System, Release 1.0</span>
+    {% if shortcuts_enabled %}
+    <span>Shortcuts: Alt+N new, Alt+S save, Alt+F search, Esc cancel</span>
+    {% endif %}
+  </footer>
+  <script src="{% static 'core/js/bbms.js' %}" defer></script>
 </body>
 </html>
