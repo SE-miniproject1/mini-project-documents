@@ -45,3 +45,9 @@ def render_field(field):
             attrs={"aria-invalid": "true", "aria-describedby": f"{field.auto_id}_error"}
         )
     return field.as_widget()
+
+
+@register.filter
+def field_named(form, name):
+    """A form field looked up by name, for templates that loop over something else."""
+    return form[name]

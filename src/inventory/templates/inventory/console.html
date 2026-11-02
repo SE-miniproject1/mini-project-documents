@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+{% block title %}Inventory{% endblock %}
+{% block content %}
+<h1>Inventory</h1>
+<div data-live="{% url 'inventory:console' %}?partial=1" data-interval="5000">
+  {% include "inventory/_live.html" %}
+</div>
+
+<h2>Units waiting for test results</h2>
+<table class="data">
+  <thead>
+    <tr>
+      {% sort_header sort "unit" "Unit" %}
+      {% sort_header sort "group" "Blood group" %}
+      {% sort_header sort "component" "Component" %}
+      {% sort_header sort "collected" "Collected" %}
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for unit in page %}
+    <tr>
+      <td>{{ unit.unit_id }}</td>
+      <td>{{ unit.blood_group }}</td>
+      <td>{{ unit.get_component_type_display }}</td>
+      <td>{{ unit.collection_date|date:"d-m-Y" }}</td>
+      <td><a href="{% url 'collection:results' unit.unit_id %}">Enter results</a> | <a href="{% url 'inventory:label' unit.unit_id %}">Label</a></td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No units are waiting.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% include "core/_pagination.html" %}
+{% endblock %}

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "core",
     "donors",
     "collection",
+    "inventory",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,7 @@ LOGGING = {
     },
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "structured"}},
     "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {"pyBarcode": {"level": "WARNING"}},  # only SVG output is used
 }
 
 # ---------------------------------------------------------------------------
@@ -220,3 +222,15 @@ BBMS_ELIGIBILITY = {
     # before the donor is re-evaluated. The SRS does not state a figure.
     "deferral_review_days": 30,
 }
+
+# Shelf life in days from collection, by component (SRS BR-4).
+BBMS_SHELF_LIFE_DAYS = {
+    "Whole Blood": 35,
+    "PRBC": 42,
+    "FFP": 365,
+    "Platelets": 5,
+    "Cryoprecipitate": 365,
+}
+
+# Where a unit is shelved when it is released from quarantine. Staff can move it later (REQ-21).
+BBMS_DEFAULT_STORAGE_LOCATION = "FRIDGE-A1"

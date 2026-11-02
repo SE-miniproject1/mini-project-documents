@@ -99,6 +99,7 @@ def screen(request, donor_id):
 @role_required(*STAFF_ROLES)
 def screening_result(request, pk):
     screening = get_object_or_404(DonorScreening.objects.select_related("donor"), pk=pk)
+    can_collect, collect_note = collection_status(screening.donor)
     return render(
         request,
         "donors/screening_result.html",
@@ -106,6 +107,8 @@ def screening_result(request, pk):
             "screening": screening,
             "donor": screening.donor,
             "reasons": [r for r in screening.reasons.split("\n") if r],
+            "can_collect": can_collect,
+            "collect_note": collect_note,
         },
     )
 
