@@ -11,6 +11,7 @@ from django.db.models import Count
 
 from donors.models import BloodGroup
 from inventory.models import BloodUnit, Component, Status
+from inventory.services.expiry import near_expiry_units
 
 GROUPS = tuple(BloodGroup.values)
 COMPONENTS = tuple(Component.values)
@@ -51,3 +52,7 @@ def status_counts():
     """How many units are in each status, including statuses with none."""
     found = dict(BloodUnit.objects.values_list("status").annotate(n=Count("id")))
     return {status.value: found.get(status.value, 0) for status in Status}
+
+
+def near_expiry_count(today=None):
+    return len(near_expiry_units(today))

@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+{% block title %}Unit {{ unit.unit_id }}{% endblock %}
+{% block content %}
+<h1>Unit {{ unit.unit_id }}</h1>
+<p><span class="badge {% if unit.status == 'Available' %}ok{% elif unit.status == 'Discarded' or unit.status == 'Expired' %}bad{% endif %}">{{ unit.status }}</span>{% if unit.discard_reason %} {{ unit.discard_reason }}{% endif %}</p>
+<dl class="facts">
+  <dt>Blood group</dt><dd>{{ unit.blood_group }}</dd>
+  <dt>Component</dt><dd>{{ unit.get_component_type_display }}</dd>
+  <dt>Volume</dt><dd>{{ unit.volume_ml }} ml</dd>
+  <dt>Collected</dt><dd>{{ unit.collection_date|date:"d-m-Y" }}</dd>
+  <dt>Expires</dt><dd>{{ unit.expiry_date|date:"d-m-Y" }}</dd>
+  <dt>Stored</dt><dd>{{ unit.storage_location }}</dd>
+  <dt>Bag lot</dt><dd>{{ unit.bag_lot_number }}</dd>
+  {% if unit.parent_unit %}<dt>Separated from</dt><dd><a href="{% url 'inventory:unit_detail' unit.parent_unit.unit_id %}">{{ unit.parent_unit.unit_id }}</a></dd>{% endif %}
+</dl>
+{% if tests %}
+<h2>Screening results</h2>
+<table class="data"><thead><tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Date</th></tr></thead>
+<tbody>{% for test in tests %}<tr><th scope="row">{{ test.get_test_name_display }}</th><td>{{ test.result }}</td><td>{{ test.tested_on|date:"d-m-Y" }}</td></tr>{% endfor %}</tbody></table>
+{% endif %}
+{% if children %}
+<h2>Components made from this unit</h2>
+<table class="data"><thead><tr><th scope="col">Unit</th><th scope="col">Component</th><th scope="col">Volume</th><th scope="col">Expires</th><th scope="col">Status</th></tr></thead>
+<tbody>{% for child in children %}<tr><td><a href="{% url 'inventory:unit_detail' child.unit_id %}">{{ child.unit_id }}</a></td><td>{{ child.get_component_type_display }}</td><td>{{ child.volume_ml }} ml</td><td>{{ child.expiry_date|date:"d-m-Y" }}</td><td>{{ child.status }}</td></tr>{% endfor %}</tbody></table>
+{% endif %}
+<p class="actions">
+  {% if can_separate %}<a class="btn primary" href="{% url 'inventory:separate' unit.unit_id %}">Separate into components</a>{% endif %}
+  <a class="btn" href="{% url 'inventory:label' unit.unit_id %}">Label</a>
+  <a class="btn" href="{% url 'inventory:console' %}" data-shortcut="cancel">Back to inventory</a>
+</p>
+{% endblock %}
