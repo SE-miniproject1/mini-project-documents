@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% block title %}My eligibility{% endblock %}
+{% block content %}
+<h1>My eligibility</h1>
+<p>
+  {% if eligible %}<span class="badge ok">Eligible</span>
+  {% else %}<span class="badge bad">Not Eligible</span>{% endif %}
+</p>
+{% if eligible %}
+<p>You can donate now. Thank you for giving blood.</p>
+{% else %}
+<p>{{ donor.eligibility_status }}{% if donor.deferral_reason %}: {{ donor.deferral_reason }}{% endif %}.</p>
+{% endif %}
+<dl class="facts">
+  <dt>Donor ID</dt><dd>{{ donor.donor_id }}</dd>
+  <dt>Blood group</dt><dd>{{ donor.blood_group }}</dd>
+  <dt>Last donation</dt><dd>{{ donor.last_donation_date|date:"d-m-Y"|default:"None yet" }}</dd>
+  {% if donor.next_eligible_date and not eligible %}
+  <dt>Next eligible date</dt><dd>{{ donor.next_eligible_date|date:"d-m-Y" }}</dd>
+  {% endif %}
+  {% if days_remaining %}<dt>Days remaining</dt><dd>{{ days_remaining }}</dd>{% endif %}
+  {% if donor.deferral_review_date and not eligible and not donor.next_eligible_date %}
+  <dt>Review date</dt><dd>{{ donor.deferral_review_date|date:"d-m-Y" }}</dd>
+  {% endif %}
+</dl>
+{% endblock %}
