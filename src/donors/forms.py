@@ -5,9 +5,9 @@ from django.utils import timezone
 
 from accounts.models import Role, User
 
-from .models import Donor
+from .models import DeferralCondition, Donor
 from .notifications import send_welcome
-from .services.eligibility import apply_result, evaluate_eligibility
+from .services.eligibility import apply_result, evaluate_eligibility, record_declarations
 from .services.id_generator import generate_donor_id
 from .validators import ensure_email_unused, ensure_mobile_unused, validate_age
 
@@ -29,6 +29,13 @@ class DonorRegistrationForm(forms.ModelForm):
         label="Confirm password",
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
+    declared_conditions = forms.ModelMultipleChoiceField(
+        label="Do any of these apply to you?",
+        queryset=DeferralCondition.objects.none(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        help_text="Tick every one that applies. Leave blank if none do.",
     )
     consent = forms.BooleanField(
         label=CONSENT_TEXT,
@@ -62,6 +69,12 @@ class DonorRegistrationForm(forms.ModelForm):
             "emergency_contact_name": "Emergency contact name",
             "emergency_contact_number": "Emergency contact number",
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["declared_conditions"].queryset = DeferralCondition.objects.filter(
+            is_active=True
+        )
 
     def clean_date_of_birth(self):
         date_of_birth = self.cleaned_data["date_of_birth"]
@@ -117,8 +130,10 @@ class DonorRegistrationForm(forms.ModelForm):
             donor.user = user
             donor.consent_timestamp = timezone.now()
             # Check what can already be checked, such as weight (SRS REQ-6).
-            apply_result(donor, evaluate_eligibility(donor))
+            declared = list(self.cleaned_data["declared_conditions"])
+            apply_result(donor, evaluate_eligibility(donor, declared=declared))
             donor.save()
+            record_declarations(donor, declared)
         transaction.on_commit(lambda: send_welcome(donor))
         return donor
 
@@ -135,3 +150,15 @@ class ScreeningForm(forms.Form):
     systolic_bp = forms.IntegerField(
         label="Systolic blood pressure (mmHg)", min_value=40, max_value=300
     )
+    declared_conditions = forms.ModelMultipleChoiceField(
+        label="Conditions the donor declares",
+        queryset=DeferralCondition.objects.none(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["declared_conditions"].queryset = DeferralCondition.objects.filter(
+            is_active=True
+        )

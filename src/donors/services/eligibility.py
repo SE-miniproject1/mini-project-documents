@@ -11,7 +11,7 @@ from datetime import date, timedelta
 from django.conf import settings
 from django.db import transaction
 
-from donors.models import DonorScreening, Eligibility
+from donors.models import ConditionKind, DonorDeclaration, DonorScreening, Eligibility
 from donors.validators import add_years, age_on
 
 
@@ -55,13 +55,23 @@ def next_eligible_date(last_donation_date):
 
 
 def evaluate_eligibility(
-    donor, *, weight_kg=None, haemoglobin=None, systolic_bp=None, on=None, recorded=True
+    donor,
+    *,
+    weight_kg=None,
+    haemoglobin=None,
+    systolic_bp=None,
+    on=None,
+    recorded=True,
+    declared=(),
 ):
     """Check a donor against every criterion.
 
     Measurements that are not supplied fall back to the donor's recorded weight and
     haemoglobin. Blood pressure is only checked when measured. A criterion that cannot
     be checked yet is skipped, not assumed to pass or fail.
+
+    `declared` is a list of `DeferralCondition` the donor has just declared. A permanent
+    one defers the donor for good, a temporary one for its number of days (SRS REQ-5).
 
     With `recorded=False` the stored weight and haemoglobin are ignored, so only age
     and the donation interval are checked. The nightly job uses this: an old reading is
@@ -136,6 +146,27 @@ def evaluate_eligibility(
                 )
             )
 
+    for condition in declared:
+        if condition.kind == ConditionKind.PERMANENT:
+            failures.append(
+                Failure(
+                    "declared_permanent",
+                    condition.name,
+                    f"Declared condition: {condition.name}. Permanent deferral.",
+                    permanent=True,
+                )
+            )
+        else:
+            failures.append(
+                Failure(
+                    "declared_temporary",
+                    condition.name,
+                    f"Declared condition: {condition.name}. Deferred for "
+                    f"{condition.deferral_days} days.",
+                    review_date=on + timedelta(days=condition.deferral_days),
+                )
+            )
+
     if donor.eligibility_status == Eligibility.PERMANENT:
         # A permanent deferral is never lifted by a measurement (SRS REQ-5).
         kept = Failure(
@@ -162,12 +193,28 @@ def apply_result(donor, result):
         donor.next_eligible_date = next_eligible_date(donor.last_donation_date)
 
 
+def record_declarations(donor, conditions, *, by=None):
+    """Keep the declared conditions against the donor. Already-declared ones are skipped."""
+    for condition in conditions:
+        DonorDeclaration.objects.get_or_create(
+            donor=donor, condition=condition, defaults={"recorded_by": by}
+        )
+
+
 @transaction.atomic
-def apply_screening(donor, *, weight_kg, haemoglobin, systolic_bp, screened_by, on=None):
+def apply_screening(
+    donor, *, weight_kg, haemoglobin, systolic_bp, screened_by, on=None, declared=()
+):
     """Staff screening (UC4): evaluate, update the donor and keep a record of the visit."""
     result = evaluate_eligibility(
-        donor, weight_kg=weight_kg, haemoglobin=haemoglobin, systolic_bp=systolic_bp, on=on
+        donor,
+        weight_kg=weight_kg,
+        haemoglobin=haemoglobin,
+        systolic_bp=systolic_bp,
+        on=on,
+        declared=declared,
     )
+    record_declarations(donor, declared, by=screened_by)
     donor.weight_kg = weight_kg
     donor.haemoglobin = haemoglobin
     apply_result(donor, result)

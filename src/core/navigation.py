@@ -39,6 +39,7 @@ NAV_ITEMS = (
     # Reports and administration
     NavItem("Reports", "reports:index", (Role.STAFF, Role.HOSPITAL, Role.ADMIN)),
     NavItem("Users and roles", "accounts:user_admin", (Role.ADMIN,)),
+    NavItem("Audit log", "audit:log", (Role.ADMIN,)),
     NavItem("Configuration", "config:settings", (Role.ADMIN,)),
 )
 
