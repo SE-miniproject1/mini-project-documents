@@ -3,13 +3,38 @@
 from django.db import transaction
 from django.utils import timezone
 
+from camps.models import Camp, CampStatus
 from collection.models import Donation
-from collection.services.guard import ensure_can_collect
+from collection.services.guard import CollectionBlockedError, ensure_can_collect
 from donors.models import Donor
 from donors.services.eligibility import record_donation
 from inventory.models import BloodUnit, Component, Status
 from inventory.services.id_generator import generate_unit_id
 from inventory.services.shelf_life import expiry_date_for
+
+CENTRE = "Centre"
+
+
+def check_collection_site(site, collected_on):
+    """The centre, or a camp that is open and has started (SRS REQ-36, REQ-37).
+
+    The camp row is locked, so closing a camp and recording a collection against it cannot
+    both succeed at the same moment.
+    """
+    if site == CENTRE:
+        return None
+    camp = Camp.objects.select_for_update().filter(camp_id=site).first()
+    if camp is None:
+        raise CollectionBlockedError(f"{site} is not the centre or a known camp")
+    if camp.status != CampStatus.SCHEDULED:
+        raise CollectionBlockedError(
+            f"Camp {camp.camp_id} is {camp.status}; no more collections can be recorded against it"
+        )
+    if camp.camp_date > collected_on:
+        raise CollectionBlockedError(
+            f"Camp {camp.camp_id} is on {camp.camp_date:%d-%m-%Y}; it has not started"
+        )
+    return camp
 
 
 @transaction.atomic
@@ -26,6 +51,7 @@ def record_collection(
     collected_at = collected_at or timezone.now()
     collected_on = timezone.localtime(collected_at).date()
     ensure_can_collect(donor, collected_on)
+    check_collection_site(collection_site, collected_on)
 
     unit = BloodUnit.objects.create(
         unit_id=generate_unit_id(),
