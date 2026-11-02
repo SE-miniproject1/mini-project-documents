@@ -1,4 +1,4 @@
-"""Creating camps and enrolling donors (SRS REQ-32 to REQ-35)."""
+"""Creating, enrolling in and closing camps (SRS REQ-32 to REQ-35, REQ-37)."""
 
 import logging
 from datetime import date
@@ -9,6 +9,7 @@ from django.db import IntegrityError, transaction
 
 from audit.models import Event
 from audit.services import record_event
+from collection.models import Donation
 from core.models import IdSequence
 from donors.models import Eligibility
 from donors.services.eligibility import next_eligible_date
@@ -136,3 +137,31 @@ def send_confirmation(enrolment):
         logger.exception("camp confirmation failed for %s", enrolment.pk)
         return False
     return True
+
+
+@transaction.atomic
+def close_camp(camp, *, by):
+    """Complete a camp and report units collected against the target (SRS REQ-37)."""
+    current = Camp.objects.select_for_update().get(pk=camp.pk)
+    if current.status != CampStatus.SCHEDULED:
+        raise CampError(f"Camp {current.camp_id} is {current.status}, not Scheduled.")
+    current.units_collected = Donation.objects.filter(collection_site=current.camp_id).count()
+    current.status = CampStatus.COMPLETED
+    current.save(update_fields=["units_collected", "status"])
+    record_event(
+        Event.CONFIG_CHANGE,
+        actor=by,
+        entity_type="Camp",
+        entity_id=current.camp_id,
+        previous=CampStatus.SCHEDULED,
+        new=CampStatus.COMPLETED,
+        reason=f"{current.units_collected} of {current.target_units} units collected",
+    )
+    return current
+
+
+def attainment(camp):
+    """Percent of target reached, for a completed camp; None until it is closed."""
+    if camp.units_collected is None:
+        return None
+    return round(100 * camp.units_collected / camp.target_units)
