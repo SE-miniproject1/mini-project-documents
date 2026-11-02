@@ -94,9 +94,9 @@ class SeparateUnitTests(TestCase):
             separate_unit(parent, {"PRBC": 100})
 
     def test_a_unit_without_a_clean_panel_is_refused(self):
-        with self.assertRaisesMessage(SeparationError, "screening panel"):
+        with self.assertRaisesMessage(SeparationError, "screening is"):
             separate_unit(tested_unit(result=TestResult.REACTIVE), VOLUMES)
-        with self.assertRaisesMessage(SeparationError, "screening panel"):
+        with self.assertRaisesMessage(SeparationError, "screening is"):
             separate_unit(make_unit(status=Status.AVAILABLE), VOLUMES)
 
     def test_a_unit_past_expiry_or_a_product_already_out_of_date_is_refused(self):
