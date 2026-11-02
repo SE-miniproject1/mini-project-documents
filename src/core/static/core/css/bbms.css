@@ -80,6 +80,8 @@ table.data td.num, table.data th.num { text-align: right; font-variant-numeric: 
 .badge { display: inline-block; padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--line); font-size: .85rem; font-weight: 600; }
 .badge.ok { border-color: var(--ok); color: var(--ok); }
 .badge.bad { border-color: var(--danger); color: var(--danger); }
+tr.emergency th, tr.emergency td { border-left: 0; font-weight: 600; }
+tr.emergency th:first-child { border-left: 4px solid var(--danger); }
 
 @media (max-width: 767px) {
   .layout { grid-template-columns: 1fr; }

@@ -48,3 +48,15 @@ class RequestForm(forms.Form):
                 "Do not enter a patient's name."
             )
         return value.upper()
+
+
+class RejectForm(forms.Form):
+    reason = forms.ChoiceField(label="Reason for rejection")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from django.conf import settings
+
+        self.fields["reason"].choices = [("", "Choose a reason")] + [
+            (reason, reason) for reason in settings.BBMS_REJECTION_REASONS
+        ]

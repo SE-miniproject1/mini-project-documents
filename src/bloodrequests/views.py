@@ -6,9 +6,10 @@ from accounts.models import Role
 from accounts.permissions import STAFF_ROLES, role_required
 from core.listing import apply_sort, paginate
 
-from .forms import RequestForm
-from .models import BloodRequest
+from .forms import RejectForm, RequestForm
+from .models import BloodRequest, RequestStatus
 from .services import RequestError, available_count, create_request, hospital_for
+from .workflow import OPEN_STATUSES, WorkflowError, approve_request, queue, reject_request
 
 
 @role_required(Role.HOSPITAL)
@@ -85,5 +86,49 @@ def detail(request, request_id):
         {
             "req": blood_request,
             "available": available_count(blood_request.blood_group, blood_request.component_type),
+            "is_staff": request.user.role == Role.STAFF,
+            "reject_form": RejectForm(),
         },
     )
+
+
+@role_required(Role.STAFF)
+def staff_queue(request):
+    """Open requests, Emergency first (REQ-26)."""
+    show = request.GET.get("show", "open")
+    statuses = OPEN_STATUSES if show == "open" else tuple(RequestStatus.values)
+    return render(
+        request,
+        "requests/queue.html",
+        {"page": paginate(request, queue(statuses)), "show": show},
+    )
+
+
+@role_required(Role.STAFF)
+def approve(request, request_id):
+    blood_request = get_object_or_404(BloodRequest, request_id=request_id)
+    if request.method == "POST":
+        try:
+            approve_request(blood_request, by=request.user)
+        except WorkflowError as problem:
+            messages.error(request, str(problem))
+        else:
+            messages.success(request, f"Request {request_id} was approved.")
+    return redirect("requests:detail", request_id=request_id)
+
+
+@role_required(Role.STAFF)
+def reject(request, request_id):
+    blood_request = get_object_or_404(BloodRequest, request_id=request_id)
+    form = RejectForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            try:
+                reject_request(blood_request, by=request.user, reason=form.cleaned_data["reason"])
+            except WorkflowError as problem:
+                messages.error(request, str(problem))
+            else:
+                messages.success(request, f"Request {request_id} was rejected.")
+        else:
+            messages.error(request, "Choose a reason before rejecting a request.")
+    return redirect("requests:detail", request_id=request_id)
