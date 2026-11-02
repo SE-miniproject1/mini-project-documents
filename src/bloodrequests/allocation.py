@@ -14,6 +14,7 @@ from django.utils import timezone
 from audit.models import Event
 from audit.services import record_event
 from inventory.models import BloodUnit, Status
+from inventory.services.safety import screening_problem
 
 from .models import Allocation, BloodRequest, RequestStatus
 from .workflow import WorkflowError, notify_hospital
@@ -101,6 +102,9 @@ def allocate_units(request, unit_ids, *, by, today=None):
             raise WorkflowError(f"Unit {unit_id} has expired.")
         if unit.status != Status.AVAILABLE:
             raise WorkflowError(f"Unit {unit_id} is {unit.status}, not Available.")
+        problem = screening_problem(unit)
+        if problem:
+            raise WorkflowError(f"Unit {unit_id} cannot be allocated: {problem}.")
     for unit_id in unit_ids:
         unit = units[unit_id]
         unit.transition_to(Status.RESERVED, by=by, reason=f"Reserved for {current.request_id}")
@@ -124,6 +128,9 @@ def issue_reserved(request, *, by, today=None):
             raise WorkflowError(f"Unit {unit.unit_id} is {unit.status}, not Reserved.")
         if unit.expiry_date < today:
             raise WorkflowError(f"Unit {unit.unit_id} has expired and cannot be issued.")
+        problem = screening_problem(unit)
+        if problem:
+            raise WorkflowError(f"Unit {unit.unit_id} cannot be issued: {problem}.")
         unit.transition_to(Status.ISSUED, by=by, reason=f"Issued to {current.hospital.name}")
         allocation.issued_by = by
         allocation.issued_at = now

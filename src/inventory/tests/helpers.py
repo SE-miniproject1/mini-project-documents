@@ -24,6 +24,33 @@ def make_unit(*, status=Status.QUARANTINED, donor=None, discard_reason="", **ove
     }
     fields.update(overrides)
     unit = BloodUnit.objects.create(**fields)
+    return make_unit_move(unit, status, discard_reason)
+
+
+def clear_screening(unit, result="Non-Reactive", *, skip=()):
+    """Record a screening panel for `unit` the way the lab would (all five tests)."""
+    from accounts.models import Role, User
+    from accounts.tests.helpers import make_user
+    from collection.models import ScreeningTest, TestName
+
+    lab = User.objects.filter(username="lab01").first() or make_user("lab01", Role.STAFF)
+    for name in TestName.values:
+        if name not in skip:
+            ScreeningTest.objects.create(
+                unit=unit, test_name=name, result=result, tested_on=date.today(), tested_by=lab
+            )
+    return unit
+
+
+def make_cleared_unit(status=Status.AVAILABLE, **kwargs):
+    """A unit with a complete Non-Reactive panel, in any status."""
+    unit = make_unit(status=Status.QUARANTINED, **kwargs)
+    clear_screening(unit)
+    return make_unit_move(unit, status, kwargs.get("discard_reason", ""))
+
+
+def make_unit_move(unit, status, reason=""):
+    """Move a Quarantined unit to `status` through the legitimate transitions."""
     path = {
         Status.QUARANTINED: [],
         Status.AVAILABLE: [Status.AVAILABLE],
@@ -33,5 +60,5 @@ def make_unit(*, status=Status.QUARANTINED, donor=None, discard_reason="", **ove
         Status.DISCARDED: [Status.DISCARDED],
     }[Status(status)]
     for step in path:
-        unit.transition_to(step, reason=discard_reason or "test discard")
+        unit.transition_to(step, reason=reason or "test discard")
     return unit

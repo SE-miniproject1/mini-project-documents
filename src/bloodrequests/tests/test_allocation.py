@@ -21,14 +21,14 @@ from bloodrequests.workflow import WorkflowError
 from donors.tests.helpers import make_donor
 from inventory.models import BloodUnit, Status
 from inventory.services.expiry import expire_due_units
-from inventory.tests.helpers import make_unit
+from inventory.tests.helpers import make_cleared_unit, make_unit
 
 from .helpers import make_hospital_user, make_request
 
 
 def a_pos_unit(status=Status.AVAILABLE, **kwargs):
     kwargs.setdefault("donor", make_donor(blood_group="A+"))
-    return make_unit(status=status, **kwargs)
+    return make_cleared_unit(status=status, **kwargs)
 
 
 class AllocationTestCase(TestCase):

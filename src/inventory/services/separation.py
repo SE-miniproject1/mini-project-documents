@@ -8,9 +8,9 @@ collection date, and the whole blood unit is closed so it cannot be issued as we
 from django.conf import settings
 from django.db import transaction
 
-from collection.models import TestName, TestResult
 from inventory.models import BloodUnit, Component, InvalidTransitionError, Status
 from inventory.services.id_generator import generate_unit_id
+from inventory.services.safety import screening_problem
 from inventory.services.shelf_life import expiry_date_for
 
 CLOSE_REASON = "Separated into components"
@@ -46,11 +46,9 @@ def separate_unit(unit, volumes, *, by=None, today=None):
         raise SeparationError("The unit is past its expiry date.")
     # Defence in depth: an Available unit passed release, but check the panel again, since
     # the products will skip quarantine and rely on the parent's results.
-    results = list(unit.tests.values_list("test_name", "result"))
-    if {name for name, _ in results} != set(TestName.values) or any(
-        result != TestResult.NON_REACTIVE for _, result in results
-    ):
-        raise SeparationError("The unit does not have a complete, non-reactive screening panel.")
+    problem = screening_problem(unit)
+    if problem:
+        raise SeparationError(f"The unit cannot be separated: {problem}.")
 
     if not volumes:
         raise SeparationError("Choose at least one component.")
