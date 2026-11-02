@@ -15,4 +15,16 @@
   {% if req.rejection_reason %}<dt>Rejection reason</dt><dd>{{ req.rejection_reason }}</dd>{% endif %}
 </dl>
 {% if req.is_open %}<p>Available now: <strong>{{ available }}</strong> unit{{ available|pluralize }} of {{ req.blood_group }} {{ req.component_type }}.</p>{% endif %}
+{% if is_staff and req.status == 'Pending' %}
+<h2>Decision</h2>
+<form method="post" action="{% url 'requests:approve' req.request_id %}" class="inline">
+  {% csrf_token %}<button type="submit" class="btn primary">Approve</button>
+</form>
+<form method="post" action="{% url 'requests:reject' req.request_id %}">
+  {% csrf_token %}
+  <div class="field"><label for="{{ reject_form.reason.id_for_label }}">{{ reject_form.reason.label }}</label>{{ reject_form.reason }}</div>
+  <button type="submit" class="btn">Reject</button>
+</form>
+{% endif %}
+{% if is_staff %}<p><a href="{% url 'requests:queue' %}" data-shortcut="cancel">Back to the queue</a></p>{% endif %}
 {% endblock %}
