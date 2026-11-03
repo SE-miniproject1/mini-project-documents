@@ -6,12 +6,11 @@ from django.shortcuts import redirect, render
 
 from accounts.models import Role
 from accounts.permissions import role_required
-
-from . import config
+from bloodrequests.services import hospital_for
 from donors.models import BloodGroup
 from inventory.models import BloodUnit, Component
-from bloodrequests.services import hospital_for
 
+from . import config
 from .forms import ConfigForm
 from .help_text import GENERAL, help_for
 

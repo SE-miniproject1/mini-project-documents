@@ -47,6 +47,8 @@ class AvailabilitySearchTests(TestCase):
         make_unit(status=Status.QUARANTINED, donor=donor, component_type="PRBC")
         make_unit(status=Status.AVAILABLE, donor=donor, component_type="PRBC")
         make_unit(status=Status.RESERVED, donor=donor, component_type="PRBC")
+        make_unit(status=Status.EXPIRED, donor=donor, component_type="PRBC")
+        make_unit(status=Status.DISCARDED, donor=donor, component_type="PRBC")
         response = self.client.get(self.url, {"group": "O+", "component": "PRBC"})
         self.assertContains(response, ">1<")
 
