@@ -19,24 +19,6 @@ The Test Plan exit criterion (NFR-Q5) asks for at least 70 percent line coverage
 
 The one skipped test is `ConcurrentAllocationTests.test_only_one_of_two_simultaneous_allocations_wins`. SQLite has no `select_for_update`, so it runs only in the PostgreSQL pass of the CI (D-72). It is not one of the cases in this report.
 
-## 2. Scope
-
-The figures above are for the whole project. The modules covered by the cases run for this report (UT-34 to UT-48, IT-18 to IT-26, ST-17 to ST-24) are camps, notifications, reports, accounts and core. For those five packages, excluding tests and migrations: 1,362 statements, 29 not run, 270 branches, 17 partial branches, 97 percent combined coverage.
-
-## 3. Cases tagged for this report
-
-Tests carry their case IDs in the docstring, so the traceability check finds them.
-
-| Case | Test |
-|---|---|
-| UT-47 | `accounts/tests/test_admin.py`: deactivation keeps the record; a role change replaces the role |
-| UT-48 | `core/tests/test_config.py`: an override applies to the next call; the 90-day floor |
-| IT-20 | `camps/tests/test_it20_camp_to_inventory.py` (new), plus `camps/tests/test_collection_link.py` |
-| IT-26 | `accounts/tests/test_admin.py`, `core/tests/test_config.py`, `inventory/tests/test_expiry.py` (14-day window) |
-| ST-22 | no test: the dashboard banner and the below-threshold flag are not built (D-103) |
-| ST-24 | `accounts/tests/test_admin.py` (hospital registration and deactivation), `bloodrequests/tests/test_raise_request.py` (inactive hospital refused) |
-| UT-40, IT-21, ST-20 | `core/tests/test_availability.py` |
-
 ## 4. Files below 100 percent in the five packages
 
 | File | Missing | Why it is not covered |
@@ -48,6 +30,7 @@ Tests carry their case IDs in the docstring, so the traceability check finds the
 | `camps/models.py` | 43 | `__str__` of a camp, used only in the admin site. |
 | `camps/services.py` | 127, 136-138 | Enrolment confirmation for a donor with no email, and a mail failure. Per D-67 the enrolment stands, and this needs a mail server error to trigger. |
 | `camps/views.py` | 30->37, 55-56, 80->91 | A GET to the enrol URL, a camp refused by the service after the form accepted it, and a GET to the close URL. |
+
 | `notifications/admin.py` | 15, 18, 21, 24 | Read-only admin permission methods. |
 | `notifications/dispatcher.py` | 86-87, 130 | SMS failure for a donor with no email, and a notification taken by another worker first (needs two workers). |
 | `notifications/management/commands/dispatch_notifications.py` | 22 | The `--loop` sleep. A test that looped would never finish. |
