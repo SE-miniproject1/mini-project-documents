@@ -1,8 +1,10 @@
-# Sprint 1 demo video
+# Sprint demo videos
 
-[`docs/demo/sprint1-demo.mp4`](demo/sprint1-demo.mp4), 75 seconds, 1280 by 720, with captions and no sound.
+## Sprint 1
 
-## What it shows, in order
+[Watch the Sprint 1 demo](demo/sprint1-demo.mp4), 75 seconds, 1280 × 720, with captions and no sound.
+
+### What it shows, in order
 
 1. **Staff sign in.** The menu shows only the screens the staff role may use.
 2. **Inventory console.** Available units by blood group and component, counted live.
@@ -15,7 +17,7 @@
 
 This is Sprint 1: stories US-01 to US-05, US-07 to US-11 and US-13.
 
-## How it was made
+### How it was made
 
 It was recorded from the app itself in a headless browser, driven by a script, **not by capturing a desktop**. That is why it contains only the seeded demo data and nothing from anyone's screen. To make it again:
 
@@ -29,3 +31,9 @@ python tools/demo/encode_video.py frames docs/demo/sprint1-demo.mp4
 ```
 
 The password above is the demo-only password for the seed data. It is not used anywhere real.
+
+## Sprint 2
+
+[Watch the Sprint 2 demo](demo/sprint2-demo.mp4).
+
+This is the Sprint 2 demonstration video stored with the project deliverables. Review it alongside the Sprint 2 acceptance criteria and the current implementation. It is a seeded-data demonstration; do not use real donor, patient, or production records in recordings.
