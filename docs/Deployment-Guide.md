@@ -54,6 +54,8 @@ Important variables:
 | `DB_PASSWORD` | PostgreSQL application user's password |
 | `DB_HOST` | PostgreSQL server host |
 | `DB_PORT` | PostgreSQL server port |
+| `BBMS_SMS_URL` | HTTPS endpoint of the SMS provider API (see `.env.example`) |
+| `BBMS_SMS_TOKEN` | Bearer token for the SMS provider API; keep it secret |
 
 Never commit a real `.env` file, production password or secret key to the repository.
 
@@ -161,7 +163,7 @@ The SMTP password must be stored securely and must not be committed to source co
 
 The development environment uses the console email backend. Production email delivery must be tested using the actual SMTP service.
 
-## 9. Daily expiry job
+## 9. Scheduled jobs and notification worker
 
 The application provides the Django management command:
 
@@ -191,6 +193,46 @@ python manage.py expire_units --no-digest
 This runs the expiry operation without sending the digest email.
 
 Verify the scheduled job's logs and confirm that the SMTP configuration works. Until the job runs, the application may still ignore expired units during stock and allocation checks, but their stored status may not yet be updated.
+
+### Other scheduled jobs
+
+Besides the daily expiry job, three more commands must run in production. The README also lists them in its "Background jobs" table.
+
+| Command | When | What it does |
+|---|---|---|
+| `manage.py expire_units` | Daily | Marks expired units and emails the near-expiry digest |
+| `manage.py clear_expired_deferrals` | Nightly | Returns donors to Eligible after their review date |
+| `manage.py send_reminders` | Hourly | Queues eligibility and camp reminders and shortage appeals |
+| `manage.py dispatch_notifications --loop 30` | Always running | Sends queued SMS and email, with retries and email fallback |
+
+Example cron entries (replace the paths with the actual deployment paths):
+
+```cron
+30 1 * * * /path/to/venv/bin/python /path/to/project/manage.py clear_expired_deferrals
+0 * * * * /path/to/venv/bin/python /path/to/project/manage.py send_reminders
+```
+
+### Notification worker (must run as a service)
+
+Notifications are written to the `Notification` table and sent by a worker. If the worker is not running, queued SMS and email messages are never delivered (deviation D-74). Run it as an always-on service, for example with a systemd unit:
+
+```ini
+[Unit]
+Description=BBMS notification dispatcher
+After=network.target
+
+[Service]
+User=bbms
+WorkingDirectory=/path/to/project
+EnvironmentFile=/path/to/bbms.env
+ExecStart=/path/to/venv/bin/python manage.py dispatch_notifications --loop 30
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable it with `systemctl enable --now bbms-dispatcher`. Set `BBMS_SMS_URL` and `BBMS_SMS_TOKEN` in the worker's environment. Without them, the development backend only logs messages (deviation D-78).
 
 ## 10. Authentication and security settings
 
@@ -234,6 +276,9 @@ Before making the application available:
 13. Test SMTP email delivery and the near-expiry digest.
 14. Verify audit source IP behaviour through the Nginx proxy.
 15. Review application and scheduled-job logs.
+16. Confirm the notification worker is running as a service and restarts after a reboot.
+17. Confirm the nightly `clear_expired_deferrals` and hourly `send_reminders` jobs are scheduled.
+18. Confirm `BBMS_SMS_URL` and `BBMS_SMS_TOKEN` are set and that a test SMS reaches the chosen provider.
 
 Record the actual test results. Do not mark a deployment check as passed until it has been performed.
 
@@ -244,6 +289,12 @@ Record the actual test results. Do not mark a deployment check as passed until i
 | D-34 | Audit source IP currently uses `REMOTE_ADDR`, which may identify the Nginx proxy instead of the client. | Configure and test trusted proxy handling and application-side client-IP extraction. |
 | D-35 | Application code prevents editing and deleting audit records, but a database administrator can still modify them directly. | Restrict runtime database permissions on `audit_auditentry`. |
 | D-41 | Expired units are marked by a management command that must run daily. | Configure and verify a daily cron job or systemd timer. |
+| D-73 | A failed SMS is attempted three times (60 s, then 300 s apart), then email is used. | Set `BBMS_NOTIFY_RETRY_SECONDS` if different intervals are needed. |
+| D-74 | Notifications are queued in the database and sent by a worker. | Run `dispatch_notifications --loop 30` as a service and monitor it. |
+| D-75 | Eligibility reminders are sent by an hourly job. | Schedule `send_reminders` hourly. |
+| D-76 | Camp reminders are queued by the hourly job 23 to 24 hours before a camp. | Schedule `send_reminders` hourly. |
+| D-77 | Shortage appeals are checked by the hourly job, not when a unit leaves stock. | Schedule `send_reminders` hourly. |
+| D-78 | No SMS provider is named; the HTTP backend posts JSON to `BBMS_SMS_URL`. | Adapt the SMS backend to the chosen provider and set `BBMS_SMS_URL` and `BBMS_SMS_TOKEN`. |
 
 ## 13. Production readiness notes
 
