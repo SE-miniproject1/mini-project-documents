@@ -1,0 +1,7 @@
+{% extends "core/base.html" %}
+{% block title %}Separate {{ unit.unit_id }}{% endblock %}
+{% block content %}
+<h1>Separate unit {{ unit.unit_id }}</h1>
+<p>{{ unit.get_component_type_display }}, {{ unit.blood_group }}, {{ unit.volume_ml }} ml, collected {{ unit.collection_date|date:"d-m-Y" }}. Each component gets a new unit ID and its own expiry date counted from the collection date. The whole blood unit is closed and cannot be issued afterwards.</p>
+{% include "core/_form.html" with submit_label="Separate" %}
+{% endblock %}

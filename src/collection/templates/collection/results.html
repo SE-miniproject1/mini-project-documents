@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+{% block title %}Test results {{ unit.unit_id }}{% endblock %}
+{% block content %}
+<h1>Test results for unit {{ unit.unit_id }}</h1>
+<dl class="facts">
+  <dt>Status</dt><dd><span class="badge {% if unit.status == 'Available' %}ok{% elif unit.status == 'Discarded' or unit.status == 'Expired' %}bad{% endif %}">{{ unit.status }}</span>{% if unit.discard_reason %} ({{ unit.discard_reason }}){% endif %}</dd>
+  <dt>Blood group</dt><dd>{{ unit.blood_group }}</dd>
+  <dt>Component</dt><dd>{{ unit.get_component_type_display }}</dd>
+  <dt>Collected</dt><dd>{{ unit.collection_date|date:"d-m-Y" }}</dd>
+  <dt>Expires</dt><dd>{{ unit.expiry_date|date:"d-m-Y" }}</dd>
+</dl>
+
+{% if editable %}
+<p>All five tests must be recorded, and all Non-Reactive, before the unit can be released. A Reactive result discards the unit for good.</p>
+{% if form.errors %}
+<div class="error-summary" role="alert"><p><strong>Please correct the following.</strong></p>
+<ul>{% for field in form %}{% for error in field.errors %}<li>{{ field.label }}: {{ error }}</li>{% endfor %}{% endfor %}</ul></div>
+{% endif %}
+<form method="post" novalidate>{% csrf_token %}
+  <table class="data">
+    <thead><tr><th scope="col">Test</th><th scope="col">Result</th></tr></thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <th scope="row">{{ row.label }}</th>
+        <td>{% if row.test %}{{ row.test.result }} <small>({{ row.test.tested_on|date:"d-m-Y" }})</small>
+            {% else %}<label class="sr-only" for="id_{{ row.name }}">{{ row.label }} result</label>{{ form|field_named:row.name }}{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="field"><label for="{{ form.tested_on.id_for_label }}">{{ form.tested_on.label }}</label>{{ form.tested_on }}</div>
+  <div class="actions">
+    <button type="submit" name="action" value="save" class="btn" data-shortcut="save">Save results</button>
+    <button type="submit" name="action" value="release" class="btn primary">Release to inventory</button>
+    <a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Cancel</a>
+  </div>
+</form>
+{% else %}
+<table class="data">
+  <thead><tr><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Date</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr><th scope="row">{{ row.label }}</th>
+      <td>{% if row.test %}{{ row.test.result }}{% else %}Not tested{% endif %}</td>
+      <td>{{ row.test.tested_on|date:"d-m-Y"|default:"" }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="actions"><a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Back to donor search</a></p>
+{% endif %}
+{% endblock %}
