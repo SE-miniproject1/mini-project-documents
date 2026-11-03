@@ -3,12 +3,19 @@
 from dataclasses import dataclass
 from datetime import date, datetime
 
+from django.utils import timezone
+
 
 def format_value(value):
-    """Dates as DD-MM-YYYY (as in the Test Plan), None as an empty cell."""
+    """Dates as DD-MM-YYYY (as in the Test Plan), None as an empty cell.
+
+    Aware datetimes are shown in local time, Asia/Kolkata (SRS OR-3).
+    """
     if value is None:
         return ""
     if isinstance(value, datetime):
+        if timezone.is_aware(value):
+            value = timezone.localtime(value)
         return value.strftime("%d-%m-%Y %H:%M:%S")
     if isinstance(value, date):
         return value.strftime("%d-%m-%Y")

@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h1>Reports</h1>
+<p>Choose a report, then a date range. Every report can be exported as CSV or PDF.</p>
+<ul>
+  {% for spec in reports %}<li><a href="{% url 'reports:run' spec.slug %}">{{ spec.title }}</a></li>{% endfor %}
+</ul>
+{% endblock %}

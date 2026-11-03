@@ -12,6 +12,7 @@ urlpatterns = [
     path("camps/", include("camps.urls")),
     path("requests/", include("bloodrequests.urls")),
     path("audit/", include("audit.urls")),
+    path("reports/", include("reports.urls")),
     path("config/", include("core.config_urls")),
     path("", include("core.urls")),
 ]
