@@ -38,7 +38,7 @@ The sprint plan (`planning/BACKLOG.md`) shared the work: Sprint 1 gave 14 points
 
 **Sprint 2 code on `main` was also committed from G A Aadish's account**, with one exception: Niveditha committed the first admin models (`69336eb`). The Sprint 2 issues for US-16, US-18, US-22, US-26 and US-27 are still assigned to the members the plan named. Each of those issues has a comment linking the merged code, and the members were asked to check it.
 
-Two commits on `main` carry a `Co-Authored-By: Claude` trailer, because they were written with an AI coding assistant working from G A Aadish's account: US-27 (`a0472af`) and US-24 (`7ccac8c`). So does the close-out note `2c65e54`. They are counted under G A Aadish above, since the tables count by author.
+Three commits on `main` carry a `Co-Authored-By: Claude` trailer, because they were written with an AI coding assistant working from G A Aadish's account: US-27 (`a0472af`), US-24 (`7ccac8c`) and the close-out note (`2c65e54`). They are counted under G A Aadish above, since the tables count by author.
 
 Since 28 October the other members have also written code, in pull requests that are not merged yet:
 - **Niveditha:** US-23 availability search (#89), US-14 inventory filters, transfer and discard (#90), and admin configuration (#84).
@@ -47,7 +47,7 @@ Since 28 October the other members have also written code, in pull requests that
 
 ## What each member's commits contain
 
-**G A Aadish.** Repository structure. SRS skeleton, sections 1 and 2, SF-4 to SF-6 and the security objectives. The architecture diagram and the whole Software Architecture and Design Specification. The Deliverable 2 plan and the audit fixes. The product backlog. The Django project, CI, and every story on `main` from US-01 to US-22, plus US-24, US-26 and US-27. The Sprint 1 demo video. The deviations log.
+**G A Aadish.** Repository structure. SRS skeleton, sections 1 and 2, SF-4 to SF-6 and the security objectives. The architecture diagram and the whole Software Architecture and Design Specification. The Deliverable 2 plan and the audit fixes. The product backlog. The Django project, CI, and every story on `main`: US-01 to US-13, US-15 to US-22, US-24, US-26 and US-27. The Sprint 1 demo video. The deviations log.
 
 **Niveditha.** Created the repository (first commit). SRS sections 3, 6 and 7. The SF-5 and SF-6 test cases. An upload of the six diagram images. The Word build script and the generated Word files. A correction of the SRS revision history dates. The first admin models on `main`. Open: the deployment guide and the Sprint 2 demo video (#50, #85), and the work in #84, #89 and #90.
 
