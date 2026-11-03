@@ -38,7 +38,7 @@ The sprint plan (`planning/BACKLOG.md`) shared the work: Sprint 1 gave 14 points
 
 **Sprint 2 code on `main` was also committed from G A Aadish's account**, with one exception: Niveditha committed the first admin models (`69336eb`). The Sprint 2 issues for US-16, US-18, US-22, US-26 and US-27 are still assigned to the members the plan named. Each of those issues has a comment linking the merged code, and the members were asked to check it.
 
-Three commits on `main` carry a `Co-Authored-By: Claude` trailer, because they were written with an AI coding assistant working from G A Aadish's account: US-27 (`a0472af`), US-24 (`7ccac8c`) and the close-out note (`2c65e54`). They are counted under G A Aadish above, since the tables count by author.
+From 02 November, G A Aadish used an AI coding assistant (Claude) for part of his work. On `main` that covers US-27 (`7891439`), US-24 (`28b1ba8`), the close-out notes in `planning/BACKLOG.md` (`7d26c9e` and later) and the refresh of this record. It also covers the fixes and additions pushed to other members' pull requests: the US-23 test fix (#89), the US-28 test fixes (#77) and the US-25 report screens (#86). These commits are authored by G A Aadish and counted under his name above, since the tables count by author.
 
 Since 28 October the other members have also written code, in pull requests that are not merged yet:
 - **Niveditha:** US-23 availability search (#89), US-14 inventory filters, transfer and discard (#90), and admin configuration (#84).
