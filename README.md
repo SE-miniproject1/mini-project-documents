@@ -75,6 +75,15 @@ python manage.py runserver
 
 Configuration comes from environment variables, listed in `.env.example`. Development uses SQLite. Production uses PostgreSQL through `requirements-postgres.txt`.
 
+Background jobs. Schedule them with cron or systemd in any shared environment:
+
+| Command | When | What it does |
+|---|---|---|
+| `manage.py expire_units` | Daily | Marks expired units and emails the near-expiry digest |
+| `manage.py clear_expired_deferrals` | Nightly | Returns donors to Eligible after their review date |
+| `manage.py send_reminders` | Hourly | Queues eligibility and camp reminders and shortage appeals |
+| `manage.py dispatch_notifications --loop 30` | Always running | Sends queued SMS and email, with retries and email fallback |
+
 Checks that CI runs on every push and pull request:
 
 ```bash
