@@ -11,6 +11,7 @@ urlpatterns = [
     path("inventory/", include("inventory.urls")),
     path("camps/", include("camps.urls")),
     path("requests/", include("bloodrequests.urls")),
+    path("search/", include("core.search_urls")),
     path("audit/", include("audit.urls")),
     path("config/", include("core.config_urls")),
     path("", include("core.urls")),

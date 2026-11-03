@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+{% block title %}Check availability{% endblock %}
+{% block content %}
+<h1>Check blood availability</h1>
+<p>Search available stock by blood group and component. Hospital accounts see counts only; unit and donor details are never included.</p>
+<form method="get" class="filter-form">
+  <div class="field">
+    <label for="id_group">Blood group</label>
+    <select id="id_group" name="group">
+      <option value="">All blood groups</option>
+      {% for value, label in groups %}<option value="{{ value }}"{% if selected_group == value %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="field">
+    <label for="id_component">Component</label>
+    <select id="id_component" name="component">
+      <option value="">All components</option>
+      {% for value, label in components %}<option value="{{ value }}"{% if selected_component == value %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="actions"><button class="btn primary" type="submit">Search availability</button><a class="btn" href="{% url 'search:availability' %}">Clear</a></div>
+</form>
+<h2>Available quantities</h2>
+<table class="data">
+  <thead><tr><th scope="col">Blood group</th><th scope="col">Component</th><th scope="col" class="num">Available units</th></tr></thead>
+  <tbody>
+    {% for row in counts %}
+    <tr><td>{{ row.blood_group }}</td><td>{{ row.component_type }}</td><td class="num">{{ row.available_count }}</td></tr>
+    {% empty %}
+    <tr><td colspan="3">No matching units are currently available.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
