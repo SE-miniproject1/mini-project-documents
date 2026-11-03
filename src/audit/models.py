@@ -24,6 +24,7 @@ class Event(models.TextChoices):
     CONFIG_CHANGE = "config_change", "Configuration change"
     REQUEST_STATUS = "request_status", "Blood request status change"
     ALLOCATION = "allocation", "Unit allocation or issue"
+    LOCATION_TRANSFER = "location_transfer", "Unit location transfer"
 
 
 class AuditQuerySet(models.QuerySet):
@@ -40,7 +41,6 @@ class AuditEntry(models.Model):
     actor = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT, related_name="+"
     )
-    # The name as typed, so a failed sign-in for an unknown user is still recorded.
     actor_username = models.CharField(max_length=150, blank=True)
     source_ip = models.GenericIPAddressField(null=True, blank=True)
     entity_type = models.CharField(max_length=30, blank=True)
