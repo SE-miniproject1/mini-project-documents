@@ -17,7 +17,7 @@ The deployment environment should provide:
 - An SMTP server supporting STARTTLS for production email.
 - A production WSGI server.
 
-**Dependency note:** The current `requirements.txt` lists Django and `python-barcode`. A PostgreSQL database driver and production WSGI server are not listed. They must be selected, added and tested before production deployment. Do not use Django's development server as the production server.
+**Dependency note:** The current `requirements.txt` lists Django and `python-barcode`. The PostgreSQL driver is pinned separately in `requirements-postgres.txt` (`psycopg[binary]>=3.2`), so production installs should use `pip install -r requirements-postgres.txt`. A production WSGI server (Gunicorn) is not listed and must be selected, added and tested before production deployment. Do not use the Django development server as the production server.
 
 ## 3. Obtain and install the application
 
@@ -73,7 +73,7 @@ The intended production database is PostgreSQL 15.
 2. Create the production database.
 3. Create a dedicated database role for the application.
 4. Configure the database environment variables.
-5. Install and verify the required PostgreSQL Python driver.
+5. Install the PostgreSQL driver with `pip install -r requirements-postgres.txt` (pins `psycopg[binary]>=3.2`) and verify it.
 6. Apply the Django migrations.
 
 Run:
@@ -249,7 +249,7 @@ Record the actual test results. Do not mark a deployment check as passed until i
 
 The following items still require confirmation before production deployment:
 
-- Add and test a PostgreSQL Python driver.
+- Verify that the PostgreSQL driver installs from `requirements-postgres.txt` and works against the production database.
 - Select, add and test a production WSGI server.
 - Verify the final Nginx configuration and trusted-proxy handling.
 - Verify PostgreSQL audit-table permissions.
