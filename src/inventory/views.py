@@ -5,11 +5,14 @@ from django.urls import reverse
 from django.utils import timezone
 
 from accounts.permissions import STAFF_ROLES, role_required
+from audit.models import Event
+from audit.services import record_event
 from core import config
 from core.listing import apply_sort, paginate
 
-from .forms import SeparationForm
+from .forms import DiscardForm, InventoryFilterForm, SeparationForm, TransferForm
 from .models import BloodUnit, Component, Status
+from .services.actions import ActionError, discard_unit, transfer_unit
 from .services.barcode import code128_svg
 from .services.expiry import near_expiry_units
 from .services.separation import SeparationError, separate_unit
@@ -31,11 +34,7 @@ def unit_barcode(request, unit_id):
 
 @role_required(*STAFF_ROLES)
 def console(request):
-    """Current stock and the units waiting for test results (UC8, SRS REQ-17).
-
-    `?partial=1` returns only the live panel, which the page fetches every few seconds so
-    one person's change reaches everyone else well inside the 5 seconds NFR-P5 allows.
-    """
+    """Current stock, filters, and units waiting for test results."""
     near_expiry = near_expiry_units()
     context = {
         "grid": stock_grid(),
@@ -57,10 +56,29 @@ def console(request):
         },
         default="collected",
     )
+    filters = InventoryFilterForm(request.GET or None)
+    filtered_units = BloodUnit.objects.select_related("donor")
+    if filters.is_valid():
+        data = filters.cleaned_data
+        if data.get("blood_group"):
+            filtered_units = filtered_units.filter(blood_group=data["blood_group"])
+        if data.get("component_type"):
+            filtered_units = filtered_units.filter(component_type=data["component_type"])
+        if data.get("storage_location"):
+            filtered_units = filtered_units.filter(storage_location__icontains=data["storage_location"])
+        if data.get("status"):
+            filtered_units = filtered_units.filter(status=data["status"])
+        if data.get("expiry_from"):
+            filtered_units = filtered_units.filter(expiry_date__gte=data["expiry_from"])
+        if data.get("expiry_to"):
+            filtered_units = filtered_units.filter(expiry_date__lte=data["expiry_to"])
+    filtered_units = filtered_units.order_by("expiry_date", "unit_id")
     context.update(
         {
             "page": paginate(request, awaiting),
             "sort": sort,
+            "filters": filters,
+            "filtered_units": paginate(request, filtered_units),
             "whole_blood": BloodUnit.objects.issuable()
             .filter(component_type=Component.WHOLE_BLOOD)
             .order_by("expiry_date", "unit_id")[:25],
@@ -112,3 +130,33 @@ def separate(request, unit_id):
             "cancel_url": reverse("inventory:unit_detail", args=[unit.unit_id]),
         },
     )
+
+
+@role_required(*STAFF_ROLES)
+def transfer(request, unit_id):
+    unit = get_object_or_404(BloodUnit, unit_id=unit_id)
+    form = TransferForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            transfer_unit(unit, form.cleaned_data["destination"], by=request.user)
+        except ActionError as problem:
+            form.add_error("destination", str(problem))
+        else:
+            messages.success(request, f"{unit.unit_id} transferred to {form.cleaned_data['destination']}.")
+            return redirect("inventory:unit_detail", unit_id=unit.unit_id)
+    return render(request, "inventory/action_form.html", {"unit": unit, "form": form, "heading": "Transfer unit"})
+
+
+@role_required(*STAFF_ROLES)
+def discard(request, unit_id):
+    unit = get_object_or_404(BloodUnit, unit_id=unit_id)
+    form = DiscardForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        try:
+            discard_unit(unit, form.cleaned_data["reason"], by=request.user)
+        except ActionError as problem:
+            form.add_error(None, str(problem))
+        else:
+            messages.success(request, f"{unit.unit_id} was discarded.")
+            return redirect("inventory:unit_detail", unit_id=unit.unit_id)
+    return render(request, "inventory/action_form.html", {"unit": unit, "form": form, "heading": "Discard unit"})
