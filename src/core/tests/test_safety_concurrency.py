@@ -22,7 +22,7 @@ from bloodrequests.tests.helpers import make_hospital_user, make_request
 from bloodrequests.workflow import WorkflowError
 from donors.tests.helpers import make_donor
 from inventory.models import Status
-from inventory.tests.helpers import make_unit
+from inventory.tests.helpers import make_cleared_unit, make_unit
 
 
 class SafetyRulesAndConcurrencyTests(TestCase):
@@ -71,7 +71,7 @@ class SafetyRulesAndConcurrencyTests(TestCase):
         donor = make_donor(blood_group="A+")
         yesterday = date.today() - timedelta(days=1)
         # Marked Available in DB but past expiry date
-        expired_unit = make_unit(
+        expired_unit = make_cleared_unit(
             donor=donor,
             status=Status.AVAILABLE,
             expiry_date=yesterday,
@@ -104,7 +104,7 @@ class SafetyRulesAndConcurrencyTests(TestCase):
     def test_nfr_s3_group_mismatch_allocation_prevented_and_state_preserved(self):
         """NFR-S3 / ST-27: Group mismatch is rejected; unit remains Available."""
         o_pos_donor = make_donor(blood_group="O+")
-        o_pos_unit = make_unit(donor=o_pos_donor, status=Status.AVAILABLE)
+        o_pos_unit = make_cleared_unit(donor=o_pos_donor, status=Status.AVAILABLE)
 
         # Request is A+
         with self.assertRaises(WorkflowError) as cm:
@@ -137,7 +137,7 @@ class SafetyRulesAndConcurrencyTests(TestCase):
            'one_live_allocation_per_unit' rejects any simultaneous unreleased allocation.
         """
         donor = make_donor(blood_group="A+")
-        shared_unit = make_unit(donor=donor, status=Status.AVAILABLE)
+        shared_unit = make_cleared_unit(donor=donor, status=Status.AVAILABLE)
 
         req_b = make_request(
             self.hospital_user,
