@@ -79,10 +79,10 @@ Configuration comes from environment variables, listed in `.env.example`. Develo
 Checks that CI runs on every push and pull request:
 
 ```bash
-ruff check src && ruff format --check src
+ruff check src && ruff format --check src       # PEP 8, imports, bugbear
 python src/manage.py check
 python src/manage.py makemigrations --check --dry-run
-coverage run src/manage.py test src && coverage report
+coverage run src/manage.py test src && coverage report   # fails under 70 percent
 ```
 
 ## Rebuilding the Word submission copies
