@@ -38,6 +38,7 @@ class UserAdminTests(AdminTestCase):
         self.assertContains(self.client.get(url, {"q": "nobody"}), "No users match")
 
     def test_creating_a_staff_account_stores_a_hashed_password_and_audits(self):
+        """IT-26 (SRS REQ-45): a new staff account is created."""
         response = self.client.post(reverse("accounts:user_create"), self.new_user_data())
         self.assertRedirects(response, reverse("accounts:user_admin"))
         user = User.objects.get(username="staff02")
@@ -74,6 +75,7 @@ class UserAdminTests(AdminTestCase):
         self.assertEqual(User.objects.get(username="staff02").hospital, hospital)
 
     def test_changing_a_role_is_audited_and_applies(self):
+        """UT-47 (SRS REQ-45): a user holds one role, and a change replaces it."""
         user = make_user("staff01", Role.STAFF)
         data = {"username": "staff01", "email": user.email, "role": Role.ADMIN, "is_active": "on"}
         self.client.post(reverse("accounts:user_edit", args=[user.pk]), data)
@@ -83,6 +85,7 @@ class UserAdminTests(AdminTestCase):
         self.assertEqual((entry.previous_value, entry.new_value), ("staff/active", "admin/active"))
 
     def test_deactivating_keeps_the_record_and_ends_sign_in(self):
+        """UT-47 (SRS REQ-45, CON-6): deactivation keeps the row."""
         user = make_user("staff01", Role.STAFF)
         data = {"username": "staff01", "email": user.email, "role": Role.STAFF}
         self.client.post(reverse("accounts:user_edit", args=[user.pk]), data)
@@ -152,6 +155,7 @@ class HospitalAdminTests(AdminTestCase):
         return data
 
     def test_registering_a_hospital_normalises_the_licence_and_audits(self):
+        """ST-24 (SRS REQ-45): a hospital is registered."""
         response = self.client.post(reverse("accounts:hospital_create"), self.data())
         self.assertRedirects(response, reverse("accounts:hospital_list"))
         hospital = Hospital.objects.get(name="St Mary's")
@@ -178,6 +182,7 @@ class HospitalAdminTests(AdminTestCase):
         self.assertContains(response, "Deactivated")
 
     def test_deactivating_a_hospital_is_audited_and_keeps_the_record(self):
+        """ST-24 (BR-7): a hospital is deactivated."""
         hospital = make_hospital()
         data = {k: v for k, v in self.data(licence_number=hospital.licence_number).items()}
         self.client.post(reverse("accounts:hospital_edit", args=[hospital.pk]), data)

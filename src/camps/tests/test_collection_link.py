@@ -41,6 +41,7 @@ class CampCollectionTests(TestCase):
         self.camp = started_camp(self.staff)
 
     def test_a_unit_collected_at_a_camp_carries_the_camp_as_its_site(self):
+        """IT-20 (SRS REQ-36): camp units carry the camp as site."""
         donation, unit = collect(make_donor(), self.staff, self.camp.camp_id)
         self.assertEqual(unit.collection_site, self.camp.camp_id)
         self.assertEqual(donation.collection_site, self.camp.camp_id)
@@ -60,6 +61,7 @@ class CampCollectionTests(TestCase):
             collect(make_donor(), self.staff, future.camp_id)
 
     def test_closing_reports_actuals_against_target_and_blocks_more_collections(self):
+        """IT-20 (SRS REQ-36, REQ-37): closure locks the camp."""
         for _ in range(3):
             collect(make_donor(), self.staff, self.camp.camp_id)
         collect(make_donor(), self.staff, "Centre")

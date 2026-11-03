@@ -119,6 +119,7 @@ class NearExpiryTests(TestCase):
 
     @override_settings(BBMS_NEAR_EXPIRY_DAYS=14)
     def test_the_window_is_configurable(self):
+        """IT-26 (SRS REQ-46): a near-expiry window of 14 days applies with no restart."""
         unit_expiring(10)
         self.assertEqual(len(near_expiry_units(TODAY, window=14)), 1)
         self.assertEqual(len(near_expiry_units(TODAY, window=7)), 0)
