@@ -1,0 +1,29 @@
+{% load bbms_ui %}
+{% if form.errors %}
+<div class="error-summary" role="alert" id="error-summary">
+  <p><strong>Please correct the following.</strong></p>
+  <ul>
+    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    {% for field in form.visible_fields %}{% for text in field|field_error_text %}
+    <li><a href="#{{ field.id_for_label }}">{{ text }}</a></li>
+    {% endfor %}{% endfor %}
+  </ul>
+</div>
+{% endif %}
+<form method="post" novalidate{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
+  {% csrf_token %}
+  {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+  {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+  {% for field in form.visible_fields %}
+  <div class="field{% if field.errors %} has-error{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="req">(required)</span>{% endif %}</label>
+    {{ field|render_field }}
+    {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+    {% for text in field|field_error_text %}<p class="field-error" id="{{ field.auto_id }}_error">{{ text }}</p>{% endfor %}
+  </div>
+  {% endfor %}
+  <div class="actions">
+    <button type="submit" class="btn primary" data-shortcut="save">{{ submit_label|default:"Save" }}</button>
+    {% if cancel_url %}<a class="btn" href="{{ cancel_url }}" data-shortcut="cancel">Cancel</a>{% endif %}
+  </div>
+</form>

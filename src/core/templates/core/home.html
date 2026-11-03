@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>Welcome, {{ user.get_full_name|default:user.get_username }}</h1>
+<p>You are signed in as <strong>{{ user.display_role }}</strong>. These are the screens available to you.</p>
+<ul class="cards">
+  {% for link in nav_links %}{% if link.url_name != "home" %}
+  <li><a class="card" href="{{ link.url }}">{{ link.label }}</a></li>
+  {% endif %}{% empty %}
+  <li>No screens are available yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

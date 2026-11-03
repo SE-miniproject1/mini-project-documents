@@ -1,0 +1,68 @@
+{% extends "core/base.html" %}
+{% block title %}Request {{ req.request_id }}{% endblock %}
+{% block content %}
+<h1>Request {{ req.request_id }}</h1>
+<p><span class="badge {% if req.status == 'Fulfilled' %}ok{% elif req.status == 'Rejected' or req.status == 'Cancelled' %}bad{% endif %}">{{ req.status }}</span>
+  {% if req.urgency == 'Emergency' %}<strong>Emergency</strong>{% endif %}</p>
+<dl class="facts">
+  <dt>Hospital</dt><dd>{{ req.hospital.name }}</dd>
+  <dt>Blood</dt><dd>{{ req.blood_group }} {{ req.component_type }}</dd>
+  <dt>Units</dt><dd>{{ req.quantity_requested }} requested, {{ req.quantity_issued }} issued{% if req.is_open and req.quantity_issued %}, {{ req.shortfall }} outstanding{% endif %}</dd>
+  <dt>Urgency</dt><dd>{{ req.urgency }}</dd>
+  <dt>Required by</dt><dd>{{ req.required_by|date:"d-m-Y H:i" }}</dd>
+  <dt>Patient reference</dt><dd>{{ req.patient_reference }}</dd>
+  <dt>Raised</dt><dd>{{ req.raised_on|date:"d-m-Y H:i" }}</dd>
+  {% if req.rejection_reason %}<dt>Rejection reason</dt><dd>{{ req.rejection_reason }}</dd>{% endif %}
+</dl>
+{% if req.is_open %}<p>Available now: <strong>{{ available }}</strong> unit{{ available|pluralize }} of {{ req.blood_group }} {{ req.component_type }}.</p>{% endif %}
+{% if allocations %}
+<h2>Units</h2>
+<table class="data">
+  <thead><tr><th scope="col">Unit</th><th scope="col">Expires</th><th scope="col">State</th>{% if can_allocate %}<th scope="col">Actions</th>{% endif %}</tr></thead>
+  <tbody>
+    {% for a in allocations %}
+    <tr><th scope="row">{{ a.unit.unit_id }}</th><td>{{ a.unit.expiry_date|date:"d-m-Y" }}</td>
+      <td>{{ a.state }}{% if a.state == 'Issued' %} {{ a.issued_at|date:"d-m-Y H:i" }}{% endif %}{% if a.state == 'Released' %} ({{ a.release_reason }}){% endif %}</td>
+      {% if can_allocate %}<td>{% if a.state == 'Reserved' %}<form method="post" action="{% url 'requests:release' req.request_id a.pk %}" class="inline">{% csrf_token %}<button type="submit" class="btn">Release</button></form>{% endif %}</td>{% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% if can_allocate %}
+<h2>Allocate units</h2>
+{% if candidates %}
+<form method="post" action="{% url 'requests:allocate' req.request_id %}">
+  {% csrf_token %}
+  <fieldset><legend>Available {{ req.blood_group }} {{ req.component_type }}, earliest expiry first</legend>
+    {% for unit in candidates %}
+    <div><label><input type="checkbox" name="unit_ids" value="{{ unit.unit_id }}"> {{ unit.unit_id }}, expires {{ unit.expiry_date|date:"d-m-Y" }}, {{ unit.volume_ml }} ml</label></div>
+    {% endfor %}
+  </fieldset>
+  <button type="submit" class="btn primary">Reserve selected units</button>
+</form>
+{% else %}<p>No {{ req.blood_group }} {{ req.component_type }} units are available.</p>{% endif %}
+{% if has_reserved %}
+<form method="post" action="{% url 'requests:issue' req.request_id %}">
+  {% csrf_token %}<button type="submit" class="btn primary">Confirm issue of reserved units</button>
+</form>
+{% endif %}
+{% endif %}
+{% if can_cancel %}
+<form method="post" action="{% url 'requests:cancel' req.request_id %}">
+  {% csrf_token %}<button type="submit" class="btn">Cancel this request</button>
+</form>
+{% endif %}
+{% if is_staff and req.status == 'Pending' %}
+<h2>Decision</h2>
+<form method="post" action="{% url 'requests:approve' req.request_id %}" class="inline">
+  {% csrf_token %}<button type="submit" class="btn primary">Approve</button>
+</form>
+<form method="post" action="{% url 'requests:reject' req.request_id %}">
+  {% csrf_token %}
+  <div class="field"><label for="{{ reject_form.reason.id_for_label }}">{{ reject_form.reason.label }}</label>{{ reject_form.reason }}</div>
+  <button type="submit" class="btn">Reject</button>
+</form>
+{% endif %}
+{% if is_staff %}<p><a href="{% url 'requests:queue' %}" data-shortcut="cancel">Back to the queue</a></p>{% endif %}
+{% endblock %}
