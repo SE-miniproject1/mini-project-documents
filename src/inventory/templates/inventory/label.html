@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% block title %}Label {{ unit.unit_id }}{% endblock %}
+{% block content %}
+<h1 class="no-print">Unit label</h1>
+<div class="label-card">
+  <img src="{% url 'inventory:barcode' unit.unit_id %}" alt="Barcode for unit {{ unit.unit_id }}" class="barcode">
+  <p class="label-id">{{ unit.unit_id }}</p>
+  <p class="label-group">{{ unit.blood_group }}</p>
+  <dl class="facts">
+    <dt>Component</dt><dd>{{ unit.get_component_type_display }}</dd>
+    <dt>Volume</dt><dd>{{ unit.volume_ml }} ml</dd>
+    <dt>Collected</dt><dd>{{ unit.collection_date|date:"d-m-Y" }}</dd>
+    <dt>Expires</dt><dd>{{ unit.expiry_date|date:"d-m-Y" }}</dd>
+    <dt>Lot</dt><dd>{{ unit.bag_lot_number }}</dd>
+  </dl>
+</div>
+<p class="actions no-print">
+  <button type="button" class="btn primary" data-print>Print</button>
+  <a class="btn" href="{% url 'donors:search' %}" data-shortcut="cancel">Done</a>
+</p>
+{% endblock %}

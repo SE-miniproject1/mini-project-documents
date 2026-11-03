@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block title %}Help{% endblock %}
+{% block content %}
+<h1>Help</h1>
+<h2>This screen</h2>
+<p>{{ topic_text }}</p>
+<h2>In general</h2>
+<p>{{ general_text }}</p>
+<p><a href="javascript:history.back()">Go back</a></p>
+{% endblock %}

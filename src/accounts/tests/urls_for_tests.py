@@ -30,5 +30,6 @@ urlpatterns = [
     path("admin-only/", admin_only),
     path("hospital-only/", HospitalOnly.as_view()),
     path("accounts/", include("accounts.urls")),
+    path("donors/", include("donors.urls")),
     path("", include("core.urls")),
 ]

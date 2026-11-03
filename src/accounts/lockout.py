@@ -36,6 +36,10 @@ def register_failure(user):
         user.locked_until = timezone.now() + timedelta(minutes=settings.BBMS_LOCKOUT_MINUTES)
         user.save(update_fields=["failed_login_count", "locked_until"])
         logger.warning("account locked user_id=%s", user.pk)
+        from audit.models import Event
+        from audit.services import record_event
+
+        record_event(Event.LOCKOUT, actor=user, entity_type="User", entity_id=user.pk)
         transaction.on_commit(lambda: _notify_locked(user))
         return True
     user.save(update_fields=["failed_login_count"])

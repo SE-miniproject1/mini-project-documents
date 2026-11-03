@@ -6,6 +6,7 @@ committed (SRS SI-1). See `.env.example` for the full list.
 
 import os
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
@@ -52,6 +53,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "core",
+    "donors",
+    "collection",
+    "inventory",
+    "bloodrequests",
+    "camps",
+    "audit",
+    "notifications",
     "reports",
 ]
 
@@ -64,6 +72,7 @@ MIDDLEWARE = [
     # SRS NFR-SEC1: every view needs a signed-in user unless it opts out with
     # @login_not_required (login, password reset, registration, health probe).
     "django.contrib.auth.middleware.LoginRequiredMiddleware",
+    "audit.middleware.CurrentRequestMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -80,6 +89,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "core.context_processors.navigation",
             ],
         },
     },
@@ -134,6 +144,7 @@ LOGGING = {
     },
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "structured"}},
     "root": {"handlers": ["console"], "level": "INFO"},
+    "loggers": {"pyBarcode": {"level": "WARNING"}},  # only SVG output is used
 }
 
 # ---------------------------------------------------------------------------
@@ -199,3 +210,68 @@ if ENVIRONMENT == "production":
     EMAIL_USE_TLS = True
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# SMS: an HTTPS gateway in production (SRS SI-4), an in-memory outbox in tests, and a log
+# line in development.
+_SMS_BACKENDS = {"production": "HttpBackend", "test": "LocmemBackend"}
+BBMS_SMS_BACKEND = os.environ.get(
+    "BBMS_SMS_BACKEND", "notifications.sms." + _SMS_BACKENDS.get(ENVIRONMENT, "ConsoleBackend")
+)
+BBMS_SMS_URL = os.environ.get("BBMS_SMS_URL", "")
+BBMS_SMS_TOKEN = os.environ.get("BBMS_SMS_TOKEN", "")
+# SRS REQ-39: three SMS attempts at increasing intervals, then email.
+BBMS_NOTIFY_SMS_ATTEMPTS = 3
+BBMS_NOTIFY_RETRY_SECONDS = [60, 300]
+
+# ---------------------------------------------------------------------------
+# Donor eligibility rules (SRS REQ-6, REQ-8, BR-2, BR-3)
+# ---------------------------------------------------------------------------
+# Held here until the administrator configuration screen (US-26, REQ-46) exists. Decimals
+# keep every comparison exact, as NFR-Q4 requires.
+BBMS_ELIGIBILITY = {
+    "min_age": 18,
+    "max_age": 65,
+    "min_weight_kg": Decimal("50"),
+    "min_haemoglobin": Decimal("12.5"),
+    "min_systolic": 100,
+    "max_systolic": 140,
+    "donation_interval_days": 90,
+    # How long a physical-criteria deferral (weight, haemoglobin, blood pressure) lasts
+    # before the donor is re-evaluated. The SRS does not state a figure.
+    "deferral_review_days": 30,
+}
+
+# Shelf life in days from collection, by component (SRS BR-4).
+BBMS_SHELF_LIFE_DAYS = {
+    "Whole Blood": 35,
+    "PRBC": 42,
+    "FFP": 365,
+    "Platelets": 5,
+    "Cryoprecipitate": 365,
+}
+
+# Where a unit is shelved when it is released from quarantine. Staff can move it later (REQ-21).
+BBMS_DEFAULT_STORAGE_LOCATION = "FRIDGE-A1"
+
+# Available units this close to their expiry date are flagged and listed in the daily digest
+# (SRS REQ-20). Held here until the configuration screen exists (US-26).
+BBMS_NEAR_EXPIRY_DAYS = 7
+
+# Components a whole blood unit can be separated into (SRS REQ-15), with where each is shelved
+# and a typical volume to suggest on the form.
+BBMS_SEPARATION = {
+    "PRBC": {"storage": "FRIDGE-A1", "suggested_ml": 200},
+    "FFP": {"storage": "FREEZER-B1", "suggested_ml": 150},
+    "Platelets": {"storage": "PLATELET-AGITATOR-1", "suggested_ml": 50},
+}
+
+# Reasons staff choose from when rejecting a hospital request (SRS REQ-27). The SRS says the
+# list is configured but does not give it; these are the usual blood bank reasons.
+BBMS_REJECTION_REASONS = [
+    "Insufficient stock of the requested group",
+    "Requested component is not stocked",
+    "Request details are unclear or incomplete",
+    "Duplicate of an existing request",
+    "Hospital is not authorised to receive blood",
+    "Request withdrawn by the hospital",
+]
