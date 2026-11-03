@@ -1,0 +1,60 @@
+{% extends "core/base.html" %}
+{% load bbms_ui %}
+
+{% block title %}Check availability{% endblock %}
+
+{% block content %}
+<h1>Check blood availability</h1>
+
+<p>Search available blood stock by blood group and component.</p>
+
+<form method="get" class="filter-form">
+    <label for="blood_group">Blood group</label>
+    <select name="blood_group" id="blood_group">
+        <option value="">All blood groups</option>
+        {% for value, label in blood_groups %}
+            <option value="{{ value }}" {% if selected_group == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label for="component_type">Component</label>
+    <select name="component_type" id="component_type">
+        <option value="">All components</option>
+        {% for value, label in components %}
+            <option value="{{ value }}" {% if selected_component == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Search</button>
+    <a href="{% url 'search:availability' %}">Clear filters</a>
+</form>
+
+<h2>Available stock</h2>
+
+<table class="data">
+    <thead>
+        <tr>
+            <th>Blood group</th>
+            <th>Component</th>
+            <th>Available quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in results %}
+            <tr>
+                <td>{{ item.blood_group }}</td>
+                <td>{{ item.component_type }}</td>
+                <td>{{ item.quantity }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No available stock found for the selected filters.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

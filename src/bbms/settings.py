@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "camps",
     "audit",
     "notifications",
+    "search",
 ]
 
 MIDDLEWARE = [
