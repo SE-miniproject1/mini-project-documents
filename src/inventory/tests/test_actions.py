@@ -23,7 +23,10 @@ class InventoryActionTests(TestCase):
         unit.refresh_from_db()
         self.assertEqual((unit.storage_location, unit.status), ("FRIDGE-B2", Status.AVAILABLE))
         entry = AuditEntry.objects.get(event=Event.LOCATION_TRANSFER, entity_id=unit.unit_id)
-        self.assertEqual((entry.previous_value, entry.new_value, entry.actor), ("FRIDGE-A1", "FRIDGE-B2", self.staff))
+        self.assertEqual(
+            (entry.previous_value, entry.new_value, entry.actor),
+            ("FRIDGE-A1", "FRIDGE-B2", self.staff),
+        )
 
     def test_transfer_rejects_same_location_and_issued_units(self):
         from inventory.services.actions import ActionError, transfer_unit
@@ -56,11 +59,17 @@ class InventoryActionScreenTests(TestCase):
         self.unit = make_unit(status=Status.AVAILABLE, storage_location="FRIDGE-A1")
 
     def test_transfer_screen_updates_location(self):
-        response = self.client.post(reverse("inventory:transfer", args=[self.unit.unit_id]), {"destination": "FRIDGE-B2"}, follow=True)
+        response = self.client.post(
+            reverse("inventory:transfer", args=[self.unit.unit_id]),
+            {"destination": "FRIDGE-B2"},
+            follow=True,
+        )
         self.assertEqual(response.status_code, 200)
         self.unit.refresh_from_db()
         self.assertEqual(self.unit.storage_location, "FRIDGE-B2")
-        self.assertTrue(AuditEntry.objects.filter(event=Event.LOCATION_TRANSFER, actor=self.staff).exists())
+        self.assertTrue(
+            AuditEntry.objects.filter(event=Event.LOCATION_TRANSFER, actor=self.staff).exists()
+        )
 
     def test_discard_requires_confirmation_and_reason(self):
         url = reverse("inventory:discard", args=[self.unit.unit_id])
@@ -69,19 +78,43 @@ class InventoryActionScreenTests(TestCase):
         self.assertEqual(self.unit.status, Status.AVAILABLE)
         self.client.post(url, {"reason": "Breakage", "confirm": "on"}, follow=True)
         self.unit.refresh_from_db()
-        self.assertEqual((self.unit.status, self.unit.discard_reason), (Status.DISCARDED, "Breakage"))
+        self.assertEqual(
+            (self.unit.status, self.unit.discard_reason), (Status.DISCARDED, "Breakage")
+        )
 
     def test_issued_unit_cannot_be_discarded(self):
         issued = make_unit(status=Status.ISSUED)
-        response = self.client.post(reverse("inventory:discard", args=[issued.unit_id]), {"reason": "Breakage", "confirm": "on"}, follow=True)
+        response = self.client.post(
+            reverse("inventory:discard", args=[issued.unit_id]),
+            {"reason": "Breakage", "confirm": "on"},
+            follow=True,
+        )
         issued.refresh_from_db()
         self.assertEqual(issued.status, Status.ISSUED)
         self.assertContains(response, "cannot be discarded")
 
     def test_inventory_filters_work_together(self):
         donor = make_donor(blood_group="A+")
-        matching = make_unit(status=Status.AVAILABLE, donor=donor, component_type="PRBC", storage_location="FRIDGE-A1", expiry_date=date.today() + timedelta(days=3))
-        other = make_unit(status=Status.AVAILABLE, component_type="FFP", storage_location="FRIDGE-B2")
-        response = self.client.get(reverse("inventory:console"), {"blood_group": "A+", "component_type": "PRBC", "storage_location": "FRIDGE-A1", "status": "Available", "expiry_from": date.today().isoformat(), "expiry_to": (date.today() + timedelta(days=7)).isoformat()})
+        matching = make_unit(
+            status=Status.AVAILABLE,
+            donor=donor,
+            component_type="PRBC",
+            storage_location="FRIDGE-A1",
+            expiry_date=date.today() + timedelta(days=3),
+        )
+        other = make_unit(
+            status=Status.AVAILABLE, component_type="FFP", storage_location="FRIDGE-B2"
+        )
+        response = self.client.get(
+            reverse("inventory:console"),
+            {
+                "blood_group": "A+",
+                "component_type": "PRBC",
+                "storage_location": "FRIDGE-A1",
+                "status": "Available",
+                "expiry_from": date.today().isoformat(),
+                "expiry_to": (date.today() + timedelta(days=7)).isoformat(),
+            },
+        )
         self.assertContains(response, matching.unit_id)
         self.assertNotContains(response, other.unit_id)

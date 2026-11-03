@@ -5,8 +5,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from accounts.permissions import STAFF_ROLES, role_required
-from audit.models import Event
-from audit.services import record_event
 from core import config
 from core.listing import apply_sort, paginate
 
@@ -65,7 +63,9 @@ def console(request):
         if data.get("component_type"):
             filtered_units = filtered_units.filter(component_type=data["component_type"])
         if data.get("storage_location"):
-            filtered_units = filtered_units.filter(storage_location__icontains=data["storage_location"])
+            filtered_units = filtered_units.filter(
+                storage_location__icontains=data["storage_location"]
+            )
         if data.get("status"):
             filtered_units = filtered_units.filter(status=data["status"])
         if data.get("expiry_from"):
@@ -142,9 +142,15 @@ def transfer(request, unit_id):
         except ActionError as problem:
             form.add_error("destination", str(problem))
         else:
-            messages.success(request, f"{unit.unit_id} transferred to {form.cleaned_data['destination']}.")
+            messages.success(
+                request, f"{unit.unit_id} transferred to {form.cleaned_data['destination']}."
+            )
             return redirect("inventory:unit_detail", unit_id=unit.unit_id)
-    return render(request, "inventory/action_form.html", {"unit": unit, "form": form, "heading": "Transfer unit"})
+    return render(
+        request,
+        "inventory/action_form.html",
+        {"unit": unit, "form": form, "heading": "Transfer unit"},
+    )
 
 
 @role_required(*STAFF_ROLES)
@@ -159,4 +165,8 @@ def discard(request, unit_id):
         else:
             messages.success(request, f"{unit.unit_id} was discarded.")
             return redirect("inventory:unit_detail", unit_id=unit.unit_id)
-    return render(request, "inventory/action_form.html", {"unit": unit, "form": form, "heading": "Discard unit"})
+    return render(
+        request,
+        "inventory/action_form.html",
+        {"unit": unit, "form": form, "heading": "Discard unit"},
+    )
