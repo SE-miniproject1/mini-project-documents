@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% block title %}{{ spec.title }}{% endblock %}
+{% block content %}
+<h1>{{ spec.title }}</h1>
+<p><a href="{% url 'reports:index' %}">All reports</a></p>
+<form method="get" class="search-bar">
+  <div>{{ form.start.label_tag }} {{ form.start }}</div>
+  <div>{{ form.end.label_tag }} {{ form.end }}</div>
+  <button type="submit" class="btn primary">Generate</button>
+</form>
+{% if form.errors %}<p class="error" role="alert">Enter both dates as valid dates.</p>{% endif %}
+{% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+{% if result %}
+<p class="muted">{% for label, value in result.provenance %}{% if not forloop.first %}{{ label }}: {{ value }}{% if not forloop.last %} · {% endif %}{% endif %}{% endfor %}</p>
+<p>
+  <a class="btn" href="?{{ query }}&amp;format=csv">Export CSV</a>
+  <a class="btn" href="?{{ query }}&amp;format=pdf">Export PDF</a>
+</p>
+<div class="scroll-x">
+<table class="data">
+  <thead><tr>{% for column in spec.columns %}<th scope="col">{{ column }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    {% for row in rows %}<tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+    {% empty %}<tr><td colspan="{{ spec.columns|length }}">No records in the selected date range.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}
