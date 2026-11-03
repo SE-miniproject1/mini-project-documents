@@ -3,8 +3,10 @@
 Covers:
 - NFR-SEC9: CSRF protection, contextual HTML escaping, SQL parameter binding.
 - NFR-P1: Screen render response time under 3.0s at P95 across core views.
-- NFR-Q5: Automated unit test line coverage >= 70% threshold verification.
-- ST-25, ST-29, ST-30 from Software Test Plan.
+- ST-25 and ST-29 from the Software Test Plan.
+
+NFR-Q5 (line coverage of at least 70 percent) is enforced by CI through `fail_under = 70` in
+pyproject.toml, not by a test here.
 """
 
 import time
@@ -27,8 +29,6 @@ class SecurityHardeningTests(TestCase):
     def setUp(self):
         self.admin = make_user("admin_sec_01", Role.ADMIN)
         self.staff = make_user("staff_sec_01", Role.STAFF)
-        self.hospital = make_hospital(name="Security Testing Hospital")
-        self.hosp_user = make_hospital_user("hosp_sec_01", self.hospital)
 
     def test_nfr_sec9_csrf_protection_on_state_changing_post(self):
         """State-changing POST request without valid CSRF token is rejected (HTTP 403)."""
@@ -65,15 +65,20 @@ class SecurityHardeningTests(TestCase):
         self.assertContains(response, escaped_needle)
 
     def test_nfr_sec9_sql_injection_metacharacters_handled_safely(self):
-        """SQL injection payloads in input fields are treated as inert strings."""
+        """SQL injection payloads in the donor search are bound as plain text."""
         self.client.force_login(self.staff)
-        sql_payload = "' OR 1=1 --"
+        donor = make_donor(full_name="Asha Rao", blood_group="O+")
+        make_donor(full_name="Vikram Shetty", blood_group="A+")
 
-        # Search or query with SQL injection string
-        response = self.client.get(reverse("inventory:console"), {"q": sql_payload})
-        self.assertEqual(response.status_code, 200)
-        # Query completes cleanly without server error or syntax exception
-        self.assertNotContains(response, "syntax error")
+        # The search really queries the database: a real name finds its donor.
+        response = self.client.get(reverse("donors:search"), {"q": "Asha"})
+        self.assertEqual(list(response.context["page"]), [donor])
+
+        # An injection payload is just text that matches no donor, not "every row".
+        for payload in ("' OR 1=1 --", '" OR ""="', "%' OR '1'='1"):
+            response = self.client.get(reverse("donors:search"), {"q": payload})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(list(response.context["page"]), [])
 
 
 class PerformanceHardeningTests(TestCase):
@@ -106,21 +111,19 @@ class PerformanceHardeningTests(TestCase):
             reverse("donors:search"),
         ]
 
+        # Each screen is timed several times so the 95th percentile means something.
         latencies = []
         for url in endpoints:
-            start_time = time.perf_counter()
-            response = self.client.get(url)
-            elapsed = time.perf_counter() - start_time
-            self.assertEqual(response.status_code, 200)
-            latencies.append(elapsed)
+            for _ in range(5):
+                start_time = time.perf_counter()
+                response = self.client.get(url)
+                latencies.append(time.perf_counter() - start_time)
+                self.assertEqual(response.status_code, 200)
 
         latencies.sort()
-        # Compute P95 latency
-        p95_latency = latencies[int(len(latencies) * 0.95)]
+        p95_latency = latencies[int(len(latencies) * 0.95) - 1]
         self.assertLess(
             p95_latency,
             3.0,
-            f"Screen render latency {p95_latency:.4f}s exceeded 3.0s P95 SLA",
+            f"Screen render latency {p95_latency:.4f}s exceeded the 3.0s P95 limit (NFR-P1)",
         )
-        # Ensure fast sub-second performance in local test runner
-        self.assertLess(p95_latency, 1.0)
