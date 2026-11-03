@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "bloodrequests",
     "camps",
     "audit",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -208,6 +209,18 @@ if ENVIRONMENT == "production":
     EMAIL_USE_TLS = True
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# SMS: an HTTPS gateway in production (SRS SI-4), an in-memory outbox in tests, and a log
+# line in development.
+_SMS_BACKENDS = {"production": "HttpBackend", "test": "LocmemBackend"}
+BBMS_SMS_BACKEND = os.environ.get(
+    "BBMS_SMS_BACKEND", "notifications.sms." + _SMS_BACKENDS.get(ENVIRONMENT, "ConsoleBackend")
+)
+BBMS_SMS_URL = os.environ.get("BBMS_SMS_URL", "")
+BBMS_SMS_TOKEN = os.environ.get("BBMS_SMS_TOKEN", "")
+# SRS REQ-39: three SMS attempts at increasing intervals, then email.
+BBMS_NOTIFY_SMS_ATTEMPTS = 3
+BBMS_NOTIFY_RETRY_SECONDS = [60, 300]
 
 # ---------------------------------------------------------------------------
 # Donor eligibility rules (SRS REQ-6, REQ-8, BR-2, BR-3)
