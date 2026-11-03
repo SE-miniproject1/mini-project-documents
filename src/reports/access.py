@@ -12,7 +12,7 @@ from .definitions import REPORTS
 
 _ALL = frozenset(REPORTS)
 
-# Deviation D-79: the SRS fixes only the hospital rule (REQ-44), so the
+# Deviation D-80: the SRS fixes only the hospital rule (REQ-44), so the
 # role-to-report table below is a project decision.
 ALLOWED_REPORTS = {
     Role.ADMIN: _ALL,
