@@ -25,6 +25,7 @@
 {% endif %}
 <p class="actions">
   {% if can_separate %}<a class="btn primary" href="{% url 'inventory:separate' unit.unit_id %}">Separate into components</a>{% endif %}
+  {% if unit.status != "Issued" and unit.status != "Discarded" %}<a class="btn" href="{% url 'inventory:transfer' unit.unit_id %}">Transfer</a><a class="btn" href="{% url 'inventory:discard' unit.unit_id %}">Discard</a>{% endif %}
   <a class="btn" href="{% url 'inventory:label' unit.unit_id %}">Label</a>
   <a class="btn" href="{% url 'inventory:console' %}" data-shortcut="cancel">Back to inventory</a>
 </p>

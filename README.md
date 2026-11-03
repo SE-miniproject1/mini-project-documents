@@ -13,8 +13,12 @@ A web-based system that manages the full life cycle of donated blood, from donor
 | Software Test Plan, IEEE layout | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, restructured for 2 |
 | Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2 |
 | Word copies for submission | [submission/](submission/) | 1 and 2 |
+ HEAD
 | Sprint 1 and Sprint 2 demo videos | [docs/DEMO.md](docs/DEMO.md) | 1 and 2 |
 | Deployment guide | [docs/Deployment-Guide.md](docs/Deployment-Guide.md) | 2 |
+
+| Sprint 1 demo video, 75 seconds | [docs/DEMO.md](docs/DEMO.md) | Sprint 1 |
+ origin/main
 
 Plans and records: [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for the Deliverable 2 schedule and [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for what the git history shows about who did what.
 
@@ -75,6 +79,15 @@ python manage.py runserver
 ```
 
 Configuration comes from environment variables, listed in `.env.example`. Development uses SQLite. Production uses PostgreSQL through `requirements-postgres.txt`.
+
+Background jobs. Schedule them with cron or systemd in any shared environment:
+
+| Command | When | What it does |
+|---|---|---|
+| `manage.py expire_units` | Daily | Marks expired units and emails the near-expiry digest |
+| `manage.py clear_expired_deferrals` | Nightly | Returns donors to Eligible after their review date |
+| `manage.py send_reminders` | Hourly | Queues eligibility and camp reminders and shortage appeals |
+| `manage.py dispatch_notifications --loop 30` | Always running | Sends queued SMS and email, with retries and email fallback |
 
 Checks that CI runs on every push and pull request:
 
