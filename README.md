@@ -13,12 +13,8 @@ A web-based system that manages the full life cycle of donated blood, from donor
 | Software Test Plan, IEEE layout | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, restructured for 2 |
 | Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2 |
 | Word copies for submission | [submission/](submission/) | 1 and 2 |
- HEAD
 | Sprint 1 and Sprint 2 demo videos | [docs/DEMO.md](docs/DEMO.md) | 1 and 2 |
 | Deployment guide | [docs/Deployment-Guide.md](docs/Deployment-Guide.md) | 2 |
-
-| Sprint 1 demo video, 75 seconds | [docs/DEMO.md](docs/DEMO.md) | Sprint 1 |
- origin/main
 
 Plans and records: [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for the Deliverable 2 schedule and [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for what the git history shows about who did what.
 
