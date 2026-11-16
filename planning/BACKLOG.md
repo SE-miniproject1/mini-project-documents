@@ -61,3 +61,7 @@ Every story in the backlog, US-01 to US-29, is merged to `main` and its issue is
 | US-28 Security, quality and performance hardening (Stretch) | #77 |
 
 Deviations from the SRS, SAD and Test Plan are recorded in `docs/DEVIATIONS.md` (D-01 to D-83).
+
+## Sprint 3
+
+No Sprint 3 was needed. Nothing spilled over from Sprints 1 and 2: US-01 to US-29 are all merged. The week of 02 to 06 November was used for testing and the reports in `docs/test-reports/` (Deliverable 3).
