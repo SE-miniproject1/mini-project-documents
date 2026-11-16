@@ -24,7 +24,7 @@ from inventory.tests.helpers import make_unit
 
 
 class SecurityHardeningTests(TestCase):
-    """NFR-SEC9, ST-29: Security hardening verification."""
+    """NFR-SEC9, ST-29 and SV-07: Security hardening verification."""
 
     def setUp(self):
         self.admin = make_user("admin_sec_01", Role.ADMIN)

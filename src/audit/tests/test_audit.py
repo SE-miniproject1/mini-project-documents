@@ -134,7 +134,7 @@ class ImmutabilityTests(TestCase):
 
 
 class AuthenticationAuditTests(TestCase):
-    """NFR-SEC10: every authentication event, authorisation failure and lockout is recorded."""
+    """SV-08, NFR-SEC10: authentication events, authorisation failures and lockouts."""
 
     def setUp(self):
         self.user = make_user("alice", role=Role.DONOR)
