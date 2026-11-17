@@ -12,6 +12,8 @@ select = ["E", "W", "F", "I", "B", "N"]
 
 [tool.coverage.run]
 source = ["src"]
+# Deliverable 3: the Branch Coverage Report needs branch measurement.
+branch = true
 omit = ["*/migrations/*", "src/manage.py", "src/bbms/wsgi.py", "src/bbms/asgi.py"]
 
 [tool.coverage.report]

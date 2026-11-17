@@ -200,6 +200,8 @@ class SessionTests(TestCase):
 
 
 class CookieAndTransportSettingsTests(TestCase):
+    """SV-04 (NFR-SEC8): production settings turn on Secure cookies, HTTPS redirect and HSTS."""
+
     def test_cookie_flags_in_development(self):
         from django.conf import settings
 
