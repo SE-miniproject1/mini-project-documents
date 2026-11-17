@@ -15,7 +15,7 @@ def log(request):
     event = request.GET.get("event", "")
     if event in Event.values:
         entries = entries.filter(event=event)
-    query = request.GET.get("q", "").strip()
+    query = request.GET.get("q", "").replace("\x00", "").strip()
     if query:
         entries = entries.filter(
             Q(actor_username__icontains=query)

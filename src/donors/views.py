@@ -50,7 +50,7 @@ def registered(request):
 @role_required(*STAFF_ROLES)
 def search(request):
     """Find a donor by ID, mobile number or name (UC4)."""
-    query = request.GET.get("q", "").strip()
+    query = request.GET.get("q", "").replace("\x00", "").strip()
     donors = Donor.objects.filter(is_active=True)
     if query:
         donors = donors.filter(
