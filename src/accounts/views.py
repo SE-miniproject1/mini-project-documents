@@ -44,7 +44,7 @@ def _audit_user_change(request, user, previous, new, reason):
 @role_required(Role.ADMIN)
 def user_admin(request):
     users = User.objects.select_related("hospital")
-    query = request.GET.get("q", "").strip()
+    query = request.GET.get("q", "").replace("\x00", "").strip()
     if query:
         users = users.filter(
             Q(username__icontains=query)

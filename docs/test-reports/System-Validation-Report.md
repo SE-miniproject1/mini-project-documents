@@ -2,7 +2,7 @@
 
 Blood Bank Management System. Covers the 30 system test cases (ST-01 to ST-30) and the 8 security validation cases (SV-01 to SV-08) of `docs/Test-Plan.md`.
 
-Generated 16-11-2026 from commit `486cf41` by `tools/system_validation_report.py`.
+Generated 17-11-2026 from commit `b5f2b35` by `tools/system_validation_report.py`.
 
 ## 1. How the validation was done
 
@@ -61,7 +61,7 @@ Generated 16-11-2026 from commit `486cf41` by `tools/system_validation_report.py
 | SV-04 | Transport security | Verify HTTP redirects to HTTPS, weak TLS versions are refused and HSTS is sent | Partly executed | Partly executed: the HTTP-to-HTTPS permanent redirect, the HSTS header and the production settings are verified by automated tests (core/tests/test_security_validation.py, accounts/tests/test_authentication.py). The TLS 1.0 and 1.1 handshake refusal needs a deployed server and a TLS scanner and was not run. See D-86 |
 | SV-05 | Credential storage | Verify only salted slow hashes are stored | Passed | Passed: stored values are salted hashes and two accounts with the same password get different hashes (accounts/tests/test_authentication.py) |
 | SV-06 | Logging | Verify logs never contain passwords, session tokens or full medical histories | Passed with deviation | Passed with deviation: log output captured at DEBUG level during failed and successful sign-in and donor registration with a declared condition contains no password, session id or condition name. Screening entry is not part of the captured flow (core/tests/test_security_validation.py). See D-87 |
-| SV-07 | Input handling | Verify fuzzed input never causes an unhandled error or data corruption | Passed with deviation | Passed with deviation: oversized, empty, negative, unicode, SQL and script payloads sent to the registration fields, the donor search and the request quantity give field errors or inert text and never a 500 (core/tests/test_security_validation.py, core/tests/test_hardening.py). Not every free-text field in the system is covered, and no scanner was run. See D-88 |
+| SV-07 | Input handling | Verify fuzzed input never causes an unhandled error or data corruption | Passed with deviation | Passed with deviation: oversized, empty, negative, unicode, SQL and script payloads sent to the registration fields, the donor search and the request quantity give field errors or inert text and never a 500 (core/tests/test_security_validation.py, core/tests/test_hardening.py). The run found a real defect: a NUL character in the donor, audit log or user search made PostgreSQL return a server error. The three searches now drop NUL characters and the test covers them. Not every free-text field in the system is covered, and no scanner was run. See D-88 |
 | SV-08 | Audit | Verify failed logins and authorisation failures are written to the audit log with user, time and source | Passed | Passed: failed sign-ins and authorisation failures are recorded with user, time and source address, and shown to the administrator (audit/tests/test_audit.py) |
 
 ## 4. Not run, and why

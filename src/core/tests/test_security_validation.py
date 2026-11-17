@@ -147,6 +147,16 @@ class HostileInputTests(TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertNotContains(response, "<script>alert(1)</script>")
 
+    def test_admin_search_boxes_survive_every_payload(self):
+        """The audit log and user list searches also take free text (a NUL crashed PostgreSQL)."""
+        admin = make_user("admin_sv07", Role.ADMIN)
+        self.client.login(username=admin.username, password=STRONG_PASSWORD)
+        for name in ("audit:log", "accounts:user_admin"):
+            for payload in self.PAYLOADS:
+                with self.subTest(page=name, payload=payload[:20]):
+                    response = self.client.get(reverse(name), {"q": payload})
+                    self.assertEqual(response.status_code, 200)
+
     def test_a_bad_quantity_in_a_blood_request_is_refused(self):
         hospital_user = make_hospital_user()
         self.client.login(username=hospital_user.username, password=STRONG_PASSWORD)
