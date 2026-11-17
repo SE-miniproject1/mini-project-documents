@@ -16,6 +16,7 @@ class InventoryActionTests(TestCase):
         self.staff = make_user("inventory_staff", role=Role.STAFF)
 
     def test_transfer_updates_location_and_writes_audit_record(self):
+        """UT-22: a transfer changes the location, not the status, and is audited."""
         from inventory.services.actions import transfer_unit
 
         unit = make_unit(status=Status.AVAILABLE, storage_location="FRIDGE-A1")
@@ -39,6 +40,7 @@ class InventoryActionTests(TestCase):
             transfer_unit(issued, "FRIDGE-C1", by=self.staff)
 
     def test_discard_requires_reason_and_respects_status_transition_rules(self):
+        """UT-23: a discard needs a reason and an Issued unit is refused."""
         from inventory.services.actions import ActionError, discard_unit
 
         unit = make_unit(status=Status.AVAILABLE)
@@ -59,6 +61,7 @@ class InventoryActionScreenTests(TestCase):
         self.unit = make_unit(status=Status.AVAILABLE, storage_location="FRIDGE-A1")
 
     def test_transfer_screen_updates_location(self):
+        """IT-12: a transfer made on screen is saved and audited."""
         response = self.client.post(
             reverse("inventory:transfer", args=[self.unit.unit_id]),
             {"destination": "FRIDGE-B2"},
@@ -72,6 +75,7 @@ class InventoryActionScreenTests(TestCase):
         )
 
     def test_discard_requires_confirmation_and_reason(self):
+        """IT-12 and ST-12: a discard needs a reason and a confirmation, and is audited."""
         url = reverse("inventory:discard", args=[self.unit.unit_id])
         self.client.post(url, {"reason": "Breakage"}, follow=True)
         self.unit.refresh_from_db()
@@ -94,6 +98,7 @@ class InventoryActionScreenTests(TestCase):
         self.assertContains(response, "cannot be discarded")
 
     def test_inventory_filters_work_together(self):
+        """UT-19: combined filters return only the intersecting set."""
         donor = make_donor(blood_group="A+")
         matching = make_unit(
             status=Status.AVAILABLE,
