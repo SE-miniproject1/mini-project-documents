@@ -1,12 +1,13 @@
 # Branch Coverage Report
 
-Prepared by Niveditha. Coverage figures verified on 18-11-2026 against commit `25cac0340d0cfb5ebcb6d0abbbc55bdcf88c9368`. Tool: coverage.py with branch measurement, driven by the Django test runner on the SQLite test database.
+Prepared by Niveditha. Coverage figures verified on 18-11-2026. Tool: coverage.py with branch measurement, driven by the Django test runner on the SQLite test database.
 
 **Commands:**
 ```bash
 export BBMS_ENV=test DJANGO_SECRET_KEY=local-test
-coverage run --branch src/manage.py test src
-coverage report --show-missing > docs/test-reports/branch-coverage-summary.txt
+python -m coverage run --branch src/manage.py test src
+python -m coverage report --show-missing > docs/test-reports/branch-coverage-summary.txt
+python -m coverage json -o docs/test-reports/coverage.json
 ```
 
 ## 1. Result
@@ -17,12 +18,13 @@ coverage report --show-missing > docs/test-reports/branch-coverage-summary.txt
 | Passed | 585 |
 | Skipped | 1 |
 | Failed | 0 |
-| Statements | 7,692 |
+| Statements | 7,692 (7,581 covered, 111 missing) |
+| Line coverage | 98.56 percent |
 | Branches | 890 (837 covered, 53 missing) |
 | Partial branches | 47 |
-| **Branch coverage** | **94.0 percent** |
+| **Branch coverage** | **94.04 percent** |
 
-The Test Plan exit criterion (NFR-Q5) asks for at least 70 percent line coverage. Line coverage is 98.5 percent and branch coverage is 94.0 percent, so the criterion is met.
+The Test Plan exit criterion (NFR-Q5) asks for at least 70 percent line coverage. Line coverage is 98.56 percent and branch coverage is 94.04 percent, so the criterion is met.
 
 The one skipped test is `ConcurrentAllocationTests.test_only_one_of_two_simultaneous_allocations_wins`. SQLite has no `select_for_update`, so it runs only in the PostgreSQL pass of the CI (D-72). It is not one of the cases in this report.
 
