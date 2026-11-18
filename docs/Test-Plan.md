@@ -151,7 +151,7 @@ New security validation cases:
 | Test execution | After environment setup. Date to be confirmed by the team |
 | Acceptance demonstration | To be scheduled with the course faculty |
 
-No test has been executed. Actual Result and Test Result columns stay `Not executed` and `Pending` until the system exists.
+Automated execution has been completed for the cases recorded as Passed, Passed with deviation or Failed in Appendix A and Section 5.1. The remaining cases retain `Not executed` and `Pending`. The execution evidence and outstanding deviations are recorded in `docs/test-reports/` and `docs/DEVIATIONS.md`.
 
 ---
 
