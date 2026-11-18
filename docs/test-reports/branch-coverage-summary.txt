@@ -1,0 +1,193 @@
+Name                                                              Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------------------------------------------------
+src/accounts/__init__.py                                              0      0      0      0   100%
+src/accounts/admin.py                                                 9      0      0      0   100%
+src/accounts/apps.py                                                  3      0      0      0   100%
+src/accounts/backends.py                                             22      2      8      2    87%   13, 15
+src/accounts/forms.py                                                64      1     18      2    96%   47, 75->77
+src/accounts/lockout.py                                              40      1      6      1    96%   26
+src/accounts/models.py                                               47      0      2      0   100%
+src/accounts/permissions.py                                          28      0      4      0   100%
+src/accounts/tests/__init__.py                                        0      0      0      0   100%
+src/accounts/tests/helpers.py                                         9      0      0      0   100%
+src/accounts/tests/test_admin.py                                    130      0      2      0   100%
+src/accounts/tests/test_authentication.py                           150      0     16      0   100%
+src/accounts/tests/test_models.py                                    29      0      0      0   100%
+src/accounts/tests/test_permissions.py                               39      0      4      0   100%
+src/accounts/tests/urls_for_tests.py                                 16      0      0      0   100%
+src/accounts/urls.py                                                  5      0      0      0   100%
+src/accounts/validators.py                                           15      0      8      0   100%
+src/accounts/views.py                                                79      1     18      2    97%   96->113, 184
+src/audit/__init__.py                                                 0      0      0      0   100%
+src/audit/admin.py                                                   14      1      0      0    93%   14
+src/audit/apps.py                                                     5      0      0      0   100%
+src/audit/context.py                                                  8      0      0      0   100%
+src/audit/middleware.py                                               9      0      0      0   100%
+src/audit/models.py                                                  43      2      2      0    96%   59-60
+src/audit/receivers.py                                               18      0      2      0   100%
+src/audit/services.py                                                11      0      4      0   100%
+src/audit/tests/__init__.py                                           0      0      0      0   100%
+src/audit/tests/test_audit.py                                       159      0     12      0   100%
+src/audit/urls.py                                                     4      0      0      0   100%
+src/audit/views.py                                                   19      0      6      1    96%   36->38
+src/bbms/__init__.py                                                  0      0      0      0   100%
+src/bbms/settings.py                                                 92     14     18      8    78%   22, 29, 34, 40-43, 102, 175->179, 200, 205-210
+src/bbms/urls.py                                                      3      0      0      0   100%
+src/bloodrequests/__init__.py                                         0      0      0      0   100%
+src/bloodrequests/allocation.py                                     121      1     42      2    98%   128, 170->172
+src/bloodrequests/apps.py                                             6      0      0      0   100%
+src/bloodrequests/forms.py                                           30      0      4      0   100%
+src/bloodrequests/models.py                                          62      3      2      0    95%   67-68, 121
+src/bloodrequests/receivers.py                                        8      0      2      0   100%
+src/bloodrequests/services.py                                        63      0     20      0   100%
+src/bloodrequests/tests/__init__.py                                   0      0      0      0   100%
+src/bloodrequests/tests/helpers.py                                   13      0      0      0   100%
+src/bloodrequests/tests/test_allocation.py                          273      0     18      0   100%
+src/bloodrequests/tests/test_queue.py                               120      0      8      0   100%
+src/bloodrequests/tests/test_raise_request.py                       130      0      8      0   100%
+src/bloodrequests/tests/test_safety.py                              112     21      4      0    78%   116-143
+src/bloodrequests/urls.py                                             4      0      0      0   100%
+src/bloodrequests/views.py                                          105      7     26      5    91%   41-42, 53, 131->138, 145->155, 149-150, 160->167, 207->214, 210-211
+src/bloodrequests/workflow.py                                        52      1      6      1    97%   97
+src/camps/__init__.py                                                 0      0      0      0   100%
+src/camps/apps.py                                                     3      0      0      0   100%
+src/camps/forms.py                                                   29      0      6      0   100%
+src/camps/models.py                                                  33      1      0      0    97%   43
+src/camps/services.py                                                86      4     26      1    96%   127, 136-138
+src/camps/tests/__init__.py                                           0      0      0      0   100%
+src/camps/tests/test_camps.py                                       178      0      4      0   100%
+src/camps/tests/test_collection_link.py                             103      0      2      0   100%
+src/camps/tests/test_it20_camp_to_inventory.py                       16      0      2      0   100%
+src/camps/urls.py                                                     4      0      0      0   100%
+src/camps/views.py                                                   57      2      8      2    94%   30->37, 55-56, 80->91
+src/collection/__init__.py                                            0      0      0      0   100%
+src/collection/apps.py                                                3      0      0      0   100%
+src/collection/forms.py                                              37      0      6      0   100%
+src/collection/models.py                                             41      2      2      0    95%   26, 71
+src/collection/services/__init__.py                                   0      0      0      0   100%
+src/collection/services/collect.py                                   34      0      8      0   100%
+src/collection/services/guard.py                                     29      0     10      0   100%
+src/collection/services/screening.py                                 80      3     20      1    96%   104-106
+src/collection/tests/__init__.py                                      0      0      0      0   100%
+src/collection/tests/test_collect.py                                130      0      2      0   100%
+src/collection/tests/test_guard.py                                   56      0      0      0   100%
+src/collection/tests/test_screening.py                              192      0      8      0   100%
+src/collection/urls.py                                                4      0      0      0   100%
+src/collection/views.py                                              60      2     10      1    96%   39-41, 75->80
+src/core/__init__.py                                                  0      0      0      0   100%
+src/core/apps.py                                                      3      0      0      0   100%
+src/core/config.py                                                   79      0     22      0   100%
+src/core/config_urls.py                                               4      0      0      0   100%
+src/core/context_processors.py                                       10      0      2      0   100%
+src/core/forms.py                                                    27      0      6      0   100%
+src/core/help_text.py                                                 4      0      0      0   100%
+src/core/listing.py                                                  17      0      2      0   100%
+src/core/management/__init__.py                                       0      0      0      0   100%
+src/core/management/commands/__init__.py                              0      0      0      0   100%
+src/core/management/commands/seed_demo.py                            57      1     14      1    97%   76
+src/core/models.py                                                   18      1      0      0    94%   42
+src/core/navigation.py                                               24      0      6      0   100%
+src/core/search_urls.py                                               4      0      0      0   100%
+src/core/templatetags/__init__.py                                     0      0      0      0   100%
+src/core/templatetags/bbms_ui.py                                     28      0      2      0   100%
+src/core/tests/__init__.py                                            0      0      0      0   100%
+src/core/tests/test_availability.py                                  62      0      2      0   100%
+src/core/tests/test_config.py                                        76      0      2      0   100%
+src/core/tests/test_forms.py                                         55      0      2      0   100%
+src/core/tests/test_hardening.py                                     61      0      8      0   100%
+src/core/tests/test_layout.py                                        53      0     10      0   100%
+src/core/tests/test_listing.py                                       45      0      2      0   100%
+src/core/tests/test_navigation.py                                    38      0      2      0   100%
+src/core/tests/test_safety_concurrency.py                            81      0      0      0   100%
+src/core/tests/test_security_validation.py                           97      0     12      0   100%
+src/core/tests/test_seed.py                                          52      0      6      0   100%
+src/core/tests/test_setup.py                                         31      0      0      0   100%
+src/core/tests/urls_for_tests.py                                     27      1      4      0    97%   32
+src/core/urls.py                                                      3      0      0      0   100%
+src/core/views.py                                                    48      0     12      0   100%
+src/donors/__init__.py                                                0      0      0      0   100%
+src/donors/admin.py                                                  23      4      0      0    83%   22, 30, 33, 36
+src/donors/apps.py                                                    5      0      0      0   100%
+src/donors/checks.py                                                  8      0      2      0   100%
+src/donors/forms.py                                                  74      0      6      0   100%
+src/donors/management/__init__.py                                     0      0      0      0   100%
+src/donors/management/commands/__init__.py                            0      0      0      0   100%
+src/donors/management/commands/clear_expired_deferrals.py             7      0      0      0   100%
+src/donors/models.py                                                 98      1      2      0    99%   88
+src/donors/notifications.py                                           9      0      0      0   100%
+src/donors/services/__init__.py                                       0      0      0      0   100%
+src/donors/services/deferrals.py                                     17      0      4      0   100%
+src/donors/services/eligibility.py                                   93      0     30      0   100%
+src/donors/services/id_generator.py                                   7      0      0      0   100%
+src/donors/tests/__init__.py                                          0      0      0      0   100%
+src/donors/tests/helpers.py                                          26      2      4      2    87%   16-17, 64->66, 66->70
+src/donors/tests/test_declarations.py                               122      0      0      0   100%
+src/donors/tests/test_deferrals.py                                  122      0      2      0   100%
+src/donors/tests/test_eligibility.py                                221      0     14      0   100%
+src/donors/tests/test_registration.py                               123      0      4      0   100%
+src/donors/tests/test_validation.py                                  73      0      8      0   100%
+src/donors/urls.py                                                    4      0      0      0   100%
+src/donors/validators.py                                             34      4     10      2    86%   33-34, 47, 57
+src/donors/views.py                                                  70      0     14      0   100%
+src/inventory/__init__.py                                             0      0      0      0   100%
+src/inventory/admin.py                                               13      0      0      0   100%
+src/inventory/apps.py                                                 3      0      0      0   100%
+src/inventory/forms.py                                               42      2     10      2    92%   29, 39
+src/inventory/management/__init__.py                                  0      0      0      0   100%
+src/inventory/management/commands/__init__.py                         0      0      0      0   100%
+src/inventory/management/commands/expire_units.py                    12      0      2      0   100%
+src/inventory/models.py                                              86      1     18      1    98%   105, 122->127
+src/inventory/services/__init__.py                                    0      0      0      0   100%
+src/inventory/services/actions.py                                    36      3     10      1    91%   16, 48-49
+src/inventory/services/barcode.py                                     8      0      0      0   100%
+src/inventory/services/expiry.py                                     47      0      8      0   100%
+src/inventory/services/id_generator.py                                7      0      0      0   100%
+src/inventory/services/safety.py                                     13      0      4      0   100%
+src/inventory/services/separation.py                                 47      1     22      0    99%   24
+src/inventory/services/shelf_life.py                                  5      0      0      0   100%
+src/inventory/services/stock.py                                      31      1      2      0    97%   58
+src/inventory/signals.py                                              2      0      0      0   100%
+src/inventory/tests/__init__.py                                       0      0      0      0   100%
+src/inventory/tests/helpers.py                                       28      0      6      0   100%
+src/inventory/tests/test_actions.py                                  71      0      0      0   100%
+src/inventory/tests/test_barcode.py                                  48      0      4      0   100%
+src/inventory/tests/test_console.py                                 122      0     16      0   100%
+src/inventory/tests/test_expiry.py                                  160      0     10      0   100%
+src/inventory/tests/test_separation.py                              137      0     10      0   100%
+src/inventory/tests/test_unit_model.py                              181      1     16      1    99%   163
+src/inventory/urls.py                                                 4      0      0      0   100%
+src/inventory/views.py                                               89      3     22      1    96%   142-143, 149
+src/notifications/__init__.py                                         0      0      0      0   100%
+src/notifications/admin.py                                           15      4      0      0    73%   15, 18, 21, 24
+src/notifications/apps.py                                             3      0      0      0   100%
+src/notifications/dispatcher.py                                      72      3     14      2    94%   86-87, 130
+src/notifications/management/__init__.py                              0      0      0      0   100%
+src/notifications/management/commands/__init__.py                     0      0      0      0   100%
+src/notifications/management/commands/dispatch_notifications.py      14      1      2      1    88%   22
+src/notifications/management/commands/send_reminders.py              10      0      2      0   100%
+src/notifications/models.py                                          36      1      0      0    97%   63
+src/notifications/sms.py                                             32      2      2      0    94%   27-28
+src/notifications/tasks/__init__.py                                   0      0      0      0   100%
+src/notifications/tasks/reminders.py                                 32      0      6      0   100%
+src/notifications/tasks/shortage.py                                  32      0     10      0   100%
+src/notifications/tests/__init__.py                                   0      0      0      0   100%
+src/notifications/tests/test_notifications.py                       232      0     14      0   100%
+src/reports/__init__.py                                               0      0      0      0   100%
+src/reports/access.py                                                19      0      4      0   100%
+src/reports/apps.py                                                   4      0      0      0   100%
+src/reports/definitions.py                                            7      0      0      0   100%
+src/reports/forms.py                                                  9      0      0      0   100%
+src/reports/services/__init__.py                                      0      0      0      0   100%
+src/reports/services/export.py                                       53      0     10      0   100%
+src/reports/services/generator.py                                   101      3     30      2    96%   116-117, 246
+src/reports/services/result.py                                       25      0      8      0   100%
+src/reports/tests/__init__.py                                         0      0      0      0   100%
+src/reports/tests/test_access.py                                     38      0      6      0   100%
+src/reports/tests/test_definitions.py                                10      0      2      0   100%
+src/reports/tests/test_export_csv.py                                 34      0      0      0   100%
+src/reports/tests/test_export_pdf.py                                 24      0      2      0   100%
+src/reports/tests/test_generator.py                                 166      1      6      1    99%   57
+src/reports/urls.py                                                   4      0      0      0   100%
+src/reports/views.py                                                 44      1     12      1    96%   32
+-------------------------------------------------------------------------------------------------------------
+TOTAL                                                              7692    111    890     47    98%
