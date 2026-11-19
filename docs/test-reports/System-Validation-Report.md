@@ -2,7 +2,7 @@
 
 Blood Bank Management System. Covers the 30 system test cases (ST-01 to ST-30) and the 8 security validation cases (SV-01 to SV-08) of `docs/Test-Plan.md`.
 
-Generated 17-11-2026 from commit `b5f2b35` by `tools/system_validation_report.py`.
+Generated 19-11-2026 from commit `9b4a0f4` by `tools/system_validation_report.py`.
 
 ## 1. How the validation was done
 
@@ -15,46 +15,46 @@ Generated 17-11-2026 from commit `b5f2b35` by `tools/system_validation_report.py
 
 | Result | Cases |
 |---|---|
-| Partly executed | 1 |
-| Passed | 8 |
-| Passed with deviation | 4 |
-| Pending | 25 |
+| Failed | 1 |
+| Partly executed | 2 |
+| Passed | 11 |
+| Passed with deviation | 24 |
 | **Total** | **38** |
 
 ## 3. Results per case
 
 | ID | Module | Description | Result | Evidence |
 |---|---|---|---|---|
-| ST-01 | Donor Portal | Verify a member of the public can self-register and receives a donor identifier | Pending | Not executed |
-| ST-02 | Donor Portal | Verify invalid registration inputs are rejected with field-level messages | Pending | Not executed |
-| ST-03 | Staff Console | Verify screening a donor who fails multiple criteria shows every reason | Pending | Not executed |
-| ST-04 | Donor Portal | Verify the donor dashboard shows the correct next eligible date after a donation | Pending | Not executed |
+| ST-01 | Donor Portal | Verify a member of the public can self-register and receives a donor identifier | Passed with deviation | Passed via Django test client in `donors/tests/test_registration.py` (`RegistrationFlowTests.test_registration_creates_donor_account_and_consent_then_shows_the_id`, `test_a_welcome_email_is_sent_to_the_donor`); confirmation shows DNR ID and welcome email sent (D-90). |
+| ST-02 | Donor Portal | Verify invalid registration inputs are rejected with field-level messages | Passed with deviation | Passed via Django test client in `donors/tests/test_validation.py` (`RejectedRegistrationTests.test_three_problems_give_three_field_errors_and_a_summary_with_no_account`); three field errors and summary banner shown, no account created (D-90). |
+| ST-03 | Staff Console | Verify screening a donor who fails multiple criteria shows every reason | Passed with deviation | Passed via Django test client in `donors/tests/test_eligibility.py` (`ScreeningScreenTests.test_two_failures_list_both_reasons_and_a_review_date`); shows Temporarily Deferred with both reasons and review date (D-90). |
+| ST-04 | Donor Portal | Verify the donor dashboard shows the correct next eligible date after a donation | Passed with deviation | Passed via Django test client in `donors/tests/test_deferrals.py` (`DashboardTests.test_a_donor_who_gave_blood_ten_days_ago_sees_not_eligible_and_the_date`); shows Not Eligible, next eligible date (+90 days) and days remaining (D-90). |
 | ST-05 | Staff Console | Verify staff can record a complete collection end to end | Passed | Passed: the screen flow saves the collection and shows the unit identifier, Quarantined status and expiry date (collection/tests/test_collect.py, inventory/tests/test_barcode.py) |
 | ST-06 | Staff Console | Verify an incompletely tested unit cannot be released | Passed | Passed: releasing with Malaria blank is refused with the missing test named and the unit stays Quarantined (collection/tests/test_screening.py) |
 | ST-07 | Staff Console | Verify a reactive screening result removes the unit from circulation permanently | Passed | Passed: a Reactive result shows the unit as Discarded with the reason, the unit cannot be allocated, and administrators are alerted (collection/tests/test_screening.py, collection/tests/test_collect.py) |
 | ST-08 | Staff Console | Verify component separation through the interface produces three usable child units | Passed | Passed: submitting the separation form from the unit screen creates the child units and shows them, with identifiers and per-component expiry checked in the service tests (inventory/tests/test_separation.py) |
-| ST-09 | Inventory Console | Verify the console displays accurate stock grouped by group and component | Pending | Not executed |
-| ST-10 | Inventory Console | Verify filtering and the exclusion of expired stock from issuable results | Pending | Not executed |
-| ST-11 | Inventory Console | Verify near-expiry flagging and location transfer through the interface | Pending | Not executed |
-| ST-12 | Inventory Console | Verify the discard workflow enforces confirmation and audit | Pending | Not executed |
-| ST-13 | Hospital Portal | Verify a hospital user can raise a request end to end | Pending | Not executed |
-| ST-14 | Staff Console | Verify the staff queue prioritises Emergency requests and supports rejection | Pending | Not executed |
-| ST-15 | Staff Console | Verify units are issued only when group, status and expiry all match | Pending | Not executed |
-| ST-16 | Hospital Portal | Verify partial fulfilment display and cancellation behaviour for a hospital user | Pending | Not executed |
-| ST-17 | Camp Management | Verify staff can schedule a camp and invalid schedules are refused | Pending | Not executed |
-| ST-18 | Donor Portal | Verify a donor can browse and enrol in an upcoming camp | Pending | Not executed |
-| ST-19 | Camp Management | Verify camp performance is reported correctly on closure | Pending | Not executed |
+| ST-09 | Inventory Console | Verify the console displays accurate stock grouped by group and component | Passed with deviation | Passed with deviation: the console grid is checked cell for cell against the database and totals add up, using the Django test client and a small seed and not 120 units in a browser (inventory/tests/test_console.py). See D-96 |
+| ST-10 | Inventory Console | Verify filtering and the exclusion of expired stock from issuable results | Passed with deviation | Passed with deviation: the combined filters return only matching units, and an expired unit is not counted in the grid, through test-client screen tests. AB- Platelets data was not used (inventory/tests/test_actions.py, inventory/tests/test_console.py). See D-96 |
+| ST-11 | Inventory Console | Verify near-expiry flagging and location transfer through the interface | Passed with deviation | Passed with deviation: the console lists units expiring soon with days left, and a transfer on screen changes the location. The two were tested separately and not as one flow (inventory/tests/test_expiry.py, inventory/tests/test_actions.py). See D-96 |
+| ST-12 | Inventory Console | Verify the discard workflow enforces confirmation and audit | Passed with deviation | Passed with deviation: a discard is refused until the confirmation box is ticked and a reason is given, then sets Discarded with the reason. The confirmation is a page headed with the unit identifier and a permanent-action warning, not a pop-up dialog, and the audit entry is read in the administrator audit log (inventory/tests/test_actions.py). See D-96 and D-98 |
+| ST-13 | Hospital Portal | Verify a hospital user can raise a request end to end | Passed with deviation | Passed with deviation: a hospital user raises a request, sees a confirmation with the request identifier and status Pending, and finds it in the hospital's own tracker. Run with the test client and not by hand in a browser (bloodrequests/tests/test_raise_request.py). See D-96 |
+| ST-14 | Staff Console | Verify the staff queue prioritises Emergency requests and supports rejection | Passed with deviation | Passed with deviation: the staff queue lists Emergency requests first, marked in words, a rejection needs a reason, and the hospital sees Rejected with the reason. Run with the test client and not by hand in a browser (bloodrequests/tests/test_queue.py). See D-96 |
+| ST-15 | Staff Console | Verify units are issued only when group, status and expiry all match | Passed with deviation | Passed with deviation: staff reserve and issue matching units, a mismatched unit posted by hand is refused with the reason and stays Available, and the hospital sees the result. Run with the test client and not by hand in a browser (bloodrequests/tests/test_allocation.py). See D-96 |
+| ST-16 | Hospital Portal | Verify partial fulfilment display and cancellation behaviour for a hospital user | Passed with deviation | Passed with deviation: the hospital cancels its own Pending request, has no cancel button once a unit is issued, and cannot cancel another hospital's request. Run with the test client and not by hand in a browser (bloodrequests/tests/test_allocation.py). See D-96 |
+| ST-17 | Camp Management | Verify staff can schedule a camp and invalid schedules are refused | Passed with deviation | Passed with deviation: `test_staff_schedule_a_camp_and_the_donor_sees_it` and `test_invalid_schedules_are_refused_with_messages` verify valid camp creation and field-level rejection of invalid schedules through the Django test client, not a browser (D-107; `camps/tests/test_camps.py`). |
+| ST-18 | Donor Portal | Verify a donor can browse and enrol in an upcoming camp | Passed with deviation | Passed with deviation: `test_a_donor_enrols_from_the_listing` verifies the donor can enrol from the camp listing, sees confirmation and no longer sees the Enrol action; the scenario uses the Django test client, not a browser (D-107; `camps/tests/test_camps.py`). |
+| ST-19 | Camp Management | Verify camp performance is reported correctly on closure | Passed with deviation | Passed with deviation: the camp collection screen tests verify staff can record collections, close a camp, see actual units and percentage against target, and cannot close it twice; the screens are exercised through the Django test client, not a browser (D-107; `camps/tests/test_collection_link.py`). |
 | ST-20 | Hospital Portal | Verify a hospital user can check availability before raising a request | Passed | Passed: a hospital user opens Check Availability, filters by group and component, and sees the available count. No unit or donor information appears on the screen (core/tests/test_availability.py) |
-| ST-21 | Notifications | Verify a donor receives eligibility and camp reminder notifications | Pending | Not executed |
-| ST-22 | Reporting | Verify shortage appeal and report generation through the interface | Pending | Not executed |
-| ST-23 | Reporting | Verify report export and hospital data scoping through the interface | Pending | Not executed |
-| ST-24 | Administration | Verify an administrator can manage users, hospitals and configuration | Pending | Not executed |
-| ST-25 | Performance | Verify screen render and search response under concurrent load | Pending | Not executed |
-| ST-26 | Safety | Verify an untested and an expired unit can never be issued through any route | Pending | Not executed |
-| ST-27 | Safety | Verify group mismatch and concurrent double allocation are both prevented | Pending | Not executed |
-| ST-28 | Security | Verify server-side role enforcement and tenant data isolation | Pending | Not executed |
-| ST-29 | Security | Verify donor confidentiality and absence of common vulnerability classes | Pending | Not executed |
-| ST-30 | Quality | Verify test coverage and complete requirement traceability | Pending | Not executed |
+| ST-21 | Notifications | Verify a donor receives eligibility and camp reminder notifications | Passed with deviation | Passed with deviation: eligibility and camp reminder tests verify due donors receive dated reminders, each enrolled donor gets one camp reminder, and repeated runs do not duplicate messages; the system scenario uses automated Django tests rather than a browser (D-107; `notifications/tests/test_notifications.py`). |
+| ST-22 | Reporting | Verify shortage appeal and report generation through the interface | Failed | Failed: the dashboard shortage banner and the below-threshold flag on the Inventory Status Report are not built (D-103). |
+| ST-23 | Reporting | Verify report export and hospital data scoping through the interface | Passed with deviation | Passed with deviation: `test_a_report_on_screen_matches_its_csv_export` and the hospital access tests verify report/CSV consistency and role-based data scoping through Django's test client, not a browser (D-107; `reports/tests/test_generator.py`, `reports/tests/test_access.py`). |
+| ST-24 | Administration | Verify an administrator can manage users, hospitals and configuration | Passed with deviation | Passed with deviation: hospital registration, deactivation and the refused request are tested separately, not as one flow (D-104). Run through the Django test client (D-107). |
+| ST-25 | Performance | Verify screen render and search response under concurrent load | Partly executed | Partly executed in `core/tests/test_hardening.py` (`PerformanceHardeningTests.test_nfr_p1_screen_render_well_under_three_seconds_p95`); P95 screen render < 3.0 s verified on seeded data; 50-user / 50,000-unit load test not run (D-91). |
+| ST-26 | Safety | Verify an untested and an expired unit can never be issued through any route | Passed | Passed in `bloodrequests/tests/test_safety.py` and `core/tests/test_safety_concurrency.py`; quarantined and expired units cannot be allocated or issued via UI or direct POST. |
+| ST-27 | Safety | Verify group mismatch and concurrent double allocation are both prevented | Passed with deviation | Passed with deviation in `bloodrequests/tests/test_safety.py` and `core/tests/test_safety_concurrency.py`; group mismatch refused and sequential race passes on SQLite; `ConcurrentAllocationTests` skipped on SQLite and runs on PostgreSQL 16 in CI (D-72). |
+| ST-28 | Security | Verify server-side role enforcement and tenant data isolation | Passed | Passed in `accounts/tests/test_permissions.py` (`RoleEnforcementTests`) and `bloodrequests/tests/`; cross-role and cross-tenant access refused server-side with 403 and logged to audit (D-93). |
+| ST-29 | Security | Verify donor confidentiality and absence of common vulnerability classes | Passed with deviation | Passed with deviation in `core/tests/test_hardening.py` (`SecurityHardeningTests`); CSRF, XSS escaping and SQLi parameter binding verified; external OWASP ZAP scan not run (D-92). |
+| ST-30 | Quality | Verify test coverage and complete requirement traceability | Passed | Passed: CI enforces 70% coverage gate (actual 98% line coverage across 576 tests), `ruff check src` and `ruff format --check src` clean, and `tools/check_traceability.py` confirms 46/46 functional requirements and 104/104 test cases traced. |
 | SV-01 | Authentication | Verify the password policy rejects weak and known-compromised passwords | Passed | Passed: short, no-digit and known-compromised passwords are rejected with the rule named, and the strong one is accepted (accounts/tests/test_authentication.py) |
 | SV-02 | Authentication | Verify the account locks for 15 minutes after 5 consecutive failed logins and the holder is emailed | Passed with deviation | Passed: five failures lock the account even for the right password, the holder is emailed, and the lock ends after 15 minutes. The 15 minutes are simulated by moving the clock, not waited for (accounts/tests/test_authentication.py). See D-85 |
 | SV-03 | Session management | Verify sessions expire after 30 minutes idle and are invalidated on logout and password change | Passed with deviation | Passed: expiry is set to 30 minutes and slides with activity, a replayed cookie after logout is refused, and a password change ends other sessions. A real 31-minute idle wait was not done (accounts/tests/test_authentication.py). See D-85 |
@@ -69,10 +69,12 @@ Generated 17-11-2026 from commit `b5f2b35` by `tools/system_validation_report.py
 - **SV-04 TLS version refusal.** Needs the reverse proxy and a TLS scanner (D-86).
 - **SV-02 and SV-03 real waiting times.** The clock is moved in the tests (D-85).
 - **SV-07 scanner.** No OWASP scanner run (D-88).
-- **Performance on the test server.** NFR-P1 and NFR-P2 are checked with the seeded data only (ST-25).
+- **Performance on the test server.** NFR-P1 and NFR-P2 are checked with the seeded data only, not with 50 concurrent users (ST-25, D-91).
+- **ST-22 shortage banner.** The dashboard banner and the below-threshold report flag are not built (D-83, D-103).
+- **Browser sessions.** System cases ran through the Django test client, which drives the same views and templates, not a browser (D-96, D-107).
 
 ## 5. Conclusion
 
-The safety rules (ST-26, ST-27) and the security validation cases that can run without a deployed server pass. The open items above need a deployed environment and are recorded as deviations, not hidden as passes. Cases still reading `Pending` belong to a member who has not yet merged their results.
+The safety rules (ST-26, ST-27) and the security validation cases that can run without a deployed server pass. ST-22 failed: see the case and its deviation for the reason. SV-04, ST-25 could only be partly executed without a deployed server and are recorded as deviations, not counted as passes. Every system and security case has a recorded result.
 
 Prepared by G A Aadish, with results contributed by each case owner.
