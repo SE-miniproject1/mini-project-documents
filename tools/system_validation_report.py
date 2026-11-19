@@ -31,6 +31,28 @@ def cases():
     return found
 
 
+def conclusion(data):
+    failed = [k for k, c in data.items() if c["result"] == "Failed"]
+    partly = [k for k, c in data.items() if c["result"] == "Partly executed"]
+    pending = [k for k, c in data.items() if c["result"] in ("Pending", "Not executed")]
+    text = (
+        "The safety rules (ST-26, ST-27) and the security validation cases that can run "
+        "without a deployed server pass."
+    )
+    if failed:
+        text += f" {', '.join(failed)} failed: see the case and its deviation for the reason."
+    if partly:
+        text += (
+            f" {', '.join(partly)} could only be partly executed without a deployed server"
+            " and are recorded as deviations, not counted as passes."
+        )
+    if pending:
+        text += f" Still pending: {', '.join(pending)}."
+    else:
+        text += " Every system and security case has a recorded result."
+    return text
+
+
 def main():
     data = cases()
     order = sorted(data, key=lambda k: (k[:2] == "SV", int(k[3:])))
@@ -76,11 +98,13 @@ def main():
         "- **SV-04 TLS version refusal.** Needs the reverse proxy and a TLS scanner (D-86).",
         "- **SV-02 and SV-03 real waiting times.** The clock is moved in the tests (D-85).",
         "- **SV-07 scanner.** No OWASP scanner run (D-88).",
-        "- **Performance on the test server.** NFR-P1 and NFR-P2 are checked with the seeded data only (ST-25).",
+        "- **Performance on the test server.** NFR-P1 and NFR-P2 are checked with the seeded data only, not with 50 concurrent users (ST-25, D-91).",
+        "- **ST-22 shortage banner.** The dashboard banner and the below-threshold report flag are not built (D-83, D-103).",
+        "- **Browser sessions.** System cases ran through the Django test client, which drives the same views and templates, not a browser (D-96, D-107).",
         "",
         "## 5. Conclusion",
         "",
-        "The safety rules (ST-26, ST-27) and the security validation cases that can run without a deployed server pass. The open items above need a deployed environment and are recorded as deviations, not hidden as passes. Cases still reading `Pending` belong to a member who has not yet merged their results.",
+        conclusion(data),
         "",
         "Prepared by G A Aadish, with results contributed by each case owner.",
         "",
