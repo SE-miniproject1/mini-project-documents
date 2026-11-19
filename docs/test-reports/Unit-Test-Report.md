@@ -2,7 +2,7 @@
 
 **Project:** Blood Bank Management System (`SE-miniproject1/mini-project-documents`)  
 **Author:** Balaraj R (QA Lead)  
-**Date:** 17 November 2026  
+**Date:** 19 November 2026  
 
 ## 1. Environment & Command
 
@@ -16,15 +16,15 @@
 
 ## 2. Suite Summary
 
-- **Total tests discovered:** 585
-- **Passed:** 584
+- **Total tests discovered:** 586
+- **Passed:** 585
 - **Failed / Errors:** 0
 - **Skipped:** 1 — `bloodrequests.tests.test_safety.ConcurrentAllocationTests.test_only_one_of_two_simultaneous_allocations_wins` (`"Database doesn't support feature(s): has_select_for_update"`). SQLite does not support `SELECT ... FOR UPDATE` row locks; this test runs on PostgreSQL 16 in CI (see `docs/DEVIATIONS.md` D-72).
 - **Raw log:** `docs/test-reports/unit-test-output.txt`
 
 ## 3. Unit Test Cases (UT-01 to UT-48)
 
-> Note: `UT-01` to `UT-33` are executed and recorded from `main` (Balaraj, Aadish, Dhanya). `UT-34` to `UT-48` reflect their current status on `main` pending Niveditha's PR (#99).
+> All 48 unit test cases (`UT-01` to `UT-48`) are executed and recorded from `main` (46 Passed, 2 Passed with deviation: `UT-19` and `UT-47`).
 
 | Case ID | Feature | Result | Actual Result / Evidence |
 |---|---|---|---|
@@ -61,18 +61,18 @@
 | UT-31 | Issue Recording | Passed | Passed: allocation reserves the units, confirming the issue sets them to Issued, and the allocation record carries the issuing staff member, the Issued state and the issue time and links the request and its hospital (bloodrequests/tests/test_allocation.py) |
 | UT-32 | Fulfilment State | Passed | Passed: issuing all requested units sets Fulfilled and issuing fewer sets Partially Fulfilled with the shortfall recorded, and the request stays open. Tested with 2 requested and 2 issued, then 2 requested and 1 issued, in place of 3 and 3, then 3 and 1 (bloodrequests/tests/test_allocation.py) |
 | UT-33 | Cancellation | Passed | Passed: cancelling releases every reserved unit back to Available, a Pending request can be cancelled, and cancellation is barred once any unit is issued (bloodrequests/tests/test_allocation.py) |
-| UT-34 | Camp Creation | Pending | Not executed |
-| UT-35 | Camp Validator | Pending | Not executed |
-| UT-36 | Camp Listing | Pending | Not executed |
-| UT-37 | Enrolment Eligibility | Pending | Not executed |
-| UT-38 | Camp Collection Link | Pending | Not executed |
-| UT-39 | Camp Closure | Pending | Not executed |
-| UT-40 | Availability Search | Passed | Passed with deviation: the counts-only logic is in the view, not a separate service function, so it is verified through the view (core/tests/test_availability.py). The hospital response carries only blood group, component and count. Staff are refused with 403 instead of receiving unit identifiers |
-| UT-41 | Dispatcher | Pending | Not executed |
-| UT-42 | Reminder Jobs | Pending | Not executed |
-| UT-43 | Shortage Appeal | Pending | Not executed |
-| UT-44 | Report Engine | Pending | Not executed |
-| UT-45 | Export | Pending | Not executed |
-| UT-46 | Data Scoping | Pending | Not executed |
-| UT-47 | User Administration | Pending | Not executed |
-| UT-48 | Configuration Store | Pending | Not executed |
+| UT-34 | Camp Creation | Passed | Passed: `test_a_valid_camp_is_scheduled_with_a_unique_id_and_audited` creates a Scheduled camp with a unique CMP identifier, stores its details and writes an audit entry (`camps/tests/test_camps.py`). |
+| UT-35 | Camp Validator | Passed | Passed: `test_today_is_allowed_but_the_past_is_not`, `test_end_time_must_be_after_start_time_and_target_positive` and the database time-rule test reject past dates, invalid time ranges and a zero target with the relevant field error (`camps/tests/test_camps.py`). |
+| UT-36 | Camp Listing | Passed | Passed: `test_only_scheduled_future_camps_in_date_order` returns only future Scheduled camps in date order and excludes Completed, Cancelled and past camps (`camps/tests/test_camps.py`). |
+| UT-37 | Enrolment Eligibility | Passed | Passed: the enrolment eligibility tests accept donors eligible by the camp date and refuse donors whose next eligible date is later, showing that date and creating no enrolment (`camps/tests/test_camps.py`). |
+| UT-38 | Camp Collection Link | Passed | Passed: `test_a_unit_collected_at_a_camp_carries_the_camp_as_its_site` stores the camp identifier as both the unit and donation collection site; centre collections remain unchanged (`camps/tests/test_collection_link.py`). |
+| UT-39 | Camp Closure | Passed | Passed: `test_closing_reports_actuals_against_target_and_blocks_more_collections` closes the camp with the actual collection count, records the audit reason and refuses another collection after closure (`camps/tests/test_collection_link.py`). |
+| UT-40 | Availability Search | Passed | Passed with deviation: the counts-only logic is in the view, not a separate service function, so it is verified through the view (`core/tests/test_availability.py`). The hospital response carries only blood group, component and count. Staff are refused with 403 instead of receiving unit identifiers. |
+| UT-41 | Dispatcher | Passed | Passed: `test_sms_is_tried_three_times_at_increasing_intervals_then_email` retries failed SMS delivery three times with increasing intervals and then queues email fallback (`notifications/tests/test_notifications.py`). |
+| UT-42 | Reminder Jobs | Passed | Passed: `test_only_the_donor_eligible_today_is_reminded`, `test_a_missed_day_is_caught_up_but_old_dates_are_not` and camp reminder tests queue reminders only for due donors and camps within 24 hours, avoid old dates and prevent duplicate reminders (`notifications/tests/test_notifications.py`). |
+| UT-43 | Shortage Appeal | Passed | Passed: shortage appeal tests identify O- stock below its configured threshold, notify only eligible O- donors, suppress repeats for 30 days and send no appeal when stock is sufficient (`notifications/tests/test_notifications.py`). |
+| UT-44 | Report Engine | Passed | Passed: `test_every_report_returns_rows_in_its_column_order` checks all report titles, column order and row lengths; report generator tests also verify date-range validation and report contents (`reports/tests/test_generator.py`). |
+| UT-45 | Export | Passed | Passed: CSV and PDF export tests verify provenance headers, column/data order, valid PDF output, CSV quoting and formula neutralisation (`reports/tests/test_export_csv.py`, `reports/tests/test_export_pdf.py`). |
+| UT-46 | Data Scoping | Passed | Passed: `test_hospital_users_see_only_their_own_requests` confirms a hospital sees only its own requests while staff can see both hospitals' records (`reports/tests/test_generator.py`). |
+| UT-47 | User Administration | Passed with deviation | Passed with deviation: a user holds a single role, so a second role cannot be assigned; a role change replaces it (D-102). Deactivation keeps the row (`accounts/tests/test_admin.py`). |
+| UT-48 | Configuration Store | Passed | Passed: `test_an_override_applies_to_the_next_call` confirms saved administrator settings, including the 120-day donation interval and updated near-expiry and stock thresholds, are used by the configuration service; validation rejects an interval below 90 days (`core/tests/test_config.py`). |

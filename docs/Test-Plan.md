@@ -148,7 +148,7 @@ New security validation cases:
 | Test case design (Deliverable 1) | Complete, 10 September 2026 |
 | Restructure to STP layout and security validation cases (Deliverable 2) | 02 October 2026 |
 | Environment setup | Complete, 03 November 2026 |
-| Test execution | Complete, 17 November 2026 |
+| Test execution | Complete, 19 November 2026 |
 | Acceptance demonstration | To be scheduled with the course faculty |
 
 ---
@@ -289,19 +289,19 @@ The RTM in SRS Appendix C maps each requirement to architecture, design and code
 
 ## 14. Test Metrics and Reporting
 
-**Planned coverage.**
+**Final execution metrics (112 cases across Appendix A).**
 
-| Level | Planned | Executed | Passed | Failed | Pending |
-|---|---|---|---|---|---|
-| Unit | 48 | 34 | 34 | 0 | 14 |
-| Integration | 26 | 18 | 18 | 0 | 8 |
-| System | 30 | 23 | 23 | 0 | 7 |
-| Security validation | 8 | 8 | 8 | 0 | 0 |
-| **Total** | **112** | **83** | **83** | **0** | **29** |
+| Level | Planned | Executed | Passed | Passed with deviation | Partly executed | Failed | Pending |
+|---|---|---|---|---|---|---|---|
+| Unit | 48 | 48 | 46 | 2 | 0 | 0 | 0 |
+| Integration | 26 | 26 | 22 | 4 | 0 | 0 | 0 |
+| System | 30 | 30 | 8 | 20 | 1 | 1 | 0 |
+| Security validation | 8 | 8 | 3 | 4 | 1 | 0 | 0 |
+| **Total** | **112** | **112** | **79** | **30** | **2** | **1** | **0** |
 
-**Metrics collected.** Percentage of cases executed, percentage passed and failed, defect density, defect ageing and requirement coverage (currently 46 of 46 functional requirements and 20 nonfunctional requirements have at least one case).
+**Metrics collected.** Percentage of cases executed (100%, 112/112), percentage passed or passed with deviation (97.3%, 109/112), partly executed (1.8%, 2/112: `ST-25` and `SV-04`), failed (0.9%, 1/112: `ST-22`, accepted as known defect #104), and requirement coverage (46 of 46 functional requirements and 20 nonfunctional requirements have at least one case).
 
-**Reports.** Daily execution status during the execution window and a final Test Summary Report.
+**Reports.** Daily execution status during the execution window and the final reports in `docs/test-reports/` (`Unit-Test-Report.md`, `System-Validation-Report.md`, `Code-Coverage.md`, `Branch-Coverage-Report.md`, and `Test-Summary-Report.md`).
 
 ---
 
