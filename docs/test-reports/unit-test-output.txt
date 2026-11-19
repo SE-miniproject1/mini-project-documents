@@ -1,0 +1,1799 @@
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 585 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, reports, staticfiles
+  Apply all migrations: accounts, admin, audit, auth, bloodrequests, camps, collection, contenttypes, core, donors, inventory, notifications, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying accounts.0001_initial... OK
+  Applying accounts.0002_hospital_user_hospital... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying audit.0001_initial... OK
+  Applying audit.0002_alter_auditentry_event... OK
+  Applying donors.0001_initial... OK
+  Applying donors.0002_donorscreening... OK
+  Applying inventory.0001_initial... OK
+  Applying inventory.0002_bloodunit_unit_stock_idx_bloodunit_unit_expiry_idx... OK
+  Applying bloodrequests.0001_initial... OK
+  Applying bloodrequests.0002_allocation... OK
+  Applying donors.0003_deferral_conditions... OK
+  Applying donors.0004_default_conditions... OK
+  Applying camps.0001_initial... OK
+  Applying collection.0001_initial... OK
+  Applying collection.0002_screeningtest... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_configvalue... OK
+  Applying notifications.0001_initial... OK
+  Applying sessions.0001_initial...test_deactivating_a_hospital_is_audited_and_keeps_the_record (accounts.tests.test_admin.HospitalAdminTests.test_deactivating_a_hospital_is_audited_and_keeps_the_record) ... ok
+test_editing_without_changing_status_writes_no_status_audit (accounts.tests.test_admin.HospitalAdminTests.test_editing_without_changing_status_writes_no_status_audit) ... ok
+test_inactive_hospitals_cannot_be_chosen_for_new_users (accounts.tests.test_admin.HospitalAdminTests.test_inactive_hospitals_cannot_be_chosen_for_new_users) ... ok
+test_registering_a_hospital_normalises_the_licence_and_audits (accounts.tests.test_admin.HospitalAdminTests.test_registering_a_hospital_normalises_the_licence_and_audits) ... ok
+test_the_licence_number_must_be_unique (accounts.tests.test_admin.HospitalAdminTests.test_the_licence_number_must_be_unique) ... ok
+test_the_list_sorts_and_shows_status (accounts.tests.test_admin.HospitalAdminTests.test_the_list_sorts_and_shows_status) ... ok
+test_a_blank_password_on_edit_keeps_the_old_one (accounts.tests.test_admin.UserAdminTests.test_a_blank_password_on_edit_keeps_the_old_one) ... ok
+test_a_weak_password_or_duplicate_email_is_refused (accounts.tests.test_admin.UserAdminTests.test_a_weak_password_or_duplicate_email_is_refused) ... ok
+test_an_administrator_cannot_demote_or_deactivate_themselves (accounts.tests.test_admin.UserAdminTests.test_an_administrator_cannot_demote_or_deactivate_themselves) ... ok
+test_changing_a_role_is_audited_and_applies (accounts.tests.test_admin.UserAdminTests.test_changing_a_role_is_audited_and_applies) ... ok
+test_creating_a_staff_account_stores_a_hashed_password_and_audits (accounts.tests.test_admin.UserAdminTests.test_creating_a_staff_account_stores_a_hashed_password_and_audits) ... ok
+test_deactivating_keeps_the_record_and_ends_sign_in (accounts.tests.test_admin.UserAdminTests.test_deactivating_keeps_the_record_and_ends_sign_in) ... ok
+test_donor_is_not_offered_when_creating_an_account (accounts.tests.test_admin.UserAdminTests.test_donor_is_not_offered_when_creating_an_account) ... ok
+test_hospital_users_need_a_hospital_and_others_must_not_have_one (accounts.tests.test_admin.UserAdminTests.test_hospital_users_need_a_hospital_and_others_must_not_have_one) ... ok
+test_non_administrators_are_refused_everywhere (accounts.tests.test_admin.UserAdminTests.test_non_administrators_are_refused_everywhere) ... 2026-11-17 23:42:25,858 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/users/ needs=admin
+2026-11-17 23:42:25,868 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/users/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:25,873 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/users/new/ needs=admin
+2026-11-17 23:42:25,877 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/users/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:25,889 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/users/1/ needs=admin
+2026-11-17 23:42:25,891 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/users/1/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:25,897 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/hospitals/ needs=admin
+2026-11-17 23:42:25,899 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/hospitals/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:25,903 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/hospitals/new/ needs=admin
+2026-11-17 23:42:25,906 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/hospitals/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:25,910 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/accounts/users/new/ needs=admin
+2026-11-17 23:42:25,912 level=WARNING logger=django.request msg=Forbidden (Permission denied): /accounts/users/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_the_list_filters_by_role_and_search (accounts.tests.test_admin.UserAdminTests.test_the_list_filters_by_role_and_search) ... ok
+test_cookie_flags_in_development (accounts.tests.test_authentication.CookieAndTransportSettingsTests.test_cookie_flags_in_development) ... ok
+test_production_turns_on_secure_cookies_https_and_hsts (accounts.tests.test_authentication.CookieAndTransportSettingsTests.test_production_turns_on_secure_cookies_https_and_hsts) ... ok
+test_a_mail_failure_does_not_break_sign_in (accounts.tests.test_authentication.LockoutTests.test_a_mail_failure_does_not_break_sign_in) ... ok
+test_a_successful_login_resets_the_count (accounts.tests.test_authentication.LockoutTests.test_a_successful_login_resets_the_count) ... ok
+test_five_failures_lock_the_account_even_for_the_right_password (accounts.tests.test_authentication.LockoutTests.test_five_failures_lock_the_account_even_for_the_right_password) ... 2026-11-17 23:42:26,254 level=WARNING logger=accounts.lockout msg=account locked user_id=1
+ok
+test_four_failures_do_not_lock (accounts.tests.test_authentication.LockoutTests.test_four_failures_do_not_lock) ... ok
+test_the_holder_is_emailed_when_the_account_locks (accounts.tests.test_authentication.LockoutTests.test_the_holder_is_emailed_when_the_account_locks) ... 2026-11-17 23:42:26,704 level=WARNING logger=accounts.lockout msg=account locked user_id=1
+ok
+test_the_lock_ends_after_fifteen_minutes (accounts.tests.test_authentication.LockoutTests.test_the_lock_ends_after_fifteen_minutes) ... 2026-11-17 23:42:26,746 level=WARNING logger=accounts.lockout msg=account locked user_id=1
+ok
+test_unknown_usernames_do_not_error_or_reveal_anything (accounts.tests.test_authentication.LockoutTests.test_unknown_usernames_do_not_error_or_reveal_anything) ... ok
+test_a_strong_password_is_accepted (accounts.tests.test_authentication.PasswordPolicyTests.test_a_strong_password_is_accepted) ... ok
+test_change_view_enforces_the_policy (accounts.tests.test_authentication.PasswordPolicyTests.test_change_view_enforces_the_policy) ... ok
+test_weak_and_compromised_passwords_are_rejected (accounts.tests.test_authentication.PasswordPolicyTests.test_weak_and_compromised_passwords_are_rejected) ... ok
+test_reset_request_sends_an_email_for_a_known_address (accounts.tests.test_authentication.PasswordResetTests.test_reset_request_sends_an_email_for_a_known_address) ... ok
+test_unknown_address_gets_the_same_response_and_no_email (accounts.tests.test_authentication.PasswordResetTests.test_unknown_address_gets_the_same_response_and_no_email) ... ok
+test_identical_passwords_get_different_salted_hashes (accounts.tests.test_authentication.PasswordStorageTests.test_identical_passwords_get_different_salted_hashes) ... ok
+test_anonymous_user_is_sent_to_login (accounts.tests.test_authentication.PublicAccessTests.test_anonymous_user_is_sent_to_login) ... ok
+test_login_reset_and_health_are_public (accounts.tests.test_authentication.PublicAccessTests.test_login_reset_and_health_are_public) ... ok
+test_logout_requires_post (accounts.tests.test_authentication.PublicAccessTests.test_logout_requires_post) ... 2026-11-17 23:42:27,192 level=WARNING logger=django.request msg=Method Not Allowed (GET): /accounts/logout/
+ok
+test_successful_login_reaches_home (accounts.tests.test_authentication.PublicAccessTests.test_successful_login_reaches_home) ... ok
+test_a_password_change_ends_every_other_session (accounts.tests.test_authentication.SessionTests.test_a_password_change_ends_every_other_session) ... ok
+test_expiry_is_thirty_minutes_and_slides_with_activity (accounts.tests.test_authentication.SessionTests.test_expiry_is_thirty_minutes_and_slides_with_activity) ... ok
+test_replaying_a_session_cookie_after_logout_is_refused (accounts.tests.test_authentication.SessionTests.test_replaying_a_session_cookie_after_logout_is_refused) ... ok
+test_default_role_is_the_least_privileged (accounts.tests.test_models.UserModelTests.test_default_role_is_the_least_privileged) ... ok
+test_email_is_required (accounts.tests.test_models.UserModelTests.test_email_is_required) ... ok
+test_email_is_stored_lowercase (accounts.tests.test_models.UserModelTests.test_email_is_stored_lowercase) ... ok
+test_email_is_unique_ignoring_case (accounts.tests.test_models.UserModelTests.test_email_is_unique_ignoring_case) ... ok
+test_every_user_has_exactly_one_role (accounts.tests.test_models.UserModelTests.test_every_user_has_exactly_one_role) ... ok
+test_superuser_is_an_administrator (accounts.tests.test_models.UserModelTests.test_superuser_is_an_administrator) ... ok
+test_a_donor_cannot_reach_staff_or_admin_urls (accounts.tests.test_permissions.RoleEnforcementTests.test_a_donor_cannot_reach_staff_or_admin_urls) ... 2026-11-17 23:42:27,294 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=donor path=/staff-only/ needs=staff,admin
+2026-11-17 23:42:27,299 level=WARNING logger=django.request msg=Forbidden (Permission denied): /staff-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:27,308 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=donor path=/admin-only/ needs=admin
+2026-11-17 23:42:27,309 level=WARNING logger=django.request msg=Forbidden (Permission denied): /admin-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_a_hospital_user_cannot_reach_staff_or_admin_urls (accounts.tests.test_permissions.RoleEnforcementTests.test_a_hospital_user_cannot_reach_staff_or_admin_urls) ... 2026-11-17 23:42:27,320 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/staff-only/ needs=staff,admin
+2026-11-17 23:42:27,321 level=WARNING logger=django.request msg=Forbidden (Permission denied): /staff-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:27,329 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/admin-only/ needs=admin
+2026-11-17 23:42:27,330 level=WARNING logger=django.request msg=Forbidden (Permission denied): /admin-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_anonymous_visitors_are_redirected_to_login (accounts.tests.test_permissions.RoleEnforcementTests.test_anonymous_visitors_are_redirected_to_login) ... ok
+test_class_based_views_are_enforced_too (accounts.tests.test_permissions.RoleEnforcementTests.test_class_based_views_are_enforced_too) ... 2026-11-17 23:42:27,346 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/hospital-only/ needs=hospital
+2026-11-17 23:42:27,347 level=WARNING logger=django.request msg=Forbidden (Permission denied): /hospital-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 65, in dispatch
+    _deny(request, self.allowed_roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_denied_responses_leak_no_page_content (accounts.tests.test_permissions.RoleEnforcementTests.test_denied_responses_leak_no_page_content) ... 2026-11-17 23:42:27,359 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=donor path=/staff-only/ needs=staff,admin
+2026-11-17 23:42:27,361 level=WARNING logger=django.request msg=Forbidden (Permission denied): /staff-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_each_denial_is_logged (accounts.tests.test_permissions.RoleEnforcementTests.test_each_denial_is_logged) ... 2026-11-17 23:42:27,373 level=WARNING logger=django.request msg=Forbidden (Permission denied): /admin-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_each_role_reaches_its_own_area (accounts.tests.test_permissions.RoleEnforcementTests.test_each_role_reaches_its_own_area) ... ok
+test_staff_cannot_reach_admin_urls (accounts.tests.test_permissions.RoleEnforcementTests.test_staff_cannot_reach_admin_urls) ... 2026-11-17 23:42:27,414 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/admin-only/ needs=admin
+2026-11-17 23:42:27,417 level=WARNING logger=django.request msg=Forbidden (Permission denied): /admin-only/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_administrators_see_the_log_newest_first (audit.tests.test_audit.AuditLogScreenTests.test_administrators_see_the_log_newest_first) ... ok
+test_only_administrators_may_read_the_log (audit.tests.test_audit.AuditLogScreenTests.test_only_administrators_may_read_the_log) ... 2026-11-17 23:42:27,462 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/audit/ needs=admin
+2026-11-17 23:42:27,464 level=WARNING logger=django.request msg=Forbidden (Permission denied): /audit/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:27,473 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/audit/ needs=admin
+2026-11-17 23:42:27,475 level=WARNING logger=django.request msg=Forbidden (Permission denied): /audit/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:27,483 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/audit/ needs=admin
+2026-11-17 23:42:27,485 level=WARNING logger=django.request msg=Forbidden (Permission denied): /audit/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_the_log_can_be_filtered_by_event_and_text (audit.tests.test_audit.AuditLogScreenTests.test_the_log_can_be_filtered_by_event_and_text) ... ok
+test_the_log_is_in_the_administrator_menu_only (audit.tests.test_audit.AuditLogScreenTests.test_the_log_is_in_the_administrator_menu_only) ... ok
+test_the_log_is_paged_at_25 (audit.tests.test_audit.AuditLogScreenTests.test_the_log_is_paged_at_25) ... ok
+test_the_time_column_is_indexed_because_the_log_only_grows (audit.tests.test_audit.AuditLogScreenTests.test_the_time_column_is_indexed_because_the_log_only_grows) ... ok
+test_a_failed_sign_in_for_an_unknown_user_is_still_recorded (audit.tests.test_audit.AuthenticationAuditTests.test_a_failed_sign_in_for_an_unknown_user_is_still_recorded) ... ok
+test_a_failed_sign_in_is_recorded_with_the_name_tried_but_never_the_password (audit.tests.test_audit.AuthenticationAuditTests.test_a_failed_sign_in_is_recorded_with_the_name_tried_but_never_the_password) ... ok
+test_a_lockout_is_recorded (audit.tests.test_audit.AuthenticationAuditTests.test_a_lockout_is_recorded) ... 2026-11-17 23:42:27,610 level=WARNING logger=accounts.lockout msg=account locked user_id=1
+ok
+test_an_anonymous_authorisation_failure_has_no_user (audit.tests.test_audit.AuthenticationAuditTests.test_an_anonymous_authorisation_failure_has_no_user) ... 2026-11-17 23:42:27,617 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=None role=None path=/x/ needs=admin
+ok
+test_an_authorisation_failure_is_recorded_with_the_path (audit.tests.test_audit.AuthenticationAuditTests.test_an_authorisation_failure_is_recorded_with_the_path) ... 2026-11-17 23:42:27,627 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=donor path=/inventory/ needs=staff,admin
+2026-11-17 23:42:27,629 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_sign_in_and_sign_out_are_recorded (audit.tests.test_audit.AuthenticationAuditTests.test_sign_in_and_sign_out_are_recorded) ... ok
+test_an_entry_cannot_be_deleted (audit.tests.test_audit.ImmutabilityTests.test_an_entry_cannot_be_deleted) ... ok
+test_an_entry_cannot_be_edited (audit.tests.test_audit.ImmutabilityTests.test_an_entry_cannot_be_edited) ... ok
+test_bulk_update_and_delete_are_refused (audit.tests.test_audit.ImmutabilityTests.test_bulk_update_and_delete_are_refused) ... ok
+test_no_application_code_updates_or_deletes_audit_entries (audit.tests.test_audit.ImmutabilityTests.test_no_application_code_updates_or_deletes_audit_entries) ... ok
+test_the_admin_offers_no_way_to_change_or_delete (audit.tests.test_audit.ImmutabilityTests.test_the_admin_offers_no_way_to_change_or_delete) ... ok
+test_a_refused_transition_leaves_no_entry (audit.tests.test_audit.UnitStatusAuditTests.test_a_refused_transition_leaves_no_entry) ... ok
+test_a_status_change_made_during_a_request_carries_that_requests_address (audit.tests.test_audit.UnitStatusAuditTests.test_a_status_change_made_during_a_request_carries_that_requests_address) ... ok
+test_a_transition_records_who_what_when_and_why (audit.tests.test_audit.UnitStatusAuditTests.test_a_transition_records_who_what_when_and_why) ... ok
+test_if_the_audit_write_fails_the_status_change_is_undone (audit.tests.test_audit.UnitStatusAuditTests.test_if_the_audit_write_fails_the_status_change_is_undone) ... ok
+test_the_source_address_comes_from_the_request (audit.tests.test_audit.UnitStatusAuditTests.test_the_source_address_comes_from_the_request) ... ok
+test_three_transitions_give_three_entries_in_order (audit.tests.test_audit.UnitStatusAuditTests.test_three_transitions_give_three_entries_in_order) ... ok
+test_a_blood_group_mismatch_is_refused_and_nothing_is_reserved (bloodrequests.tests.test_allocation.AllocateTests.test_a_blood_group_mismatch_is_refused_and_nothing_is_reserved) ... ok
+test_a_component_mismatch_is_refused (bloodrequests.tests.test_allocation.AllocateTests.test_a_component_mismatch_is_refused) ... ok
+test_a_unit_past_its_expiry_date_is_refused_even_if_still_marked_available (bloodrequests.tests.test_allocation.AllocateTests.test_a_unit_past_its_expiry_date_is_refused_even_if_still_marked_available) ... ok
+test_candidates_are_exact_match_only_and_earliest_expiry_first (bloodrequests.tests.test_allocation.AllocateTests.test_candidates_are_exact_match_only_and_earliest_expiry_first) ... ok
+test_matching_available_units_are_reserved_and_linked (bloodrequests.tests.test_allocation.AllocateTests.test_matching_available_units_are_reserved_and_linked) ... ok
+test_more_units_than_are_needed_or_none_are_refused (bloodrequests.tests.test_allocation.AllocateTests.test_more_units_than_are_needed_or_none_are_refused) ... ok
+test_quarantined_expired_reserved_issued_and_discarded_units_are_refused (bloodrequests.tests.test_allocation.AllocateTests.test_quarantined_expired_reserved_issued_and_discarded_units_are_refused) ... ok
+test_requests_that_are_not_approved_cannot_receive_units (bloodrequests.tests.test_allocation.AllocateTests.test_requests_that_are_not_approved_cannot_receive_units) ... ok
+test_the_database_itself_refuses_a_second_live_claim_on_a_unit (bloodrequests.tests.test_allocation.AllocateTests.test_the_database_itself_refuses_a_second_live_claim_on_a_unit) ... ok
+test_two_requests_cannot_hold_the_same_unit (bloodrequests.tests.test_allocation.AllocateTests.test_two_requests_cannot_hold_the_same_unit) ... ok
+test_a_mismatched_unit_posted_by_hand_is_refused_with_the_reason (bloodrequests.tests.test_allocation.AllocationScreenTests.test_a_mismatched_unit_posted_by_hand_is_refused_with_the_reason) ... ok
+test_hospital_users_and_donors_cannot_allocate_issue_or_release (bloodrequests.tests.test_allocation.AllocationScreenTests.test_hospital_users_and_donors_cannot_allocate_issue_or_release) ... 2026-11-17 23:42:28,131 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=hospital path=/requests/REQ10000001/allocate/ needs=staff
+2026-11-17 23:42:28,133 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/allocate/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:28,137 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=hospital path=/requests/REQ10000001/issue/ needs=staff
+2026-11-17 23:42:28,139 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/issue/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:28,152 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=5 role=donor path=/requests/REQ10000001/allocate/ needs=staff
+2026-11-17 23:42:28,153 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/allocate/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:28,158 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=5 role=donor path=/requests/REQ10000001/issue/ needs=staff
+2026-11-17 23:42:28,159 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/issue/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_release_from_the_screen (bloodrequests.tests.test_allocation.AllocationScreenTests.test_release_from_the_screen) ... 2026-11-17 23:42:28,225 level=WARNING logger=django.request msg=Not Found: /requests/REQ10000002/release/1/
+ok
+test_staff_cannot_cancel_a_hospitals_request (bloodrequests.tests.test_allocation.AllocationScreenTests.test_staff_cannot_cancel_a_hospitals_request) ... 2026-11-17 23:42:28,244 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=staff path=/requests/REQ10000001/cancel/ needs=hospital
+2026-11-17 23:42:28,245 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/cancel/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_staff_reserve_issue_and_the_hospital_sees_the_result (bloodrequests.tests.test_allocation.AllocationScreenTests.test_staff_reserve_issue_and_the_hospital_sees_the_result) ... ok
+test_the_hospital_cancels_its_own_request_only (bloodrequests.tests.test_allocation.AllocationScreenTests.test_the_hospital_cancels_its_own_request_only) ... 2026-11-17 23:42:28,400 level=WARNING logger=django.request msg=Not Found: /requests/REQ10000002/cancel/
+ok
+test_the_hospital_has_no_cancel_button_after_an_issue (bloodrequests.tests.test_allocation.AllocationScreenTests.test_the_hospital_has_no_cancel_button_after_an_issue) ... ok
+test_a_failure_part_way_issues_nothing (bloodrequests.tests.test_allocation.IssueTests.test_a_failure_part_way_issues_nothing) ... ok
+test_a_partially_fulfilled_request_stays_open_for_more_units (bloodrequests.tests.test_allocation.IssueTests.test_a_partially_fulfilled_request_stays_open_for_more_units) ... ok
+test_issue_needs_reserved_units_and_an_unexpired_one (bloodrequests.tests.test_allocation.IssueTests.test_issue_needs_reserved_units_and_an_unexpired_one) ... ok
+test_issuing_all_requested_units_fulfils_the_request (bloodrequests.tests.test_allocation.IssueTests.test_issuing_all_requested_units_fulfils_the_request) ... ok
+test_issuing_fewer_than_requested_is_partial_and_records_the_shortfall (bloodrequests.tests.test_allocation.IssueTests.test_issuing_fewer_than_requested_is_partial_and_records_the_shortfall) ... ok
+test_the_request_status_change_is_audited (bloodrequests.tests.test_allocation.IssueTests.test_the_request_status_change_is_audited) ... ok
+test_a_pending_request_can_be_cancelled (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_a_pending_request_can_be_cancelled) ... ok
+test_a_reserved_unit_that_expires_frees_its_claim (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_a_reserved_unit_that_expires_frees_its_claim)
+SRS REQ-19, D-42. ... 2026-11-17 23:42:28,735 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_a_reserved_unit_that_is_discarded_frees_its_claim (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_a_reserved_unit_that_is_discarded_frees_its_claim) ... ok
+test_an_issued_or_released_unit_cannot_be_released (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_an_issued_or_released_unit_cannot_be_released) ... ok
+test_cancellation_is_barred_once_any_unit_is_issued (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_cancellation_is_barred_once_any_unit_is_issued) ... ok
+test_cancelling_releases_every_reserved_unit (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_cancelling_releases_every_reserved_unit) ... ok
+test_releasing_returns_the_unit_to_stock_and_frees_the_claim (bloodrequests.tests.test_allocation.ReleaseAndCancelTests.test_releasing_returns_the_unit_to_stock_and_frees_the_claim) ... ok
+test_a_mail_failure_does_not_undo_the_decision (bloodrequests.tests.test_queue.DecisionTests.test_a_mail_failure_does_not_undo_the_decision) ... ok
+test_approve_moves_pending_to_approved_audits_and_emails_the_hospital (bloodrequests.tests.test_queue.DecisionTests.test_approve_moves_pending_to_approved_audits_and_emails_the_hospital) ... ok
+test_only_pending_requests_can_be_decided (bloodrequests.tests.test_queue.DecisionTests.test_only_pending_requests_can_be_decided) ... ok
+test_rejection_needs_a_reason_from_the_list_and_tells_the_hospital (bloodrequests.tests.test_queue.DecisionTests.test_rejection_needs_a_reason_from_the_list_and_tells_the_hospital) ... ok
+test_closed_requests_are_left_out_unless_asked_for (bloodrequests.tests.test_queue.QueueOrderTests.test_closed_requests_are_left_out_unless_asked_for) ... ok
+test_emergency_first_then_by_required_by_ascending (bloodrequests.tests.test_queue.QueueOrderTests.test_emergency_first_then_by_required_by_ascending) ... ok
+test_closed_requests_can_be_shown (bloodrequests.tests.test_queue.QueueScreenTests.test_closed_requests_can_be_shown) ... ok
+test_deciding_twice_shows_an_error_not_a_crash (bloodrequests.tests.test_queue.QueueScreenTests.test_deciding_twice_shows_an_error_not_a_crash) ... ok
+test_hospital_users_and_donors_cannot_use_the_queue_or_decide (bloodrequests.tests.test_queue.QueueScreenTests.test_hospital_users_and_donors_cannot_use_the_queue_or_decide) ... 2026-11-17 23:42:29,102 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/requests/queue/ needs=staff
+2026-11-17 23:42:29,104 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/queue/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,108 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/requests/REQ10000001/approve/ needs=staff
+2026-11-17 23:42:29,110 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/approve/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,115 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/requests/REQ10000001/reject/ needs=staff
+2026-11-17 23:42:29,117 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/reject/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,130 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/requests/queue/ needs=staff
+2026-11-17 23:42:29,132 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/queue/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,136 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/requests/REQ10000001/approve/ needs=staff
+2026-11-17 23:42:29,137 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/approve/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,142 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/requests/REQ10000001/reject/ needs=staff
+2026-11-17 23:42:29,144 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/REQ10000001/reject/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_rejecting_without_a_reason_is_refused_and_with_one_is_recorded (bloodrequests.tests.test_queue.QueueScreenTests.test_rejecting_without_a_reason_is_refused_and_with_one_is_recorded) ... ok
+test_staff_can_approve_from_the_request_page (bloodrequests.tests.test_queue.QueueScreenTests.test_staff_can_approve_from_the_request_page) ... ok
+test_the_hospital_sees_the_rejection_reason_but_no_decision_buttons (bloodrequests.tests.test_queue.QueueScreenTests.test_the_hospital_sees_the_rejection_reason_but_no_decision_buttons) ... ok
+test_the_menu_links_the_queue_for_staff (bloodrequests.tests.test_queue.QueueScreenTests.test_the_menu_links_the_queue_for_staff) ... ok
+test_the_queue_lists_emergency_first_and_marks_it_in_words (bloodrequests.tests.test_queue.QueueScreenTests.test_the_queue_lists_emergency_first_and_marks_it_in_words) ... ok
+test_a_mail_failure_does_not_lose_the_request (bloodrequests.tests.test_raise_request.CreateRequestTests.test_a_mail_failure_does_not_lose_the_request) ... ok
+test_a_valid_request_is_pending_with_a_unique_identifier (bloodrequests.tests.test_raise_request.CreateRequestTests.test_a_valid_request_is_pending_with_a_unique_identifier) ... ok
+test_identifiers_are_sequential_and_never_reused (bloodrequests.tests.test_raise_request.CreateRequestTests.test_identifiers_are_sequential_and_never_reused) ... ok
+test_invalid_input_is_refused_and_names_the_field (bloodrequests.tests.test_raise_request.CreateRequestTests.test_invalid_input_is_refused_and_names_the_field) ... ok
+test_no_staff_means_no_mail_and_no_error (bloodrequests.tests.test_raise_request.CreateRequestTests.test_no_staff_means_no_mail_and_no_error) ... ok
+test_only_users_of_a_registered_active_hospital_may_raise_requests (bloodrequests.tests.test_raise_request.CreateRequestTests.test_only_users_of_a_registered_active_hospital_may_raise_requests) ... ok
+test_the_request_is_audited_and_staff_are_notified (bloodrequests.tests.test_raise_request.CreateRequestTests.test_the_request_is_audited_and_staff_are_notified) ... ok
+test_an_unlinked_hospital_user_is_told_why (bloodrequests.tests.test_raise_request.RequestScreenTests.test_an_unlinked_hospital_user_is_told_why) ... 2026-11-17 23:42:29,352 level=WARNING logger=django.request msg=Forbidden: /requests/new/
+2026-11-17 23:42:29,357 level=WARNING logger=django.request msg=Forbidden: /requests/mine/
+ok
+test_another_hospitals_request_is_not_found (bloodrequests.tests.test_raise_request.RequestScreenTests.test_another_hospitals_request_is_not_found) ... 2026-11-17 23:42:29,373 level=WARNING logger=django.request msg=Not Found: /requests/REQ10000001/
+ok
+test_bad_input_shows_messages_naming_the_fields (bloodrequests.tests.test_raise_request.RequestScreenTests.test_bad_input_shows_messages_naming_the_fields) ... ok
+test_donors_cannot_use_the_screens_and_staff_cannot_raise (bloodrequests.tests.test_raise_request.RequestScreenTests.test_donors_cannot_use_the_screens_and_staff_cannot_raise) ... 2026-11-17 23:42:29,446 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/requests/new/ needs=hospital
+2026-11-17 23:42:29,447 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,450 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/requests/new/ needs=hospital
+2026-11-17 23:42:29,452 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,464 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=staff path=/requests/new/ needs=hospital
+2026-11-17 23:42:29,466 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,470 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=staff path=/requests/new/ needs=hospital
+2026-11-17 23:42:29,471 level=WARNING logger=django.request msg=Forbidden (Permission denied): /requests/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_insufficient_stock_is_accepted_with_the_available_quantity_shown (bloodrequests.tests.test_raise_request.RequestScreenTests.test_insufficient_stock_is_accepted_with_the_available_quantity_shown) ... ok
+test_raising_a_request_with_enough_stock_confirms_it (bloodrequests.tests.test_raise_request.RequestScreenTests.test_raising_a_request_with_enough_stock_confirms_it) ... ok
+test_the_menu_offers_the_hospital_screens (bloodrequests.tests.test_raise_request.RequestScreenTests.test_the_menu_offers_the_hospital_screens) ... ok
+test_the_tracker_lists_only_this_hospitals_requests (bloodrequests.tests.test_raise_request.RequestScreenTests.test_the_tracker_lists_only_this_hospitals_requests) ... ok
+test_the_tracker_sorts_by_column (bloodrequests.tests.test_raise_request.RequestScreenTests.test_the_tracker_sorts_by_column) ... ok
+test_a_reactive_unit_forced_to_available_cannot_be_allocated (bloodrequests.tests.test_safety.SafetyRuleTests.test_a_reactive_unit_forced_to_available_cannot_be_allocated) ... ok
+test_a_reserved_unit_whose_panel_turns_reactive_cannot_be_issued (bloodrequests.tests.test_safety.SafetyRuleTests.test_a_reserved_unit_whose_panel_turns_reactive_cannot_be_issued) ... ok
+test_a_wrong_group_unit_cannot_be_allocated (bloodrequests.tests.test_safety.SafetyRuleTests.test_a_wrong_group_unit_cannot_be_allocated) ... ok
+test_an_expired_unit_cannot_be_allocated_or_issued (bloodrequests.tests.test_safety.SafetyRuleTests.test_an_expired_unit_cannot_be_allocated_or_issued) ... ok
+test_an_untested_unit_forced_to_available_cannot_be_allocated (bloodrequests.tests.test_safety.SafetyRuleTests.test_an_untested_unit_forced_to_available_cannot_be_allocated) ... ok
+test_a_complete_non_reactive_panel_has_no_problem (bloodrequests.tests.test_safety.ScreeningProblemTests.test_a_complete_non_reactive_panel_has_no_problem) ... ok
+test_a_component_is_judged_by_its_parents_panel (bloodrequests.tests.test_safety.ScreeningProblemTests.test_a_component_is_judged_by_its_parents_panel) ... ok
+test_a_missing_test_is_named (bloodrequests.tests.test_safety.ScreeningProblemTests.test_a_missing_test_is_named) ... ok
+test_a_reactive_result_is_named (bloodrequests.tests.test_safety.ScreeningProblemTests.test_a_reactive_result_is_named) ... ok
+test_the_second_allocation_of_a_reserved_unit_is_refused (bloodrequests.tests.test_safety.SequentialAllocationRaceTests.test_the_second_allocation_of_a_reserved_unit_is_refused) ... ok
+test_a_donor_enrols_from_the_listing (camps.tests.test_camps.CampScreenTests.test_a_donor_enrols_from_the_listing) ... ok
+test_an_ineligible_donor_sees_the_date_they_become_eligible (camps.tests.test_camps.CampScreenTests.test_an_ineligible_donor_sees_the_date_they_become_eligible) ... ok
+test_invalid_schedules_are_refused_with_messages (camps.tests.test_camps.CampScreenTests.test_invalid_schedules_are_refused_with_messages) ... ok
+test_manage_can_show_closed_camps (camps.tests.test_camps.CampScreenTests.test_manage_can_show_closed_camps) ... ok
+test_role_boundaries (camps.tests.test_camps.CampScreenTests.test_role_boundaries) ... 2026-11-17 23:42:29,968 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/camps/manage/ needs=staff,admin
+2026-11-17 23:42:29,971 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/manage/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,977 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/camps/new/ needs=staff,admin
+2026-11-17 23:42:29,979 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,983 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/camps/CMP1000001/ needs=staff,admin
+2026-11-17 23:42:29,985 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/CMP1000001/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:29,997 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/camps/ needs=donor
+2026-11-17 23:42:29,999 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:30,003 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/camps/CMP1000001/enrol/ needs=donor
+2026-11-17 23:42:30,005 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/CMP1000001/enrol/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:30,018 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=staff path=/camps/ needs=donor
+2026-11-17 23:42:30,020 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_staff_schedule_a_camp_and_the_donor_sees_it (camps.tests.test_camps.CampScreenTests.test_staff_schedule_a_camp_and_the_donor_sees_it) ... ok
+test_staff_see_who_enrolled (camps.tests.test_camps.CampScreenTests.test_staff_see_who_enrolled) ... ok
+test_the_menus_link_the_camp_screens (camps.tests.test_camps.CampScreenTests.test_the_menus_link_the_camp_screens) ... ok
+test_a_valid_camp_is_scheduled_with_a_unique_id_and_audited (camps.tests.test_camps.CreateCampTests.test_a_valid_camp_is_scheduled_with_a_unique_id_and_audited) ... ok
+test_end_time_must_be_after_start_time_and_target_positive (camps.tests.test_camps.CreateCampTests.test_end_time_must_be_after_start_time_and_target_positive) ... ok
+test_the_database_enforces_the_time_rule_too (camps.tests.test_camps.CreateCampTests.test_the_database_enforces_the_time_rule_too) ... ok
+test_today_is_allowed_but_the_past_is_not (camps.tests.test_camps.CreateCampTests.test_today_is_allowed_but_the_past_is_not) ... ok
+test_a_camp_that_has_already_happened_is_not_open (camps.tests.test_camps.EnrolmentTests.test_a_camp_that_has_already_happened_is_not_open) ... ok
+test_a_deactivated_donor_cannot_enrol (camps.tests.test_camps.EnrolmentTests.test_a_deactivated_donor_cannot_enrol) ... ok
+test_a_donor_not_eligible_until_after_the_camp_is_refused_with_the_date (camps.tests.test_camps.EnrolmentTests.test_a_donor_not_eligible_until_after_the_camp_is_refused_with_the_date) ... ok
+test_a_recent_donor_who_will_be_eligible_by_the_camp_date_is_accepted (camps.tests.test_camps.EnrolmentTests.test_a_recent_donor_who_will_be_eligible_by_the_camp_date_is_accepted) ... ok
+test_an_eligible_donor_is_enrolled_and_confirmed_by_email (camps.tests.test_camps.EnrolmentTests.test_an_eligible_donor_is_enrolled_and_confirmed_by_email) ... ok
+test_deferral_cases (camps.tests.test_camps.EnrolmentTests.test_deferral_cases) ... ok
+test_enrolling_twice_or_in_a_closed_camp_is_refused (camps.tests.test_camps.EnrolmentTests.test_enrolling_twice_or_in_a_closed_camp_is_refused) ... ok
+test_only_scheduled_future_camps_in_date_order (camps.tests.test_camps.ListingTests.test_only_scheduled_future_camps_in_date_order) ... ok
+test_a_site_outside_the_offered_choices_is_rejected_by_the_form (camps.tests.test_collection_link.CampCollectionScreenTests.test_a_site_outside_the_offered_choices_is_rejected_by_the_form) ... ok
+test_closing_a_camp_from_its_page_shows_the_result (camps.tests.test_collection_link.CampCollectionScreenTests.test_closing_a_camp_from_its_page_shows_the_result) ... ok
+test_only_staff_can_close_a_camp (camps.tests.test_collection_link.CampCollectionScreenTests.test_only_staff_can_close_a_camp) ... 2026-11-17 23:42:30,366 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/camps/CMP1000001/close/ needs=staff,admin
+2026-11-17 23:42:30,367 level=WARNING logger=django.request msg=Forbidden (Permission denied): /camps/CMP1000001/close/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_recording_a_camp_collection_through_the_form (camps.tests.test_collection_link.CampCollectionScreenTests.test_recording_a_camp_collection_through_the_form) ... 2026-11-17 23:42:30,392 level=INFO logger=collection.views msg=donation recorded unit_id=BU1000000001 donor_id=DNR10000001 user_id=1
+ok
+test_the_collection_form_offers_the_centre_and_open_started_camps_only (camps.tests.test_collection_link.CampCollectionScreenTests.test_the_collection_form_offers_the_centre_and_open_started_camps_only) ... ok
+test_a_camp_cannot_be_closed_twice (camps.tests.test_collection_link.CampCollectionTests.test_a_camp_cannot_be_closed_twice) ... ok
+test_a_camp_that_has_not_started_takes_no_collections (camps.tests.test_collection_link.CampCollectionTests.test_a_camp_that_has_not_started_takes_no_collections) ... ok
+test_a_camp_with_no_collections_closes_with_zero (camps.tests.test_collection_link.CampCollectionTests.test_a_camp_with_no_collections_closes_with_zero) ... ok
+test_a_unit_collected_at_a_camp_carries_the_camp_as_its_site (camps.tests.test_collection_link.CampCollectionTests.test_a_unit_collected_at_a_camp_carries_the_camp_as_its_site) ... ok
+test_an_unknown_site_is_refused (camps.tests.test_collection_link.CampCollectionTests.test_an_unknown_site_is_refused) ... ok
+test_closing_reports_actuals_against_target_and_blocks_more_collections (camps.tests.test_collection_link.CampCollectionTests.test_closing_reports_actuals_against_target_and_blocks_more_collections) ... ok
+test_collection_at_the_centre_is_unchanged (camps.tests.test_collection_link.CampCollectionTests.test_collection_at_the_centre_is_unchanged) ... ok
+test_a_blocked_donor_cannot_be_collected_from_by_posting_directly (collection.tests.test_collect.CollectionScreenTests.test_a_blocked_donor_cannot_be_collected_from_by_posting_directly) ... ok
+test_a_deferred_donor_sees_why_and_no_form (collection.tests.test_collect.CollectionScreenTests.test_a_deferred_donor_sees_why_and_no_form) ... ok
+test_an_eligible_donor_gets_the_form (collection.tests.test_collect.CollectionScreenTests.test_an_eligible_donor_gets_the_form) ... ok
+test_an_unknown_donor_gives_not_found (collection.tests.test_collect.CollectionScreenTests.test_an_unknown_donor_gives_not_found) ... 2026-11-17 23:42:30,632 level=WARNING logger=django.request msg=Not Found: /collection/DNR00000000/new/
+ok
+test_invalid_entries_show_messages_and_create_nothing (collection.tests.test_collect.CollectionScreenTests.test_invalid_entries_show_messages_and_create_nothing) ... ok
+test_only_staff_and_administrators_may_record_a_donation (collection.tests.test_collect.CollectionScreenTests.test_only_staff_and_administrators_may_record_a_donation) ... 2026-11-17 23:42:30,671 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/collection/DNR10000001/new/ needs=staff,admin
+2026-11-17 23:42:30,673 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/DNR10000001/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:30,676 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/collection/DNR10000001/new/ needs=staff,admin
+2026-11-17 23:42:30,677 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/DNR10000001/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:30,685 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/collection/DNR10000001/new/ needs=staff,admin
+2026-11-17 23:42:30,687 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/DNR10000001/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:30,690 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/collection/DNR10000001/new/ needs=staff,admin
+2026-11-17 23:42:30,692 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/DNR10000001/new/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_saving_shows_the_unit_id_status_and_expiry (collection.tests.test_collect.CollectionScreenTests.test_saving_shows_the_unit_id_status_and_expiry) ... 2026-11-17 23:42:30,713 level=INFO logger=collection.views msg=donation recorded unit_id=BU1000000001 donor_id=DNR10000001 user_id=1
+ok
+test_the_collection_time_cannot_be_in_the_future (collection.tests.test_collect.CollectionScreenTests.test_the_collection_time_cannot_be_in_the_future) ... ok
+test_the_screening_result_offers_collection_to_an_eligible_donor (collection.tests.test_collect.CollectionScreenTests.test_the_screening_result_offers_collection_to_an_eligible_donor) ... ok
+test_the_search_screen_disables_it_with_the_reason_for_a_deferred_donor (collection.tests.test_collect.CollectionScreenTests.test_the_search_screen_disables_it_with_the_reason_for_a_deferred_donor) ... ok
+test_the_search_screen_offers_start_collection_to_an_eligible_donor (collection.tests.test_collect.CollectionScreenTests.test_the_search_screen_offers_start_collection_to_an_eligible_donor) ... ok
+test_a_collection_creates_a_donation_and_a_quarantined_unit (collection.tests.test_collect.RecordCollectionTests.test_a_collection_creates_a_donation_and_a_quarantined_unit) ... ok
+test_a_deferred_donor_is_refused_and_no_unit_is_created (collection.tests.test_collect.RecordCollectionTests.test_a_deferred_donor_is_refused_and_no_unit_is_created) ... ok
+test_a_failure_part_way_leaves_nothing_behind (collection.tests.test_collect.RecordCollectionTests.test_a_failure_part_way_leaves_nothing_behind) ... ok
+test_a_past_collection_time_sets_the_dates_from_that_day (collection.tests.test_collect.RecordCollectionTests.test_a_past_collection_time_sets_the_dates_from_that_day) ... ok
+test_a_second_collection_for_the_same_donor_is_refused (collection.tests.test_collect.RecordCollectionTests.test_a_second_collection_for_the_same_donor_is_refused)
+The first collection defers the donor, so a second person cannot bleed them again. ... ok
+test_the_donor_s_last_and_next_dates_are_updated_and_they_wait_out_the_interval (collection.tests.test_collect.RecordCollectionTests.test_the_donor_s_last_and_next_dates_are_updated_and_they_wait_out_the_interval) ... ok
+test_the_expiry_date_comes_from_the_component_shelf_life (collection.tests.test_collect.RecordCollectionTests.test_the_expiry_date_comes_from_the_component_shelf_life) ... ok
+test_a_deactivated_donor_is_refused (collection.tests.test_guard.GuardTests.test_a_deactivated_donor_is_refused) ... ok
+test_a_deferred_donor_is_refused_with_the_reason_and_review_date (collection.tests.test_guard.GuardTests.test_a_deferred_donor_is_refused_with_the_reason_and_review_date) ... ok
+test_a_permanently_deferred_donor_is_refused_with_no_review_date (collection.tests.test_guard.GuardTests.test_a_permanently_deferred_donor_is_refused_with_no_review_date) ... ok
+test_an_eligible_donor_may_donate (collection.tests.test_guard.GuardTests.test_an_eligible_donor_may_donate) ... ok
+test_collection_status_gives_a_yes_or_a_reason_for_the_screen (collection.tests.test_guard.GuardTests.test_collection_status_gives_a_yes_or_a_reason_for_the_screen) ... ok
+test_exactly_ninety_days_after_the_last_donation_is_allowed (collection.tests.test_guard.GuardTests.test_exactly_ninety_days_after_the_last_donation_is_allowed) ... ok
+test_the_interval_is_enforced_even_when_the_status_says_eligible (collection.tests.test_guard.GuardTests.test_the_interval_is_enforced_even_when_the_status_says_eligible)
+NFR-S5: a stale status must not allow a donor to be bled too soon. ... ok
+test_the_screen_works_for_eligible_and_deferred_donors (collection.tests.test_guard.SearchControlTests.test_the_screen_works_for_eligible_and_deferred_donors) ... ok
+test_a_clear_result_sends_no_alert (collection.tests.test_screening.AdministratorAlertTests.test_a_clear_result_sends_no_alert) ... ok
+test_a_mail_failure_does_not_undo_the_discard (collection.tests.test_screening.AdministratorAlertTests.test_a_mail_failure_does_not_undo_the_discard) ... ok
+test_having_no_administrator_is_logged_not_ignored (collection.tests.test_screening.AdministratorAlertTests.test_having_no_administrator_is_logged_not_ignored) ... ok
+test_no_alert_goes_to_staff_or_hospital_users (collection.tests.test_screening.AdministratorAlertTests.test_no_alert_goes_to_staff_or_hospital_users) ... ok
+test_only_active_administrators_are_alerted (collection.tests.test_screening.AdministratorAlertTests.test_only_active_administrators_are_alerted) ... ok
+test_the_alert_names_the_unit_the_test_and_the_donor (collection.tests.test_screening.AdministratorAlertTests.test_the_alert_names_the_unit_the_test_and_the_donor) ... ok
+test_a_bad_entry_saves_none_of_the_batch (collection.tests.test_screening.RecordResultsTests.test_a_bad_entry_saves_none_of_the_batch) ... ok
+test_a_complete_non_reactive_panel_releases_the_unit_to_inventory (collection.tests.test_screening.RecordResultsTests.test_a_complete_non_reactive_panel_releases_the_unit_to_inventory) ... ok
+test_a_reactive_unit_can_never_be_restored (collection.tests.test_screening.RecordResultsTests.test_a_reactive_unit_can_never_be_restored) ... ok
+test_a_recorded_result_is_final (collection.tests.test_screening.RecordResultsTests.test_a_recorded_result_is_final) ... ok
+test_a_unit_that_expired_while_waiting_is_never_released (collection.tests.test_screening.RecordResultsTests.test_a_unit_that_expired_while_waiting_is_never_released)
+NFR-S2. ... ok
+test_an_incomplete_panel_cannot_be_released_and_the_missing_test_is_named (collection.tests.test_screening.RecordResultsTests.test_an_incomplete_panel_cannot_be_released_and_the_missing_test_is_named) ... ok
+test_four_clear_and_one_reactive_still_discards (collection.tests.test_screening.RecordResultsTests.test_four_clear_and_one_reactive_still_discards) ... ok
+test_no_results_at_all_names_every_test (collection.tests.test_screening.RecordResultsTests.test_no_results_at_all_names_every_test) ... ok
+test_one_reactive_result_discards_the_unit_at_once_with_the_reason (collection.tests.test_screening.RecordResultsTests.test_one_reactive_result_discards_the_unit_at_once_with_the_reason) ... ok
+test_results_can_be_entered_over_several_visits (collection.tests.test_screening.RecordResultsTests.test_results_can_be_entered_over_several_visits) ... ok
+test_results_cannot_be_entered_for_a_unit_that_is_not_quarantined (collection.tests.test_screening.RecordResultsTests.test_results_cannot_be_entered_for_a_unit_that_is_not_quarantined) ... ok
+test_the_mandatory_panel_is_the_five_tests_in_the_srs (collection.tests.test_screening.RecordResultsTests.test_the_mandatory_panel_is_the_five_tests_in_the_srs) ... ok
+test_unknown_tests_and_results_are_rejected (collection.tests.test_screening.RecordResultsTests.test_unknown_tests_and_results_are_rejected) ... ok
+test_a_decided_unit_shows_its_results_read_only (collection.tests.test_screening.ResultsScreenTests.test_a_decided_unit_shows_its_results_read_only) ... 2026-11-17 23:42:31,200 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_a_full_non_reactive_panel_released_from_the_screen_makes_the_unit_available (collection.tests.test_screening.ResultsScreenTests.test_a_full_non_reactive_panel_released_from_the_screen_makes_the_unit_available) ... 2026-11-17 23:42:31,253 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_a_future_test_date_is_refused (collection.tests.test_screening.ResultsScreenTests.test_a_future_test_date_is_refused) ... ok
+test_a_reactive_result_discards_the_unit_and_says_so (collection.tests.test_screening.ResultsScreenTests.test_a_reactive_result_discards_the_unit_and_says_so) ... 2026-11-17 23:42:31,315 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_a_result_for_an_already_recorded_test_is_not_offered_again (collection.tests.test_screening.ResultsScreenTests.test_a_result_for_an_already_recorded_test_is_not_offered_again) ... 2026-11-17 23:42:31,354 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_only_staff_and_administrators_may_enter_results (collection.tests.test_screening.ResultsScreenTests.test_only_staff_and_administrators_may_enter_results) ... 2026-11-17 23:42:31,398 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/collection/units/BU1000000001/results/ needs=staff,admin
+2026-11-17 23:42:31,400 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/units/BU1000000001/results/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,404 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/collection/units/BU1000000001/results/ needs=staff,admin
+2026-11-17 23:42:31,405 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/units/BU1000000001/results/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,414 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/collection/units/BU1000000001/results/ needs=staff,admin
+2026-11-17 23:42:31,415 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/units/BU1000000001/results/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,420 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/collection/units/BU1000000001/results/ needs=staff,admin
+2026-11-17 23:42:31,421 level=WARNING logger=django.request msg=Forbidden (Permission denied): /collection/units/BU1000000001/results/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_releasing_with_malaria_blank_is_refused_and_the_unit_stays_quarantined (collection.tests.test_screening.ResultsScreenTests.test_releasing_with_malaria_blank_is_refused_and_the_unit_stays_quarantined) ... 2026-11-17 23:42:31,449 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_saving_without_releasing_keeps_the_unit_quarantined (collection.tests.test_screening.ResultsScreenTests.test_saving_without_releasing_keeps_the_unit_quarantined) ... 2026-11-17 23:42:31,488 level=INFO logger=collection.views msg=screening results handled unit_id=BU1000000001 user_id=1
+ok
+test_test_names_in_the_panel_match_the_model_choices (collection.tests.test_screening.ResultsScreenTests.test_test_names_in_the_panel_match_the_model_choices) ... ok
+test_the_confirmation_page_links_to_the_results_screen (collection.tests.test_screening.ResultsScreenTests.test_the_confirmation_page_links_to_the_results_screen) ... ok
+test_the_screen_shows_all_five_tests_and_the_unit (collection.tests.test_screening.ResultsScreenTests.test_the_screen_shows_all_five_tests_and_the_unit) ... ok
+test_an_unknown_filter_value_is_ignored (core.tests.test_availability.AvailabilitySearchTests.test_an_unknown_filter_value_is_ignored) ... ok
+test_hospital_sees_aggregated_counts_by_group_and_component_only (core.tests.test_availability.AvailabilitySearchTests.test_hospital_sees_aggregated_counts_by_group_and_component_only) ... ok
+test_non_hospital_roles_cannot_use_the_search (core.tests.test_availability.AvailabilitySearchTests.test_non_hospital_roles_cannot_use_the_search) ... 2026-11-17 23:42:31,673 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/search/availability/ needs=hospital
+2026-11-17 23:42:31,674 level=WARNING logger=django.request msg=Forbidden (Permission denied): /search/availability/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,687 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=staff path=/search/availability/ needs=hospital
+2026-11-17 23:42:31,688 level=WARNING logger=django.request msg=Forbidden (Permission denied): /search/availability/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,700 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=admin path=/search/availability/ needs=hospital
+2026-11-17 23:42:31,702 level=WARNING logger=django.request msg=Forbidden (Permission denied): /search/availability/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_quarantined_reserved_expired_and_discarded_units_are_not_counted (core.tests.test_availability.AvailabilitySearchTests.test_quarantined_reserved_expired_and_discarded_units_are_not_counted) ... ok
+test_search_filters_by_group_and_component (core.tests.test_availability.AvailabilitySearchTests.test_search_filters_by_group_and_component) ... ok
+test_unlinked_hospital_account_is_refused (core.tests.test_availability.AvailabilitySearchTests.test_unlinked_hospital_account_is_refused) ... 2026-11-17 23:42:31,787 level=WARNING logger=django.request msg=Forbidden: /search/availability/
+ok
+test_invalid_values_are_rejected_without_saving_anything (core.tests.test_config.ConfigScreenTests.test_invalid_values_are_rejected_without_saving_anything) ... ok
+test_only_administrators_can_open_it (core.tests.test_config.ConfigScreenTests.test_only_administrators_can_open_it) ... 2026-11-17 23:42:31,841 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/config/ needs=admin
+2026-11-17 23:42:31,842 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,847 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=staff path=/config/ needs=admin
+2026-11-17 23:42:31,848 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,860 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/config/ needs=admin
+2026-11-17 23:42:31,861 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,865 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/config/ needs=admin
+2026-11-17 23:42:31,866 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,878 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/config/ needs=admin
+2026-11-17 23:42:31,879 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:31,884 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/config/ needs=admin
+2026-11-17 23:42:31,885 level=WARNING logger=django.request msg=Forbidden (Permission denied): /config/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_saving_changes_applies_and_reports (core.tests.test_config.ConfigScreenTests.test_saving_changes_applies_and_reports) ... ok
+test_saving_with_no_changes_says_so (core.tests.test_config.ConfigScreenTests.test_saving_with_no_changes_says_so) ... ok
+test_the_form_shows_current_values_and_is_in_the_menu (core.tests.test_config.ConfigScreenTests.test_the_form_shows_current_values_and_is_in_the_menu) ... ok
+test_the_pressure_limits_must_not_cross (core.tests.test_config.ConfigScreenTests.test_the_pressure_limits_must_not_cross) ... ok
+test_a_garbled_stored_value_falls_back_to_the_default (core.tests.test_config.ConfigServiceTests.test_a_garbled_stored_value_falls_back_to_the_default) ... ok
+test_an_override_applies_to_the_next_call (core.tests.test_config.ConfigServiceTests.test_an_override_applies_to_the_next_call) ... ok
+test_defaults_come_from_settings_until_overridden (core.tests.test_config.ConfigServiceTests.test_defaults_come_from_settings_until_overridden) ... ok
+test_only_real_changes_are_stored_and_audited_with_before_and_after (core.tests.test_config.ConfigServiceTests.test_only_real_changes_are_stored_and_audited_with_before_and_after) ... ok
+test_validation_enforces_ranges_and_the_ninety_day_floor (core.tests.test_config.ConfigServiceTests.test_validation_enforces_ranges_and_the_ninety_day_floor) ... ok
+test_an_unhandled_error_shows_a_generic_page (core.tests.test_forms.ErrorPageTests.test_an_unhandled_error_shows_a_generic_page) ... ok
+test_not_found_and_forbidden_pages_are_friendly (core.tests.test_forms.ErrorPageTests.test_not_found_and_forbidden_pages_are_friendly) ... ok
+test_a_blank_form_has_save_and_cancel (core.tests.test_forms.FormStandardTests.test_a_blank_form_has_save_and_cancel) ... ok
+test_a_summary_banner_at_the_top_lists_every_error (core.tests.test_forms.FormStandardTests.test_a_summary_banner_at_the_top_lists_every_error) ... ok
+test_a_valid_form_shows_no_errors (core.tests.test_forms.FormStandardTests.test_a_valid_form_shows_no_errors) ... ok
+test_errors_appear_beside_the_field_prefixed_with_its_label (core.tests.test_forms.FormStandardTests.test_errors_appear_beside_the_field_prefixed_with_its_label) ... ok
+test_fields_in_error_are_tied_to_their_message_for_screen_readers (core.tests.test_forms.FormStandardTests.test_fields_in_error_are_tied_to_their_message_for_screen_readers) ... ok
+test_form_level_errors_are_in_the_summary_too (core.tests.test_forms.FormStandardTests.test_form_level_errors_are_in_the_summary_too) ... ok
+test_help_text_is_shown (core.tests.test_forms.FormStandardTests.test_help_text_is_shown) ... ok
+test_nfr_p1_screen_render_well_under_three_seconds_p95 (core.tests.test_hardening.PerformanceHardeningTests.test_nfr_p1_screen_render_well_under_three_seconds_p95)
+Interactive screens render in well under 3.0s boundary at P95. ... ok
+test_nfr_sec9_contextual_html_escaping_prevents_xss (core.tests.test_hardening.SecurityHardeningTests.test_nfr_sec9_contextual_html_escaping_prevents_xss)
+User-supplied payload containing script tags is strictly escaped on output. ... ok
+test_nfr_sec9_csrf_protection_on_state_changing_post (core.tests.test_hardening.SecurityHardeningTests.test_nfr_sec9_csrf_protection_on_state_changing_post)
+State-changing POST request without valid CSRF token is rejected (HTTP 403). ... 2026-11-17 23:42:32,473 level=WARNING logger=django.security.csrf msg=Forbidden (CSRF cookie not set.): /accounts/users/new/
+ok
+test_nfr_sec9_sql_injection_metacharacters_handled_safely (core.tests.test_hardening.SecurityHardeningTests.test_nfr_sec9_sql_injection_metacharacters_handled_safely)
+SQL injection payloads in the donor search are bound as plain text. ... ok
+test_a_menu_toggle_exists_for_narrow_screens (core.tests.test_layout.LayoutTests.test_a_menu_toggle_exists_for_narrow_screens) ... ok
+test_anonymous_pages_have_no_menu_or_user_details (core.tests.test_layout.LayoutTests.test_anonymous_pages_have_no_menu_or_user_details) ... ok
+test_every_screen_has_help_sign_out_footer_and_a_skip_link (core.tests.test_layout.LayoutTests.test_every_screen_has_help_sign_out_footer_and_a_skip_link) ... ok
+test_header_shows_system_name_user_and_role (core.tests.test_layout.LayoutTests.test_header_shows_system_name_user_and_role) ... ok
+test_help_falls_back_to_general_guidance_for_an_unknown_screen (core.tests.test_layout.LayoutTests.test_help_falls_back_to_general_guidance_for_an_unknown_screen) ... ok
+test_help_gives_text_for_the_screen_the_user_came_from (core.tests.test_layout.LayoutTests.test_help_gives_text_for_the_screen_the_user_came_from) ... ok
+test_keyboard_shortcuts_are_on_for_staff_and_admin_only (core.tests.test_layout.LayoutTests.test_keyboard_shortcuts_are_on_for_staff_and_admin_only) ... ok
+test_static_assets_are_referenced (core.tests.test_layout.LayoutTests.test_static_assets_are_referenced) ... ok
+test_the_home_page_lists_the_role_s_screens_as_cards (core.tests.test_layout.LayoutTests.test_the_home_page_lists_the_role_s_screens_as_cards) ... ok
+test_the_page_is_responsive_and_has_landmarks (core.tests.test_layout.LayoutTests.test_the_page_is_responsive_and_has_landmarks) ... ok
+test_a_field_that_was_not_offered_cannot_be_sorted_on (core.tests.test_listing.ListingTests.test_a_field_that_was_not_offered_cannot_be_sorted_on) ... ok
+test_bad_page_numbers_return_a_valid_page (core.tests.test_listing.ListingTests.test_bad_page_numbers_return_a_valid_page) ... ok
+test_inactive_columns_start_ascending (core.tests.test_listing.ListingTests.test_inactive_columns_start_ascending) ... ok
+test_later_pages_and_the_last_partial_page (core.tests.test_listing.ListingTests.test_later_pages_and_the_last_partial_page) ... ok
+test_sort_ascending_by_default (core.tests.test_listing.ListingTests.test_sort_ascending_by_default) ... ok
+test_sort_descending_on_request (core.tests.test_listing.ListingTests.test_sort_descending_on_request) ... ok
+test_sort_header_links_reverse_the_active_column_and_reset_the_page (core.tests.test_listing.ListingTests.test_sort_header_links_reverse_the_active_column_and_reset_the_page) ... ok
+test_the_page_size_is_twenty_five (core.tests.test_listing.ListingTests.test_the_page_size_is_twenty_five) ... ok
+test_a_donor_sees_donor_screens_only (core.tests.test_navigation.NavigationTests.test_a_donor_sees_donor_screens_only) ... ok
+test_a_hospital_user_sees_requests_but_not_inventory (core.tests.test_navigation.NavigationTests.test_a_hospital_user_sees_requests_but_not_inventory) ... ok
+test_anonymous_visitors_get_no_navigation (core.tests.test_navigation.NavigationTests.test_anonymous_visitors_get_no_navigation) ... ok
+test_links_to_screens_that_do_not_exist_yet_are_left_out (core.tests.test_navigation.NavigationTests.test_links_to_screens_that_do_not_exist_yet_are_left_out) ... ok
+test_staff_see_inventory_but_not_the_donor_dashboard (core.tests.test_navigation.NavigationTests.test_staff_see_inventory_but_not_the_donor_dashboard) ... ok
+test_the_current_page_is_marked (core.tests.test_navigation.NavigationTests.test_the_current_page_is_marked) ... ok
+test_the_menu_is_rendered_from_the_server_not_hidden_in_the_browser (core.tests.test_navigation.NavigationTests.test_the_menu_is_rendered_from_the_server_not_hidden_in_the_browser) ... ok
+test_the_registry_gives_every_role_at_least_a_home_link (core.tests.test_navigation.NavigationTests.test_the_registry_gives_every_role_at_least_a_home_link) ... ok
+test_nfr_s1_untested_quarantined_unit_cannot_be_allocated_or_issued (core.tests.test_safety_concurrency.SafetyRulesAndConcurrencyTests.test_nfr_s1_untested_quarantined_unit_cannot_be_allocated_or_issued)
+NFR-S1 / ST-26: Quarantined units cannot be allocated or issued. ... ok
+test_nfr_s2_expired_unit_cannot_be_allocated_or_issued (core.tests.test_safety_concurrency.SafetyRulesAndConcurrencyTests.test_nfr_s2_expired_unit_cannot_be_allocated_or_issued)
+NFR-S2 / ST-26: Expired unit can never be allocated or issued through any route. ... ok
+test_nfr_s3_group_mismatch_allocation_prevented_and_state_preserved (core.tests.test_safety_concurrency.SafetyRulesAndConcurrencyTests.test_nfr_s3_group_mismatch_allocation_prevented_and_state_preserved)
+NFR-S3 / ST-27: Group mismatch is rejected; unit remains Available. ... ok
+test_nfr_s4_concurrent_double_allocation_prevented (core.tests.test_safety_concurrency.SafetyRulesAndConcurrencyTests.test_nfr_s4_concurrent_double_allocation_prevented)
+NFR-S4 / ST-27: Prevention of double allocation on the same blood unit. ... ok
+test_a_bad_quantity_in_a_blood_request_is_refused (core.tests.test_security_validation.HostileInputTests.test_a_bad_quantity_in_a_blood_request_is_refused) ... ok
+test_admin_search_boxes_survive_every_payload (core.tests.test_security_validation.HostileInputTests.test_admin_search_boxes_survive_every_payload)
+The audit log and user list searches also take free text (a NUL crashed PostgreSQL). ... ok
+test_registration_fields_survive_every_payload (core.tests.test_security_validation.HostileInputTests.test_registration_fields_survive_every_payload) ... ok
+test_search_boxes_survive_every_payload (core.tests.test_security_validation.HostileInputTests.test_search_boxes_survive_every_payload) ... ok
+test_login_registration_and_screening_log_no_secrets (core.tests.test_security_validation.LogContentTests.test_login_registration_and_screening_log_no_secrets) ... ok
+test_a_quarantined_unit_cannot_be_allocated (core.tests.test_security_validation.QuarantineEnforcementTests.test_a_quarantined_unit_cannot_be_allocated) ... ok
+test_a_quarantined_unit_is_not_counted_in_the_hospital_search (core.tests.test_security_validation.QuarantineEnforcementTests.test_a_quarantined_unit_is_not_counted_in_the_hospital_search) ... ok
+test_https_responses_carry_the_hsts_header (core.tests.test_security_validation.TransportSecurityTests.test_https_responses_carry_the_hsts_header) ... ok
+test_plain_http_gets_a_permanent_redirect_to_https (core.tests.test_security_validation.TransportSecurityTests.test_plain_http_gets_a_permanent_redirect_to_https) ... ok
+test_it_creates_one_account_per_role_and_the_same_donor_ids_every_time (core.tests.test_seed.SeedDemoTests.test_it_creates_one_account_per_role_and_the_same_donor_ids_every_time) ... ok
+test_it_refuses_to_run_in_production (core.tests.test_seed.SeedDemoTests.test_it_refuses_to_run_in_production) ... ok
+test_running_it_twice_changes_nothing (core.tests.test_seed.SeedDemoTests.test_running_it_twice_changes_nothing) ... ok
+test_the_data_covers_the_states_a_demo_needs (core.tests.test_seed.SeedDemoTests.test_the_data_covers_the_states_a_demo_needs) ... ok
+test_the_password_option_is_used_for_every_account (core.tests.test_seed.SeedDemoTests.test_the_password_option_is_used_for_every_account) ... ok
+test_the_seeded_data_obeys_the_safety_rules (core.tests.test_seed.SeedDemoTests.test_the_seeded_data_obeys_the_safety_rules)
+Every unit that can be issued has a complete, entirely non-reactive panel. ... ok
+test_without_the_option_a_strong_random_password_is_printed_and_works (core.tests.test_seed.SeedDemoTests.test_without_the_option_a_strong_random_password_is_printed_and_works) ... ok
+test_health_endpoint_reports_ok (core.tests.test_setup.HealthTests.test_health_endpoint_reports_ok) ... ok
+test_a_donor_cannot_declare_the_same_condition_twice (donors.tests.test_declarations.ConditionListTests.test_a_donor_cannot_declare_the_same_condition_twice) ... ok
+test_a_starting_list_of_both_kinds_is_loaded (donors.tests.test_declarations.ConditionListTests.test_a_starting_list_of_both_kinds_is_loaded) ... ok
+test_a_temporary_condition_must_say_how_long_and_a_permanent_one_must_not (donors.tests.test_declarations.ConditionListTests.test_a_temporary_condition_must_say_how_long_and_a_permanent_one_must_not) ... ok
+test_a_permanent_condition_defers_for_good_with_no_review_date (donors.tests.test_declarations.EngineWithDeclarationsTests.test_a_permanent_condition_defers_for_good_with_no_review_date) ... ok
+test_a_permanent_condition_wins_over_temporary_ones (donors.tests.test_declarations.EngineWithDeclarationsTests.test_a_permanent_condition_wins_over_temporary_ones) ... ok
+test_a_temporary_condition_defers_for_its_number_of_days (donors.tests.test_declarations.EngineWithDeclarationsTests.test_a_temporary_condition_defers_for_its_number_of_days) ... ok
+test_declarations_add_to_failed_measurements (donors.tests.test_declarations.EngineWithDeclarationsTests.test_declarations_add_to_failed_measurements) ... ok
+test_many_conditions_still_fit_the_stored_reason (donors.tests.test_declarations.EngineWithDeclarationsTests.test_many_conditions_still_fit_the_stored_reason) ... ok
+test_no_declaration_leaves_an_eligible_donor_eligible (donors.tests.test_declarations.EngineWithDeclarationsTests.test_no_declaration_leaves_an_eligible_donor_eligible) ... ok
+test_the_longest_temporary_condition_sets_the_review_date (donors.tests.test_declarations.EngineWithDeclarationsTests.test_the_longest_temporary_condition_sets_the_review_date) ... ok
+test_a_deferred_donor_cannot_donate (donors.tests.test_declarations.RegistrationDeclarationTests.test_a_deferred_donor_cannot_donate) ... ok
+test_a_permanent_condition_registers_the_donor_as_permanently_deferred (donors.tests.test_declarations.RegistrationDeclarationTests.test_a_permanent_condition_registers_the_donor_as_permanently_deferred) ... ok
+test_a_rejected_registration_records_no_declaration (donors.tests.test_declarations.RegistrationDeclarationTests.test_a_rejected_registration_records_no_declaration) ... ok
+test_a_retired_condition_is_not_offered (donors.tests.test_declarations.RegistrationDeclarationTests.test_a_retired_condition_is_not_offered) ... ok
+test_a_temporary_condition_registers_the_donor_as_temporarily_deferred (donors.tests.test_declarations.RegistrationDeclarationTests.test_a_temporary_condition_registers_the_donor_as_temporarily_deferred) ... ok
+test_declaring_nothing_registers_an_eligible_donor (donors.tests.test_declarations.RegistrationDeclarationTests.test_declaring_nothing_registers_an_eligible_donor) ... ok
+test_the_conditions_are_offered_on_the_form (donors.tests.test_declarations.RegistrationDeclarationTests.test_the_conditions_are_offered_on_the_form) ... ok
+test_a_declared_permanent_condition_defers_the_donor_even_with_good_measurements (donors.tests.test_declarations.ScreeningDeclarationTests.test_a_declared_permanent_condition_defers_the_donor_even_with_good_measurements) ... 2026-11-17 23:42:35,047 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Permanently Deferred user_id=1
+ok
+test_a_later_clean_screening_does_not_lift_a_permanent_deferral (donors.tests.test_declarations.ScreeningDeclarationTests.test_a_later_clean_screening_does_not_lift_a_permanent_deferral) ... 2026-11-17 23:42:35,074 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Permanently Deferred user_id=1
+2026-11-17 23:42:35,089 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Permanently Deferred user_id=1
+ok
+test_the_declaration_is_kept_with_who_recorded_it (donors.tests.test_declarations.ScreeningDeclarationTests.test_the_declaration_is_kept_with_who_recorded_it) ... 2026-11-17 23:42:35,117 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Temporarily Deferred user_id=1
+ok
+test_the_screening_form_offers_the_conditions (donors.tests.test_declarations.ScreeningDeclarationTests.test_the_screening_form_offers_the_conditions) ... ok
+test_a_deferral_that_has_not_reached_its_review_date_is_left_alone (donors.tests.test_deferrals.ClearDeferralTests.test_a_deferral_that_has_not_reached_its_review_date_is_left_alone) ... ok
+test_a_donor_past_the_review_date_returns_to_eligible_and_the_reason_is_cleared (donors.tests.test_deferrals.ClearDeferralTests.test_a_donor_past_the_review_date_returns_to_eligible_and_the_reason_is_cleared) ... 2026-11-17 23:42:35,185 level=INFO logger=donors.services.deferrals msg=deferral cleared donor_id=DNR10000001
+ok
+test_a_donor_still_inside_the_interval_stays_deferred_with_a_new_review_date (donors.tests.test_deferrals.ClearDeferralTests.test_a_donor_still_inside_the_interval_stays_deferred_with_a_new_review_date) ... ok
+test_a_permanent_deferral_is_never_cleared (donors.tests.test_deferrals.ClearDeferralTests.test_a_permanent_deferral_is_never_cleared) ... ok
+test_an_old_low_reading_does_not_keep_a_donor_deferred_for_ever (donors.tests.test_deferrals.ClearDeferralTests.test_an_old_low_reading_does_not_keep_a_donor_deferred_for_ever) ... 2026-11-17 23:42:35,209 level=INFO logger=donors.services.deferrals msg=deferral cleared donor_id=DNR10000001
+ok
+test_inactive_donors_are_ignored (donors.tests.test_deferrals.ClearDeferralTests.test_inactive_donors_are_ignored) ... ok
+test_the_nightly_command_reports_how_many_were_cleared (donors.tests.test_deferrals.ClearDeferralTests.test_the_nightly_command_reports_how_many_were_cleared) ... 2026-11-17 23:42:35,228 level=INFO logger=donors.services.deferrals msg=deferral cleared donor_id=DNR10000001
+ok
+test_the_review_date_itself_counts_as_passed (donors.tests.test_deferrals.ClearDeferralTests.test_the_review_date_itself_counts_as_passed) ... 2026-11-17 23:42:35,234 level=INFO logger=donors.services.deferrals msg=deferral cleared donor_id=DNR10000001
+ok
+test_a_deferred_donor_sees_the_reason (donors.tests.test_deferrals.DashboardTests.test_a_deferred_donor_sees_the_reason) ... ok
+test_a_donor_only_ever_sees_their_own_record (donors.tests.test_deferrals.DashboardTests.test_a_donor_only_ever_sees_their_own_record) ... ok
+test_a_donor_who_gave_blood_ten_days_ago_sees_not_eligible_and_the_date (donors.tests.test_deferrals.DashboardTests.test_a_donor_who_gave_blood_ten_days_ago_sees_not_eligible_and_the_date) ... ok
+test_an_eligible_donor_sees_they_can_donate (donors.tests.test_deferrals.DashboardTests.test_an_eligible_donor_sees_they_can_donate) ... ok
+test_staff_and_hospital_users_cannot_use_the_donor_dashboard (donors.tests.test_deferrals.DashboardTests.test_staff_and_hospital_users_cannot_use_the_donor_dashboard) ... 2026-11-17 23:42:35,325 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=1 role=staff path=/donors/me/ needs=donor
+2026-11-17 23:42:35,327 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/me/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:35,338 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=hospital path=/donors/me/ needs=donor
+2026-11-17 23:42:35,340 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/me/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:35,350 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=admin path=/donors/me/ needs=donor
+2026-11-17 23:42:35,352 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/me/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_the_dashboard_is_in_the_donor_menu (donors.tests.test_deferrals.DashboardTests.test_the_dashboard_is_in_the_donor_menu) ... ok
+test_a_donation_sets_the_next_eligible_date_and_a_deferral_until_then (donors.tests.test_deferrals.RecordDonationTests.test_a_donation_sets_the_next_eligible_date_and_a_deferral_until_then) ... ok
+test_the_donor_is_eligible_again_on_the_next_eligible_date (donors.tests.test_deferrals.RecordDonationTests.test_the_donor_is_eligible_again_on_the_next_eligible_date) ... 2026-11-17 23:42:35,383 level=INFO logger=donors.services.deferrals msg=deferral cleared donor_id=DNR10000001
+ok
+test_a_clean_result_clears_an_earlier_deferral (donors.tests.test_eligibility.ApplyTests.test_a_clean_result_clears_an_earlier_deferral) ... ok
+test_apply_result_records_status_reason_and_review_date (donors.tests.test_eligibility.ApplyTests.test_apply_result_records_status_reason_and_review_date) ... ok
+test_apply_screening_updates_the_donor_and_keeps_a_record (donors.tests.test_eligibility.ApplyTests.test_apply_screening_updates_the_donor_and_keeps_a_record) ... ok
+test_the_stored_reason_always_fits_its_column (donors.tests.test_eligibility.ApplyTests.test_the_stored_reason_always_fits_its_column) ... ok
+test_a_donor_over_65_is_permanently_ineligible (donors.tests.test_eligibility.EngineTests.test_a_donor_over_65_is_permanently_ineligible) ... ok
+test_a_donor_under_18_may_return_on_their_18th_birthday (donors.tests.test_eligibility.EngineTests.test_a_donor_under_18_may_return_on_their_18th_birthday) ... ok
+test_a_donor_who_meets_every_criterion_is_eligible (donors.tests.test_eligibility.EngineTests.test_a_donor_who_meets_every_criterion_is_eligible) ... ok
+test_a_first_time_donor_has_no_interval_to_wait (donors.tests.test_eligibility.EngineTests.test_a_first_time_donor_has_no_interval_to_wait) ... ok
+test_a_permanent_deferral_is_never_lifted_by_good_measurements (donors.tests.test_eligibility.EngineTests.test_a_permanent_deferral_is_never_lifted_by_good_measurements) ... ok
+test_age_boundaries (donors.tests.test_eligibility.EngineTests.test_age_boundaries) ... ok
+test_all_five_criteria_can_fail_together (donors.tests.test_eligibility.EngineTests.test_all_five_criteria_can_fail_together) ... ok
+test_blood_pressure_boundaries (donors.tests.test_eligibility.EngineTests.test_blood_pressure_boundaries) ... ok
+test_every_failing_criterion_is_reported_not_only_the_first (donors.tests.test_eligibility.EngineTests.test_every_failing_criterion_is_reported_not_only_the_first) ... ok
+test_haemoglobin_boundary_is_exact (donors.tests.test_eligibility.EngineTests.test_haemoglobin_boundary_is_exact) ... ok
+test_the_donation_interval_boundary (donors.tests.test_eligibility.EngineTests.test_the_donation_interval_boundary) ... ok
+test_the_interval_alone_clears_on_the_next_eligible_date (donors.tests.test_eligibility.EngineTests.test_the_interval_alone_clears_on_the_next_eligible_date) ... ok
+test_the_review_date_is_the_latest_of_the_failing_criteria (donors.tests.test_eligibility.EngineTests.test_the_review_date_is_the_latest_of_the_failing_criteria) ... ok
+test_unmeasured_values_are_skipped_not_assumed (donors.tests.test_eligibility.EngineTests.test_unmeasured_values_are_skipped_not_assumed) ... ok
+test_weight_boundary (donors.tests.test_eligibility.EngineTests.test_weight_boundary) ... ok
+test_a_longer_configured_interval_is_used (donors.tests.test_eligibility.NextEligibleDateTests.test_a_longer_configured_interval_is_used) ... ok
+test_ninety_days_after_the_last_donation (donors.tests.test_eligibility.NextEligibleDateTests.test_ninety_days_after_the_last_donation) ... ok
+test_no_donation_gives_no_date (donors.tests.test_eligibility.NextEligibleDateTests.test_no_donation_gives_no_date) ... ok
+test_the_interval_can_never_be_set_below_ninety_days (donors.tests.test_eligibility.NextEligibleDateTests.test_the_interval_can_never_be_set_below_ninety_days) ... ok
+test_a_registrant_who_meets_what_can_be_checked_is_eligible (donors.tests.test_eligibility.RegistrationEligibilityTests.test_a_registrant_who_meets_what_can_be_checked_is_eligible) ... ok
+test_an_underweight_registrant_starts_temporarily_deferred (donors.tests.test_eligibility.RegistrationEligibilityTests.test_an_underweight_registrant_starts_temporarily_deferred) ... ok
+test_a_low_haemoglobin_defers_the_donor_with_a_review_date (donors.tests.test_eligibility.ScreeningScreenTests.test_a_low_haemoglobin_defers_the_donor_with_a_review_date) ... 2026-11-17 23:42:35,553 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Temporarily Deferred user_id=2
+ok
+test_a_passing_screening_says_every_criterion_is_met (donors.tests.test_eligibility.ScreeningScreenTests.test_a_passing_screening_says_every_criterion_is_met) ... 2026-11-17 23:42:35,580 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Eligible user_id=2
+ok
+test_an_unknown_donor_gives_not_found (donors.tests.test_eligibility.ScreeningScreenTests.test_an_unknown_donor_gives_not_found) ... 2026-11-17 23:42:35,608 level=WARNING logger=django.request msg=Not Found: /donors/DNR00000000/screen/
+ok
+test_invalid_measurements_are_rejected_with_a_message (donors.tests.test_eligibility.ScreeningScreenTests.test_invalid_measurements_are_rejected_with_a_message) ... ok
+test_only_staff_and_administrators_may_screen (donors.tests.test_eligibility.ScreeningScreenTests.test_only_staff_and_administrators_may_screen) ... 2026-11-17 23:42:35,650 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/donors/DNR10000001/screen/ needs=staff,admin
+2026-11-17 23:42:35,653 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/DNR10000001/screen/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:35,658 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/donors/DNR10000001/screen/ needs=staff,admin
+2026-11-17 23:42:35,659 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/DNR10000001/screen/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:35,670 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/donors/DNR10000001/screen/ needs=staff,admin
+2026-11-17 23:42:35,672 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/DNR10000001/screen/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:35,676 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/donors/DNR10000001/screen/ needs=staff,admin
+2026-11-17 23:42:35,678 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/DNR10000001/screen/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_the_form_shows_the_donor (donors.tests.test_eligibility.ScreeningScreenTests.test_the_form_shows_the_donor) ... ok
+test_the_result_page_survives_a_refresh_without_repeating_the_screening (donors.tests.test_eligibility.ScreeningScreenTests.test_the_result_page_survives_a_refresh_without_repeating_the_screening) ... 2026-11-17 23:42:35,717 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Eligible user_id=2
+ok
+test_two_failures_list_both_reasons_and_a_review_date (donors.tests.test_eligibility.ScreeningScreenTests.test_two_failures_list_both_reasons_and_a_review_date) ... 2026-11-17 23:42:35,748 level=INFO logger=donors.views msg=screening recorded donor_id=DNR10000001 outcome=Temporarily Deferred user_id=2
+ok
+test_columns_sort_and_the_page_size_is_25 (donors.tests.test_eligibility.SearchTests.test_columns_sort_and_the_page_size_is_25) ... ok
+test_inactive_donors_are_not_listed (donors.tests.test_eligibility.SearchTests.test_inactive_donors_are_not_listed) ... ok
+test_no_match_says_so (donors.tests.test_eligibility.SearchTests.test_no_match_says_so) ... ok
+test_no_query_lists_everyone (donors.tests.test_eligibility.SearchTests.test_no_query_lists_everyone) ... ok
+test_only_staff_and_administrators_may_search (donors.tests.test_eligibility.SearchTests.test_only_staff_and_administrators_may_search) ... 2026-11-17 23:42:35,922 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/donors/search/ needs=staff,admin
+2026-11-17 23:42:35,924 level=WARNING logger=django.request msg=Forbidden (Permission denied): /donors/search/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_search_by_name_id_and_mobile (donors.tests.test_eligibility.SearchTests.test_search_by_name_id_and_mobile) ... ok
+test_a_donor_identifier_cannot_be_changed (donors.tests.test_registration.DonorIdTests.test_a_donor_identifier_cannot_be_changed) ... ok
+test_a_thousand_identifiers_are_distinct_and_well_formed (donors.tests.test_registration.DonorIdTests.test_a_thousand_identifiers_are_distinct_and_well_formed) ... ok
+test_numbering_starts_at_10000001_and_counts_up (donors.tests.test_registration.DonorIdTests.test_numbering_starts_at_10000001_and_counts_up) ... ok
+test_sequences_are_independent_per_name (donors.tests.test_registration.DonorIdTests.test_sequences_are_independent_per_name) ... ok
+test_a_failed_welcome_email_does_not_undo_the_registration (donors.tests.test_registration.RegistrationFlowTests.test_a_failed_welcome_email_does_not_undo_the_registration) ... ok
+test_a_signed_in_user_is_sent_home_instead (donors.tests.test_registration.RegistrationFlowTests.test_a_signed_in_user_is_sent_home_instead) ... ok
+test_a_welcome_email_is_sent_to_the_donor (donors.tests.test_registration.RegistrationFlowTests.test_a_welcome_email_is_sent_to_the_donor) ... ok
+test_errors_show_beside_the_fields_and_nothing_is_saved (donors.tests.test_registration.RegistrationFlowTests.test_errors_show_beside_the_fields_and_nothing_is_saved) ... ok
+test_registration_creates_donor_account_and_consent_then_shows_the_id (donors.tests.test_registration.RegistrationFlowTests.test_registration_creates_donor_account_and_consent_then_shows_the_id) ... ok
+test_the_confirmation_page_needs_a_fresh_registration (donors.tests.test_registration.RegistrationFlowTests.test_the_confirmation_page_needs_a_fresh_registration) ... ok
+test_the_identifier_is_not_put_in_the_address (donors.tests.test_registration.RegistrationFlowTests.test_the_identifier_is_not_put_in_the_address) ... ok
+test_the_new_donor_can_sign_in_with_the_donor_id_as_username (donors.tests.test_registration.RegistrationFlowTests.test_the_new_donor_can_sign_in_with_the_donor_id_as_username) ... ok
+test_the_numbers_are_not_reused_after_a_rejected_registration (donors.tests.test_registration.RegistrationFlowTests.test_the_numbers_are_not_reused_after_a_rejected_registration) ... ok
+test_the_registration_page_is_public (donors.tests.test_registration.RegistrationFlowTests.test_the_registration_page_is_public) ... ok
+test_a_complete_valid_form_creates_one_donor_with_the_submitted_values (donors.tests.test_registration.RegistrationFormTests.test_a_complete_valid_form_creates_one_donor_with_the_submitted_values) ... ok
+test_consent_is_required_and_recorded_with_a_timestamp (donors.tests.test_registration.RegistrationFormTests.test_consent_is_required_and_recorded_with_a_timestamp) ... ok
+test_every_required_field_is_enforced (donors.tests.test_registration.RegistrationFormTests.test_every_required_field_is_enforced) ... ok
+test_formats_are_checked (donors.tests.test_registration.RegistrationFormTests.test_formats_are_checked) ... ok
+test_passwords_must_match_and_follow_the_policy (donors.tests.test_registration.RegistrationFormTests.test_passwords_must_match_and_follow_the_policy) ... ok
+test_the_form_cannot_be_saved_without_committing (donors.tests.test_registration.RegistrationFormTests.test_the_form_cannot_be_saved_without_committing) ... ok
+test_a_leap_day_birthday_is_handled (donors.tests.test_validation.AgeRuleTests.test_a_leap_day_birthday_is_handled) ... ok
+test_just_under_18_and_just_over_65_are_rejected (donors.tests.test_validation.AgeRuleTests.test_just_under_18_and_just_over_65_are_rejected) ... ok
+test_the_boundaries_are_inclusive_at_18_and_65 (donors.tests.test_validation.AgeRuleTests.test_the_boundaries_are_inclusive_at_18_and_65) ... ok
+test_the_form_rejects_a_donor_who_is_too_young_or_too_old (donors.tests.test_validation.AgeRuleTests.test_the_form_rejects_a_donor_who_is_too_young_or_too_old) ... ok
+test_the_message_is_the_one_in_the_srs (donors.tests.test_validation.AgeRuleTests.test_the_message_is_the_one_in_the_srs) ... ok
+test_a_deactivated_donor_does_not_block_a_new_registration (donors.tests.test_validation.DuplicateTests.test_a_deactivated_donor_does_not_block_a_new_registration) ... ok
+test_a_duplicate_email_is_refused_ignoring_case (donors.tests.test_validation.DuplicateTests.test_a_duplicate_email_is_refused_ignoring_case) ... ok
+test_a_duplicate_mobile_number_is_refused_with_the_srs_message (donors.tests.test_validation.DuplicateTests.test_a_duplicate_mobile_number_is_refused_with_the_srs_message) ... ok
+test_an_email_used_by_any_sign_in_account_is_refused (donors.tests.test_validation.DuplicateTests.test_an_email_used_by_any_sign_in_account_is_refused) ... ok
+test_the_database_constraint_backs_the_check_up_when_two_requests_race (donors.tests.test_validation.DuplicateTests.test_the_database_constraint_backs_the_check_up_when_two_requests_race) ... ok
+test_unique_distinct_details_register_normally (donors.tests.test_validation.DuplicateTests.test_unique_distinct_details_register_normally) ... ok
+test_three_problems_give_three_field_errors_and_a_summary_with_no_account (donors.tests.test_validation.RejectedRegistrationTests.test_three_problems_give_three_field_errors_and_a_summary_with_no_account) ... ok
+test_discard_requires_confirmation_and_reason (inventory.tests.test_actions.InventoryActionScreenTests.test_discard_requires_confirmation_and_reason)
+IT-12 and ST-12: a discard needs a reason and a confirmation, and is audited. ... ok
+test_inventory_filters_work_together (inventory.tests.test_actions.InventoryActionScreenTests.test_inventory_filters_work_together)
+UT-19: combined filters return only the intersecting set. ... ok
+test_issued_unit_cannot_be_discarded (inventory.tests.test_actions.InventoryActionScreenTests.test_issued_unit_cannot_be_discarded) ... ok
+test_transfer_screen_updates_location (inventory.tests.test_actions.InventoryActionScreenTests.test_transfer_screen_updates_location)
+IT-12: a transfer made on screen is saved and audited. ... ok
+test_discard_requires_reason_and_respects_status_transition_rules (inventory.tests.test_actions.InventoryActionTests.test_discard_requires_reason_and_respects_status_transition_rules)
+UT-23: a discard needs a reason and an Issued unit is refused. ... ok
+test_transfer_rejects_same_location_and_issued_units (inventory.tests.test_actions.InventoryActionTests.test_transfer_rejects_same_location_and_issued_units) ... ok
+test_transfer_updates_location_and_writes_audit_record (inventory.tests.test_actions.InventoryActionTests.test_transfer_updates_location_and_writes_audit_record)
+UT-22: a transfer changes the location, not the status, and is audited. ... ok
+test_donors_and_hospital_users_cannot_see_labels (inventory.tests.test_barcode.LabelTests.test_donors_and_hospital_users_cannot_see_labels) ... 2026-11-17 23:42:37,974 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/inventory/units/BU1000000001/label/ needs=staff,admin
+2026-11-17 23:42:37,976 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/label/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:37,980 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=donor path=/inventory/units/BU1000000001/barcode.svg needs=staff,admin
+2026-11-17 23:42:37,982 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/barcode.svg
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:37,991 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/inventory/units/BU1000000001/label/ needs=staff,admin
+2026-11-17 23:42:37,993 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/label/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:37,997 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=hospital path=/inventory/units/BU1000000001/barcode.svg needs=staff,admin
+2026-11-17 23:42:37,998 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/barcode.svg
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_the_barcode_is_served_as_svg (inventory.tests.test_barcode.LabelTests.test_the_barcode_is_served_as_svg) ... ok
+test_the_label_never_shows_the_donor (inventory.tests.test_barcode.LabelTests.test_the_label_never_shows_the_donor) ... ok
+test_the_label_shows_the_unit_details_and_a_barcode_image (inventory.tests.test_barcode.LabelTests.test_the_label_shows_the_unit_details_and_a_barcode_image) ... ok
+test_unknown_units_give_not_found (inventory.tests.test_barcode.LabelTests.test_unknown_units_give_not_found) ... 2026-11-17 23:42:38,070 level=WARNING logger=django.request msg=Not Found: /inventory/units/BU0000000000/label/
+ok
+test_anonymous_visitors_are_sent_to_sign_in (inventory.tests.test_console.ConsoleTests.test_anonymous_visitors_are_sent_to_sign_in) ... ok
+test_donors_and_hospital_users_cannot_see_inventory (inventory.tests.test_console.ConsoleTests.test_donors_and_hospital_users_cannot_see_inventory) ... 2026-11-17 23:42:38,095 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/inventory/ needs=staff,admin
+2026-11-17 23:42:38,098 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:38,102 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=2 role=donor path=/inventory/ needs=staff,admin
+2026-11-17 23:42:38,104 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:38,120 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/inventory/ needs=staff,admin
+2026-11-17 23:42:38,121 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:38,125 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=3 role=hospital path=/inventory/ needs=staff,admin
+2026-11-17 23:42:38,127 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_quarantined_units_are_listed_with_a_link_to_enter_results (inventory.tests.test_console.ConsoleTests.test_quarantined_units_are_listed_with_a_link_to_enter_results) ... ok
+test_released_units_leave_the_waiting_list (inventory.tests.test_console.ConsoleTests.test_released_units_leave_the_waiting_list) ... ok
+test_staff_and_administrators_see_inventory_in_the_menu (inventory.tests.test_console.ConsoleTests.test_staff_and_administrators_see_inventory_in_the_menu) ... ok
+test_the_console_shows_the_grid_and_the_status_counts (inventory.tests.test_console.ConsoleTests.test_the_console_shows_the_grid_and_the_status_counts) ... ok
+test_the_grid_matches_the_database_cell_for_cell (inventory.tests.test_console.ConsoleTests.test_the_grid_matches_the_database_cell_for_cell)
+ST-09. ... ok
+test_the_live_panel_is_returned_alone_for_the_five_second_refresh (inventory.tests.test_console.ConsoleTests.test_the_live_panel_is_returned_alone_for_the_five_second_refresh) ... ok
+test_the_number_of_queries_does_not_grow_with_the_number_of_units (inventory.tests.test_console.ConsoleTests.test_the_number_of_queries_does_not_grow_with_the_number_of_units)
+NFR-P1: the console does a fixed amount of work however large the stock is. ... ok
+test_the_page_asks_the_browser_to_refresh_the_panel_every_five_seconds (inventory.tests.test_console.ConsoleTests.test_the_page_asks_the_browser_to_refresh_the_panel_every_five_seconds) ... ok
+test_the_waiting_list_is_paged_at_25_and_sortable (inventory.tests.test_console.ConsoleTests.test_the_waiting_list_is_paged_at_25_and_sortable) ... ok
+test_a_change_shows_on_the_very_next_read (inventory.tests.test_console.StockGridTests.test_a_change_shows_on_the_very_next_read)
+IT-10 (NFR-P5): nothing is cached. ... ok
+test_a_unit_past_its_expiry_date_is_not_counted_even_if_still_marked_available (inventory.tests.test_console.StockGridTests.test_a_unit_past_its_expiry_date_is_not_counted_even_if_still_marked_available)
+NFR-S2. ... ok
+test_every_blood_group_and_component_appears_even_when_empty (inventory.tests.test_console.StockGridTests.test_every_blood_group_and_component_appears_even_when_empty) ... ok
+test_every_status_is_reported_including_empty_ones (inventory.tests.test_console.StockGridTests.test_every_status_is_reported_including_empty_ones) ... ok
+test_only_available_units_are_counted (inventory.tests.test_console.StockGridTests.test_only_available_units_are_counted) ... ok
+test_row_and_column_totals_add_up (inventory.tests.test_console.StockGridTests.test_row_and_column_totals_add_up) ... ok
+test_the_console_lists_units_expiring_soon_with_days_left (inventory.tests.test_expiry.ConsoleNearExpiryTests.test_the_console_lists_units_expiring_soon_with_days_left) ... ok
+test_the_live_panel_carries_the_near_expiry_count_too (inventory.tests.test_expiry.ConsoleNearExpiryTests.test_the_live_panel_carries_the_near_expiry_count_too) ... ok
+test_with_nothing_expiring_it_says_so_and_shows_no_table (inventory.tests.test_expiry.ConsoleNearExpiryTests.test_with_nothing_expiring_it_says_so_and_shows_no_table) ... ok
+test_a_mail_failure_is_logged_and_does_not_raise (inventory.tests.test_expiry.DigestTests.test_a_mail_failure_is_logged_and_does_not_raise) ... ok
+test_having_no_recipients_is_logged_as_an_error (inventory.tests.test_expiry.DigestTests.test_having_no_recipients_is_logged_as_an_error) ... ok
+test_it_lists_each_unit_with_its_date_and_days_left (inventory.tests.test_expiry.DigestTests.test_it_lists_each_unit_with_its_date_and_days_left) ... ok
+test_no_units_means_no_email (inventory.tests.test_expiry.DigestTests.test_no_units_means_no_email) ... ok
+test_one_email_goes_to_active_staff_and_administrators_only (inventory.tests.test_expiry.DigestTests.test_one_email_goes_to_active_staff_and_administrators_only) ... ok
+test_the_command_can_skip_the_digest (inventory.tests.test_expiry.DigestTests.test_the_command_can_skip_the_digest) ... ok
+test_the_daily_command_expires_units_and_sends_the_digest (inventory.tests.test_expiry.DigestTests.test_the_daily_command_expires_units_and_sends_the_digest) ... 2026-11-17 23:42:39,115 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_a_unit_past_its_expiry_date_becomes_expired_and_others_are_left_alone (inventory.tests.test_expiry.ExpireDueUnitsTests.test_a_unit_past_its_expiry_date_becomes_expired_and_others_are_left_alone) ... 2026-11-17 23:42:39,137 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_a_unit_that_moved_on_meanwhile_is_skipped_and_the_rest_continue (inventory.tests.test_expiry.ExpireDueUnitsTests.test_a_unit_that_moved_on_meanwhile_is_skipped_and_the_rest_continue) ... 2026-11-17 23:42:39,154 level=INFO logger=inventory.services.expiry msg=expiry skipped unit_id=BU1000000001
+2026-11-17 23:42:39,155 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000002
+ok
+test_each_expiry_is_audited_with_the_reason (inventory.tests.test_expiry.ExpireDueUnitsTests.test_each_expiry_is_audited_with_the_reason) ... 2026-11-17 23:42:39,164 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_expired_units_leave_the_stock_count (inventory.tests.test_expiry.ExpireDueUnitsTests.test_expired_units_leave_the_stock_count) ... 2026-11-17 23:42:39,179 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_issued_discarded_and_already_expired_units_are_not_touched (inventory.tests.test_expiry.ExpireDueUnitsTests.test_issued_discarded_and_already_expired_units_are_not_touched) ... ok
+test_quarantined_and_reserved_units_expire_too (inventory.tests.test_expiry.ExpireDueUnitsTests.test_quarantined_and_reserved_units_expire_too) ... 2026-11-17 23:42:39,230 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+2026-11-17 23:42:39,233 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000002
+ok
+test_running_it_twice_changes_nothing_the_second_time (inventory.tests.test_expiry.ExpireDueUnitsTests.test_running_it_twice_changes_nothing_the_second_time) ... 2026-11-17 23:42:39,244 level=INFO logger=inventory.services.expiry msg=unit expired unit_id=BU1000000001
+ok
+test_a_unit_expiring_today_is_still_flagged_and_an_expired_one_is_not (inventory.tests.test_expiry.NearExpiryTests.test_a_unit_expiring_today_is_still_flagged_and_an_expired_one_is_not) ... ok
+test_only_available_units_are_flagged (inventory.tests.test_expiry.NearExpiryTests.test_only_available_units_are_flagged) ... ok
+test_the_window_is_configurable (inventory.tests.test_expiry.NearExpiryTests.test_the_window_is_configurable) ... ok
+test_units_inside_the_window_are_listed_soonest_first (inventory.tests.test_expiry.NearExpiryTests.test_units_inside_the_window_are_listed_soonest_first) ... ok
+test_a_failure_part_way_leaves_no_partial_products (inventory.tests.test_separation.SeparateUnitTests.test_a_failure_part_way_leaves_no_partial_products) ... ok
+test_a_subset_of_components_is_allowed (inventory.tests.test_separation.SeparateUnitTests.test_a_subset_of_components_is_allowed) ... ok
+test_a_unit_past_expiry_or_a_product_already_out_of_date_is_refused (inventory.tests.test_separation.SeparateUnitTests.test_a_unit_past_expiry_or_a_product_already_out_of_date_is_refused) ... ok
+test_a_unit_without_a_clean_panel_is_refused (inventory.tests.test_separation.SeparateUnitTests.test_a_unit_without_a_clean_panel_is_refused) ... ok
+test_bad_requests_are_refused (inventory.tests.test_separation.SeparateUnitTests.test_bad_requests_are_refused) ... ok
+test_each_component_is_a_new_available_unit_linked_to_the_parent (inventory.tests.test_separation.SeparateUnitTests.test_each_component_is_a_new_available_unit_linked_to_the_parent) ... ok
+test_expiry_is_counted_from_the_collection_date_per_component (inventory.tests.test_separation.SeparateUnitTests.test_expiry_is_counted_from_the_collection_date_per_component) ... ok
+test_only_available_whole_blood_can_be_separated (inventory.tests.test_separation.SeparateUnitTests.test_only_available_whole_blood_can_be_separated) ... ok
+test_the_whole_blood_unit_is_closed_with_a_reason (inventory.tests.test_separation.SeparateUnitTests.test_the_whole_blood_unit_is_closed_with_a_reason) ... ok
+test_volumes_over_the_parent_volume_are_refused_and_nothing_changes (inventory.tests.test_separation.SeparateUnitTests.test_volumes_over_the_parent_volume_are_refused_and_nothing_changes) ... ok
+test_a_child_page_links_back_to_its_parent_and_cannot_be_separated (inventory.tests.test_separation.SeparationViewTests.test_a_child_page_links_back_to_its_parent_and_cannot_be_separated) ... ok
+test_a_missing_volume_and_an_oversize_total_show_errors (inventory.tests.test_separation.SeparationViewTests.test_a_missing_volume_and_an_oversize_total_show_errors) ... ok
+test_donors_cannot_reach_the_screens (inventory.tests.test_separation.SeparationViewTests.test_donors_cannot_reach_the_screens) ... 2026-11-17 23:42:39,703 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/inventory/units/BU1000000001/ needs=staff,admin
+2026-11-17 23:42:39,705 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:39,709 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=4 role=donor path=/inventory/units/BU1000000001/separate/ needs=staff,admin
+2026-11-17 23:42:39,711 level=WARNING logger=django.request msg=Forbidden (Permission denied): /inventory/units/BU1000000001/separate/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_submitting_the_form_creates_the_products_and_shows_them (inventory.tests.test_separation.SeparationViewTests.test_submitting_the_form_creates_the_products_and_shows_them) ... ok
+test_the_console_lists_whole_blood_with_a_separate_link (inventory.tests.test_separation.SeparationViewTests.test_the_console_lists_whole_blood_with_a_separate_link) ... ok
+test_the_detail_page_offers_separation_for_available_whole_blood (inventory.tests.test_separation.SeparationViewTests.test_the_detail_page_offers_separation_for_available_whole_blood) ... ok
+test_the_admin_cannot_add_edit_or_delete_units (inventory.tests.test_unit_model.AdminTests.test_the_admin_cannot_add_edit_or_delete_units) ... ok
+test_a_failing_receiver_undoes_the_change (inventory.tests.test_unit_model.AnnouncementTests.test_a_failing_receiver_undoes_the_change) ... ok
+test_a_receiver_gets_the_details_of_each_change (inventory.tests.test_unit_model.AnnouncementTests.test_a_receiver_gets_the_details_of_each_change) ... ok
+test_a_refused_move_announces_nothing (inventory.tests.test_unit_model.AnnouncementTests.test_a_refused_move_announces_nothing) ... ok
+test_the_database_refuses_a_discarded_unit_with_no_reason (inventory.tests.test_unit_model.DatabaseRuleTests.test_the_database_refuses_a_discarded_unit_with_no_reason) ... ok
+test_the_database_refuses_an_expiry_before_collection (inventory.tests.test_unit_model.DatabaseRuleTests.test_the_database_refuses_an_expiry_before_collection) ... ok
+test_the_database_refuses_an_unknown_status (inventory.tests.test_unit_model.DatabaseRuleTests.test_the_database_refuses_an_unknown_status) ... ok
+test_a_unit_expiring_today_is_still_issuable_today (inventory.tests.test_unit_model.IssuableTests.test_a_unit_expiring_today_is_still_issuable_today) ... ok
+test_a_unit_past_its_expiry_date_is_not_issuable_even_if_still_marked_available (inventory.tests.test_unit_model.IssuableTests.test_a_unit_past_its_expiry_date_is_not_issuable_even_if_still_marked_available) ... ok
+test_only_available_unexpired_units_are_issuable (inventory.tests.test_unit_model.IssuableTests.test_only_available_unexpired_units_are_issuable) ... ok
+test_each_component_has_its_own_shelf_life (inventory.tests.test_unit_model.ShelfLifeTests.test_each_component_has_its_own_shelf_life) ... ok
+test_a_bulk_update_bypasses_the_instance_guard (inventory.tests.test_unit_model.TransitionRuleTests.test_a_bulk_update_bypasses_the_instance_guard)
+Known limit. The guard sits on the model, so a queryset update skips it. ... ok
+test_a_quarantined_unit_cannot_be_issued_directly (inventory.tests.test_unit_model.TransitionRuleTests.test_a_quarantined_unit_cannot_be_issued_directly) ... ok
+test_a_stale_copy_cannot_act_on_a_unit_that_has_moved_on (inventory.tests.test_unit_model.TransitionRuleTests.test_a_stale_copy_cannot_act_on_a_unit_that_has_moved_on)
+Two staff holding the same unit: the second is refused (SRS NFR-S4). ... ok
+test_an_issued_unit_cannot_be_discarded (inventory.tests.test_unit_model.TransitionRuleTests.test_an_issued_unit_cannot_be_discarded)
+SRS REQ-22. ... ok
+test_can_transition_to_reports_without_changing_anything (inventory.tests.test_unit_model.TransitionRuleTests.test_can_transition_to_reports_without_changing_anything) ... ok
+test_discarding_needs_a_reason_and_records_it (inventory.tests.test_unit_model.TransitionRuleTests.test_discarding_needs_a_reason_and_records_it) ... ok
+test_every_permitted_move_works_and_every_other_is_refused (inventory.tests.test_unit_model.TransitionRuleTests.test_every_permitted_move_works_and_every_other_is_refused) ... ok
+test_issued_and_discarded_units_are_final (inventory.tests.test_unit_model.TransitionRuleTests.test_issued_and_discarded_units_are_final) ... ok
+test_no_application_code_updates_a_status_in_bulk (inventory.tests.test_unit_model.TransitionRuleTests.test_no_application_code_updates_a_status_in_bulk) ... ok
+test_the_permitted_moves_are_exactly_the_documented_ones (inventory.tests.test_unit_model.TransitionRuleTests.test_the_permitted_moves_are_exactly_the_documented_ones) ... ok
+test_writing_the_status_directly_is_refused (inventory.tests.test_unit_model.TransitionRuleTests.test_writing_the_status_directly_is_refused) ... ok
+test_a_thousand_identifiers_are_distinct_and_well_formed (inventory.tests.test_unit_model.UnitIdTests.test_a_thousand_identifiers_are_distinct_and_well_formed) ... ok
+test_an_identifier_cannot_be_changed (inventory.tests.test_unit_model.UnitIdTests.test_an_identifier_cannot_be_changed) ... ok
+test_numbering_starts_at_1000000001 (inventory.tests.test_unit_model.UnitIdTests.test_numbering_starts_at_1000000001) ... ok
+test_a_new_unit_is_quarantined_in_quarantine_storage (inventory.tests.test_unit_model.UnitRecordTests.test_a_new_unit_is_quarantined_in_quarantine_storage) ... ok
+test_a_unit_cannot_be_created_in_any_other_status (inventory.tests.test_unit_model.UnitRecordTests.test_a_unit_cannot_be_created_in_any_other_status) ... ok
+test_every_attribute_round_trips (inventory.tests.test_unit_model.UnitRecordTests.test_every_attribute_round_trips) ... ok
+test_a_rolled_back_transaction_leaves_no_message (notifications.tests.test_notifications.AsynchronousDispatchTests.test_a_rolled_back_transaction_leaves_no_message) ... ok
+test_queueing_never_calls_a_gateway_or_blocks_the_transaction (notifications.tests.test_notifications.AsynchronousDispatchTests.test_queueing_never_calls_a_gateway_or_blocks_the_transaction) ... ok
+test_a_camp_already_started_or_closed_sends_nothing (notifications.tests.test_notifications.CampReminderTests.test_a_camp_already_started_or_closed_sends_nothing) ... ok
+test_each_enrolled_donor_gets_their_own_reminder_once (notifications.tests.test_notifications.CampReminderTests.test_each_enrolled_donor_gets_their_own_reminder_once) ... ok
+test_only_the_camp_in_the_next_24_hours_sends_reminders (notifications.tests.test_notifications.CampReminderTests.test_only_the_camp_in_the_next_24_hours_sends_reminders) ... ok
+test_a_dedup_key_queues_a_message_only_once (notifications.tests.test_notifications.DispatcherTests.test_a_dedup_key_queues_a_message_only_once) ... ok
+test_a_donor_without_a_mobile_number_is_emailed (notifications.tests.test_notifications.DispatcherTests.test_a_donor_without_a_mobile_number_is_emailed) ... ok
+test_a_message_goes_by_sms_when_the_gateway_accepts_it (notifications.tests.test_notifications.DispatcherTests.test_a_message_goes_by_sms_when_the_gateway_accepts_it) ... ok
+test_a_message_that_cannot_be_delivered_any_way_is_marked_failed (notifications.tests.test_notifications.DispatcherTests.test_a_message_that_cannot_be_delivered_any_way_is_marked_failed) ... 2026-11-17 23:42:41,514 level=WARNING logger=notifications.dispatcher msg=email failed id=1 error=smtp
+2026-11-17 23:42:41,516 level=WARNING logger=notifications.dispatcher msg=email failed id=1 error=smtp
+2026-11-17 23:42:41,519 level=WARNING logger=notifications.dispatcher msg=email failed id=1 error=smtp
+ok
+test_a_sent_message_is_never_sent_again (notifications.tests.test_notifications.DispatcherTests.test_a_sent_message_is_never_sent_again) ... ok
+test_sms_is_tried_three_times_at_increasing_intervals_then_email (notifications.tests.test_notifications.DispatcherTests.test_sms_is_tried_three_times_at_increasing_intervals_then_email) ... 2026-11-17 23:42:41,532 level=WARNING logger=notifications.dispatcher msg=sms failed id=1 error=gateway down
+2026-11-17 23:42:41,536 level=WARNING logger=notifications.dispatcher msg=sms failed id=1 error=gateway down
+2026-11-17 23:42:41,539 level=WARNING logger=notifications.dispatcher msg=sms failed id=1 error=gateway down
+ok
+test_the_sms_text_is_cut_to_160_characters (notifications.tests.test_notifications.DispatcherTests.test_the_sms_text_is_cut_to_160_characters) ... ok
+test_the_worker_command_reports_what_it_tried (notifications.tests.test_notifications.DispatcherTests.test_the_worker_command_reports_what_it_tried) ... ok
+test_a_missed_day_is_caught_up_but_old_dates_are_not (notifications.tests.test_notifications.EligibilityReminderTests.test_a_missed_day_is_caught_up_but_old_dates_are_not) ... ok
+test_only_the_donor_eligible_today_is_reminded (notifications.tests.test_notifications.EligibilityReminderTests.test_only_the_donor_eligible_today_is_reminded) ... ok
+test_running_again_does_not_repeat_the_reminder (notifications.tests.test_notifications.EligibilityReminderTests.test_running_again_does_not_repeat_the_reminder) ... ok
+test_the_interval_deferral_counts_but_other_deferrals_do_not (notifications.tests.test_notifications.EligibilityReminderTests.test_the_interval_deferral_counts_but_other_deferrals_do_not) ... ok
+test_plain_http_and_network_errors_are_failures (notifications.tests.test_notifications.HttpBackendTests.test_plain_http_and_network_errors_are_failures) ... ok
+test_the_message_is_posted_with_the_token (notifications.tests.test_notifications.HttpBackendTests.test_the_message_is_posted_with_the_token) ... ok
+test_a_group_below_its_threshold_is_short (notifications.tests.test_notifications.ShortageAppealTests.test_a_group_below_its_threshold_is_short) ... ok
+test_an_appeal_is_not_repeated_within_30_days (notifications.tests.test_notifications.ShortageAppealTests.test_an_appeal_is_not_repeated_within_30_days) ... ok
+test_enough_stock_or_no_threshold_means_no_appeal (notifications.tests.test_notifications.ShortageAppealTests.test_enough_stock_or_no_threshold_means_no_appeal) ... ok
+test_only_eligible_donors_of_the_short_group_are_asked (notifications.tests.test_notifications.ShortageAppealTests.test_only_eligible_donors_of_the_short_group_are_asked) ... ok
+test_the_administrators_threshold_is_used (notifications.tests.test_notifications.ShortageAppealTests.test_the_administrators_threshold_is_used) ... ok
+test_the_reminder_command_queues_appeals (notifications.tests.test_notifications.ShortageAppealTests.test_the_reminder_command_queues_appeals) ... ok
+test_every_report_returns_rows_in_its_column_order (reports.tests.test_generator.EveryReportTests.test_every_report_returns_rows_in_its_column_order) ... ok
+test_the_range_is_checked (reports.tests.test_generator.EveryReportTests.test_the_range_is_checked) ... ok
+test_unknown_or_forbidden_reports_are_refused (reports.tests.test_generator.EveryReportTests.test_unknown_or_forbidden_reports_are_refused) ... ok
+test_aware_times_are_shown_in_local_time (reports.tests.test_generator.FormatTests.test_aware_times_are_shown_in_local_time) ... ok
+test_expiry_lists_units_expiring_in_range_with_who_moved_them (reports.tests.test_generator.InventoryAndExpiryTests.test_expiry_lists_units_expiring_in_range_with_who_moved_them) ... ok
+test_inventory_counts_by_group_and_component (reports.tests.test_generator.InventoryAndExpiryTests.test_inventory_counts_by_group_and_component) ... ok
+test_collection_shows_site_and_screening_outcome (reports.tests.test_generator.RegistrationAndCollectionTests.test_collection_shows_site_and_screening_outcome) ... ok
+test_registration_counts_donations_and_respects_the_range (reports.tests.test_generator.RegistrationAndCollectionTests.test_registration_counts_donations_and_respects_the_range) ... ok
+test_screening_outcome (reports.tests.test_generator.RegistrationAndCollectionTests.test_screening_outcome) ... ok
+test_a_bad_range_shows_the_reason (reports.tests.test_generator.ReportScreenTests.test_a_bad_range_shows_the_reason) ... ok
+test_a_report_on_screen_matches_its_csv_export (reports.tests.test_generator.ReportScreenTests.test_a_report_on_screen_matches_its_csv_export) ... 2026-11-17 23:42:42,281 level=INFO logger=reports.views msg=report exported slug=registration format=csv user_id=1
+ok
+test_hospital_users_and_donors_cannot_open_other_reports (reports.tests.test_generator.ReportScreenTests.test_hospital_users_and_donors_cannot_open_other_reports) ... 2026-11-17 23:42:42,301 level=WARNING logger=django.request msg=Forbidden (Permission denied): /reports/registration/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 51, in wrapped
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/reports/views.py", line 34, in run
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+2026-11-17 23:42:42,318 level=WARNING logger=accounts.permissions msg=authorisation failure user_id=5 role=donor path=/reports/ needs=staff,admin,hospital
+2026-11-17 23:42:42,320 level=WARNING logger=django.request msg=Forbidden (Permission denied): /reports/
+Traceback (most recent call last):
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 50, in wrapped
+    _deny(request, roles)
+  File "/home/balaraj/mini-project-documents/src/accounts/permissions.py", line 40, in _deny
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+ok
+test_pdf_export (reports.tests.test_generator.ReportScreenTests.test_pdf_export) ... 2026-11-17 23:42:42,339 level=INFO logger=reports.views msg=report exported slug=inventory format=pdf user_id=1
+ok
+test_the_first_visit_offers_the_last_30_days (reports.tests.test_generator.ReportScreenTests.test_the_first_visit_offers_the_last_30_days) ... ok
+test_the_index_lists_only_allowed_reports (reports.tests.test_generator.ReportScreenTests.test_the_index_lists_only_allowed_reports) ... ok
+test_camp_performance (reports.tests.test_generator.RequestAndCampTests.test_camp_performance) ... ok
+test_hospital_users_see_only_their_own_requests (reports.tests.test_generator.RequestAndCampTests.test_hospital_users_see_only_their_own_requests)
+UT-46 (SRS REQ-44). ... ok
+test_only_one_of_two_simultaneous_allocations_wins (bloodrequests.tests.test_safety.ConcurrentAllocationTests.test_only_one_of_two_simultaneous_allocations_wins) ... skipped "Database doesn't support feature(s): has_select_for_update"
+test_no_secret_key_is_committed_in_settings (core.tests.test_setup.SettingsTests.test_no_secret_key_is_committed_in_settings) ... ok
+test_production_accepts_a_secret_key_and_disables_debug (core.tests.test_setup.SettingsTests.test_production_accepts_a_secret_key_and_disables_debug) ... ok
+test_production_requires_a_secret_key (core.tests.test_setup.SettingsTests.test_production_requires_a_secret_key) ... ok
+test_unknown_environment_is_rejected (core.tests.test_setup.SettingsTests.test_unknown_environment_is_rejected) ... ok
+test_different_identifiers_give_different_barcodes (inventory.tests.test_barcode.BarcodeTests.test_different_identifiers_give_different_barcodes) ... ok
+test_the_output_is_well_formed_svg_with_bars (inventory.tests.test_barcode.BarcodeTests.test_the_output_is_well_formed_svg_with_bars) ... ok
+test_the_same_identifier_always_gives_the_same_barcode (inventory.tests.test_barcode.BarcodeTests.test_the_same_identifier_always_gives_the_same_barcode) ... ok
+test_the_symbol_encodes_exactly_the_identifier (inventory.tests.test_barcode.BarcodeTests.test_the_symbol_encodes_exactly_the_identifier) ... ok
+test_hospital_user_is_limited_to_their_own_hospital (reports.tests.test_access.HospitalScopeTests.test_hospital_user_is_limited_to_their_own_hospital) ... ok
+test_hospital_user_of_an_inactive_hospital_is_refused (reports.tests.test_access.HospitalScopeTests.test_hospital_user_of_an_inactive_hospital_is_refused) ... ok
+test_hospital_user_without_a_hospital_is_refused (reports.tests.test_access.HospitalScopeTests.test_hospital_user_without_a_hospital_is_refused) ... ok
+test_staff_and_admin_are_not_restricted (reports.tests.test_access.HospitalScopeTests.test_staff_and_admin_are_not_restricted) ... ok
+test_donor_may_run_no_report (reports.tests.test_access.ReportAccessTests.test_donor_may_run_no_report) ... ok
+test_hospital_user_is_refused_reports_that_name_donors (reports.tests.test_access.ReportAccessTests.test_hospital_user_is_refused_reports_that_name_donors) ... ok
+test_hospital_user_may_run_only_the_request_and_issue_report (reports.tests.test_access.ReportAccessTests.test_hospital_user_may_run_only_the_request_and_issue_report) ... ok
+test_staff_and_admin_may_run_all_six_reports (reports.tests.test_access.ReportAccessTests.test_staff_and_admin_may_run_all_six_reports) ... ok
+test_unknown_report_is_refused (reports.tests.test_access.ReportAccessTests.test_unknown_report_is_refused) ... ok
+test_each_report_has_ten_unique_columns (reports.tests.test_definitions.ReportDefinitionTests.test_each_report_has_ten_unique_columns) ... ok
+test_six_reports_are_defined (reports.tests.test_definitions.ReportDefinitionTests.test_six_reports_are_defined) ... ok
+test_columns_and_data_follow_the_header (reports.tests.test_export_csv.CsvExportTests.test_columns_and_data_follow_the_header) ... ok
+test_commas_and_quotes_survive_a_round_trip (reports.tests.test_export_csv.CsvExportTests.test_commas_and_quotes_survive_a_round_trip) ... ok
+test_every_record_has_the_same_number_of_fields (reports.tests.test_export_csv.CsvExportTests.test_every_record_has_the_same_number_of_fields) ... ok
+test_formula_text_is_neutralised_but_numbers_are_not (reports.tests.test_export_csv.CsvExportTests.test_formula_text_is_neutralised_but_numbers_are_not) ... ok
+test_header_carries_name_range_user_and_timestamp (reports.tests.test_export_csv.CsvExportTests.test_header_carries_name_range_user_and_timestamp) ... ok
+test_lines_end_with_crlf (reports.tests.test_export_csv.CsvExportTests.test_lines_end_with_crlf) ... ok
+test_empty_report_still_exports (reports.tests.test_export_pdf.PdfExportTests.test_empty_report_still_exports) ... ok
+test_header_carries_name_range_user_and_timestamp (reports.tests.test_export_pdf.PdfExportTests.test_header_carries_name_range_user_and_timestamp) ... ok
+test_long_report_spans_several_pages (reports.tests.test_export_pdf.PdfExportTests.test_long_report_spans_several_pages) ... ok
+test_markup_characters_in_data_do_not_break_the_pdf (reports.tests.test_export_pdf.PdfExportTests.test_markup_characters_in_data_do_not_break_the_pdf) ... ok
+test_output_is_a_pdf (reports.tests.test_export_pdf.PdfExportTests.test_output_is_a_pdf) ... ok
+
+----------------------------------------------------------------------
+Ran 585 tests in 17.909s
+
+OK (skipped=1)
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).
