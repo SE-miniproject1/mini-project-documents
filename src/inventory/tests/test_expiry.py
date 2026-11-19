@@ -119,6 +119,7 @@ class NearExpiryTests(TestCase):
 
     @override_settings(BBMS_NEAR_EXPIRY_DAYS=14)
     def test_the_window_is_configurable(self):
+        """UT-21: a supplied 14-day window includes units expiring within that window."""
         unit_expiring(10)
         self.assertEqual(len(near_expiry_units(TODAY, window=14)), 1)
         self.assertEqual(len(near_expiry_units(TODAY, window=7)), 0)

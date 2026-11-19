@@ -31,6 +31,7 @@ class ConfigServiceTests(TestCase):
         self.assertEqual(config.min_stock("O-"), 0)
 
     def test_an_override_applies_to_the_next_call(self):
+        """UT-48, IT-26 (SRS REQ-46): a change applies with no restart."""
         admin = make_user("admin1", Role.ADMIN)
         config.save(
             {
@@ -63,6 +64,7 @@ class ConfigServiceTests(TestCase):
         self.assertEqual(config.near_expiry_days(), 7)
 
     def test_validation_enforces_ranges_and_the_ninety_day_floor(self):
+        """UT-48 (BR-2): an interval below 90 days is refused."""
         problems = config.validate(
             {
                 "eligibility.donation_interval_days": 60,

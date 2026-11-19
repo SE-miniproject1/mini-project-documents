@@ -72,6 +72,7 @@ class CreateRequestTests(TestCase):
         self.assertEqual(BloodRequest.objects.count(), 0)
 
     def test_only_users_of_a_registered_active_hospital_may_raise_requests(self):
+        """ST-24 (BR-7): a request from an inactive hospital is refused."""
         no_hospital = make_user("hosp_none", Role.HOSPITAL)
         inactive = make_hospital_user(
             "hosp_off", make_hospital(licence_number="X9", is_active=False)

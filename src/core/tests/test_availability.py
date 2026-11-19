@@ -16,6 +16,7 @@ class AvailabilitySearchTests(TestCase):
         self.url = reverse("search:availability")
 
     def test_hospital_sees_aggregated_counts_by_group_and_component_only(self):
+        """UT-40, IT-21 (SRS REQ-38): counts only, no unit or donor data."""
         donor = make_donor(blood_group="A+")
         first = make_unit(status=Status.AVAILABLE, donor=donor, component_type="PRBC")
         second = make_unit(status=Status.AVAILABLE, donor=donor, component_type="PRBC")
@@ -36,6 +37,7 @@ class AvailabilitySearchTests(TestCase):
         self.assertNotIn(donor.email, body)
 
     def test_search_filters_by_group_and_component(self):
+        """ST-20 (SRS REQ-38): a hospital user checks availability."""
         donor_a = make_donor(blood_group="A+")
         donor_b = make_donor(blood_group="B+")
         make_unit(status=Status.AVAILABLE, donor=donor_a, component_type="PRBC")
