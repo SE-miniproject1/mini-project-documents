@@ -4,6 +4,22 @@ Blood Bank Management System · Organisation [SE-miniproject1](https://github.co
 
 Source: `SE_Mini_Project_Delivereables_Part-3.pdf`. It asks for updated test cases, completed testing with four reports in `docs/`, and an optional Sprint 3. The dates in the PDF (2 to 6 November) have passed, so do this as fast as you can and tell the faculty the submission is late.
 
+## Status on 19 November 2026
+
+Every pull request in this plan is merged. All 112 cases have a result: 79 Passed, 30 Passed with deviation, 2 Partly executed, 1 Failed (ST-22).
+
+| Task | Owner | Pull request |
+|---|---|---|
+| Collection and security cases, branch coverage, this plan | Aadish | #98 |
+| Inventory and request cases, Code Coverage Report | Dhanya | #100 |
+| Donor registration and nonfunctional cases, Unit Test Report, Test Summary, Word copy | Balaraj | #101 |
+| Camp, search, notification and report cases, Branch Coverage Report | Niveditha | #99 |
+| System Validation Report, contribution record | Aadish | #102 |
+
+Still open: Test Plan section 14 metrics, section 7 and the Test Summary predate #99 and need the final figures, then a Word rebuild (Balaraj).
+
+The sections below are the original plan, kept as a record.
+
 ## 1. What is already done (Aadish, branch `test/aadish-cases`)
 
 Review and merge this first. Everything else depends on it.
