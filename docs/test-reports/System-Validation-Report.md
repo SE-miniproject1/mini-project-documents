@@ -2,7 +2,7 @@
 
 Blood Bank Management System. Covers the 30 system test cases (ST-01 to ST-30) and the 8 security validation cases (SV-01 to SV-08) of `docs/Test-Plan.md`.
 
-Generated 19-11-2026 from commit `9b4a0f4` by `tools/system_validation_report.py`.
+Generated 19-11-2026 from commit `8cc0b18` by `tools/system_validation_report.py`.
 
 ## 1. How the validation was done
 
@@ -70,7 +70,7 @@ Generated 19-11-2026 from commit `9b4a0f4` by `tools/system_validation_report.py
 - **SV-02 and SV-03 real waiting times.** The clock is moved in the tests (D-85).
 - **SV-07 scanner.** No OWASP scanner run (D-88).
 - **Performance on the test server.** NFR-P1 and NFR-P2 are checked with the seeded data only, not with 50 concurrent users (ST-25, D-91).
-- **ST-22 shortage banner.** The dashboard banner and the below-threshold report flag are not built (D-83, D-103).
+- **ST-22 shortage banner.** The dashboard banner and the below-threshold report flag are not built. Accepted as a known defect, issue #104 (D-83, D-103).
 - **Browser sessions.** System cases ran through the Django test client, which drives the same views and templates, not a browser (D-96, D-107).
 
 ## 5. Conclusion

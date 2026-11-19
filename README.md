@@ -1,4 +1,4 @@
-# Blood Bank Management System — Deliverables 1 and 2
+# Blood Bank Management System — Deliverables 1 to 3
 
 Software Engineering Mini Project, PES University.
 Organisation: [SE-miniproject1](https://github.com/SE-miniproject1) · Repository: [mini-project-documents](https://github.com/SE-miniproject1/mini-project-documents)
@@ -10,13 +10,18 @@ A web-based system that manages the full life cycle of donated blood, from donor
 | Document | File | Deliverable |
 |---|---|---|
 | Software Requirements Specification | [docs/SRS.md](docs/SRS.md) | 1, extended for 2 with security objectives and an embedded use case diagram |
-| Software Test Plan, IEEE layout | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, restructured for 2 |
+| Software Test Plan, IEEE layout, with results | [docs/Test-Plan.md](docs/Test-Plan.md) | 1, restructured for 2, executed for 3 |
 | Software Architecture and Design Specification | [docs/SAD.md](docs/SAD.md) | 2 |
 | Word copies for submission | [submission/](submission/) | 1 and 2 |
 | Sprint 1 and Sprint 2 demo videos | [docs/DEMO.md](docs/DEMO.md) | 1 and 2 |
 | Deployment guide | [docs/Deployment-Guide.md](docs/Deployment-Guide.md) | 2 |
+| Unit Test Report | [docs/test-reports/Unit-Test-Report.md](docs/test-reports/Unit-Test-Report.md) | 3 |
+| System Validation Report | [docs/test-reports/System-Validation-Report.md](docs/test-reports/System-Validation-Report.md) | 3 |
+| Code Coverage Report | [docs/test-reports/Code-Coverage.md](docs/test-reports/Code-Coverage.md) | 3 |
+| Branch Coverage Report | [docs/test-reports/Branch-Coverage-Report.md](docs/test-reports/Branch-Coverage-Report.md) | 3 |
+| Test Summary Report | [docs/test-reports/Test-Summary-Report.md](docs/test-reports/Test-Summary-Report.md) | 3 |
 
-Plans and records: [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) for the Deliverable 2 schedule and [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for what the git history shows about who did what.
+Plans and records: [COMMIT-PLAN-2.md](COMMIT-PLAN-2.md) and [COMMIT-PLAN-3.md](COMMIT-PLAN-3.md) for the Deliverable 2 and 3 schedules, and [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for what the git history shows about who did what.
 
 ## Team
 
@@ -52,7 +57,7 @@ The SRS follows the IEEE 830 structure given in the course template. It specifie
 | SF-5 | Donation Camp and Drive Management | REQ-32 to REQ-37 |
 | SF-6 | Search, Notification and Reporting | REQ-38 to REQ-46 |
 
-The Test Plan carries **112 test cases**: 48 unit, 26 integration, 30 system and 8 security validation. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS and in section 13 of the Test Plan. No test has been executed, because the system has not been implemented. Every result column reads `Not executed` and `Pending`.
+The Test Plan carries **112 test cases**: 48 unit, 26 integration, 30 system and 8 security validation. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS and in section 13 of the Test Plan. All 112 cases were executed for Deliverable 3, through Django's test client and services rather than a deployed server: 79 Passed, 30 Passed with deviation, 2 Partly executed (SV-04, ST-25) and 1 Failed (ST-22, the dashboard shortage banner is not built, accepted as a known defect in issue #104). Each deviation is recorded in [docs/DEVIATIONS.md](docs/DEVIATIONS.md). The automated suite has 586 tests, with 98 percent line and 94 percent branch coverage.
 
 ## Traceability
 
@@ -113,9 +118,9 @@ npm install @mermaid-js/mermaid-cli
 for f in diagrams/*.mmd; do npx mmdc -i "$f" -o "${f%.mmd}.png" -b white -s 3; done
 ```
 
-## Planned technology stack
+## Technology stack
 
-Python 3.11 with Django 5.x, PostgreSQL 15, served by Gunicorn behind Nginx. Node.js with Express was evaluated and rejected for this release; the reasoning is recorded in SRS section 2.5 under constraint CON-1.
+Python 3.12 with Django 5.2, PostgreSQL 16 in CI and production (SQLite for development), to be served by Gunicorn behind Nginx. Node.js with Express was evaluated and rejected for this release; the reasoning is recorded in SRS section 2.5 under constraint CON-1.
 
 ## Working agreement
 
