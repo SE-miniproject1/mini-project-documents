@@ -57,7 +57,7 @@ The SRS follows the IEEE 830 structure given in the course template. It specifie
 | SF-5 | Donation Camp and Drive Management | REQ-32 to REQ-37 |
 | SF-6 | Search, Notification and Reporting | REQ-38 to REQ-46 |
 
-The Test Plan carries **112 test cases**: 48 unit, 26 integration, 30 system and 8 security validation. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS and in section 13 of the Test Plan. All 112 cases were executed for Deliverable 3, through Django's test client and services rather than a deployed server: 79 Passed, 30 Passed with deviation, 2 Partly executed (SV-04, ST-25) and 1 Failed (ST-22, the dashboard shortage banner is not built). Each deviation is recorded in [docs/DEVIATIONS.md](docs/DEVIATIONS.md). The automated suite has 586 tests, with 98 percent line and 94 percent branch coverage.
+The Test Plan carries **112 test cases**: 48 unit, 26 integration, 30 system and 8 security validation. Every one of the 46 functional requirements is verified by at least one case, and the mapping is given in Appendix C of the SRS and in section 13 of the Test Plan. All 112 cases were executed for Deliverable 3, through Django's test client and services rather than a deployed server: 79 Passed, 30 Passed with deviation, 2 Partly executed (SV-04, ST-25) and 1 Failed (ST-22, the dashboard shortage banner is not built, accepted as a known defect in issue #104). Each deviation is recorded in [docs/DEVIATIONS.md](docs/DEVIATIONS.md). The automated suite has 586 tests, with 98 percent line and 94 percent branch coverage.
 
 ## Traceability
 

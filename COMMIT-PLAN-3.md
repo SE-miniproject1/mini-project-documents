@@ -6,7 +6,7 @@ Source: `SE_Mini_Project_Delivereables_Part-3.pdf`. It asks for updated test cas
 
 ## Status on 19 November 2026
 
-Every pull request in this plan is merged. All 112 cases have a result: 79 Passed, 30 Passed with deviation, 2 Partly executed, 1 Failed (ST-22).
+Every pull request in this plan is merged. All 112 cases have a result: 79 Passed, 30 Passed with deviation, 2 Partly executed, 1 Failed (ST-22, accepted as a known defect, issue #104).
 
 | Task | Owner | Pull request |
 |---|---|---|
